@@ -1,6 +1,6 @@
 {
-  "name": "poc-pwa-react",
-  "homepage": "https://kykim0818.github.io/pwa-react-test",
+  "name": "golfbet",
+  "homepage": "/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

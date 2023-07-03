@@ -1,6 +1,6 @@
 {
-  "short_name": "PWA TEST",
-  "name": "PWA REACT TEST",
+  "short_name": "GoldBet",
+  "name": "GolfBet",
   "icons": [
     {
       "src": "favicon.ico",
@@ -27,8 +27,8 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#c4ea07",
-  "background_color": "#1221b0",
+  "theme_color": "#F8FAFB",
+  "background_color": "#F8FAFB",
   "scope": ".",
   "lang": "en",
   "display_override": [],

@@ -13,26 +13,23 @@ import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <Login />,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/home",
-      element: <Home />,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/enter_game",
-      element: <EnterGame />,
-      errorElement: <ErrorPage />,
-    },
-  ],
-  { basename: "/pwa-react-test" }
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/enter_game",
+    element: <EnterGame />,
+    errorElement: <ErrorPage />,
+  },
+]);
 
 const queryClient = new QueryClient();
 
