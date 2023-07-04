@@ -38,6 +38,7 @@ export const Home = () => {
         <HomeImageButton
           label="게임 생성하기"
           imgSrc={process.env.PUBLIC_URL + "/assets/images/make_game_img.png"}
+          onClick={() => navigate("/make_game")}
         />
         <HomeImageButton
           label="게임 참여하기"

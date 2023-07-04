@@ -7,6 +7,7 @@ import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import MakeGame from "./pages/MakeGame";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
   {
     path: "/enter_game",
     element: <EnterGame />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/make_game",
+    element: <MakeGame />,
     errorElement: <ErrorPage />,
   },
 ]);
