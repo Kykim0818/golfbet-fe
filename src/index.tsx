@@ -3,10 +3,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import App from "./App";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
 import MakeGame from "./pages/MakeGame";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -17,12 +16,7 @@ import { theme } from "./styles/theme";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/home",
-    element: <Home />,
+    element: <App />,
     errorElement: <ErrorPage />,
   },
   {

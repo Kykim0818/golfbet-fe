@@ -1,25 +1,17 @@
-import styled from "styled-components";
+import { useAccount } from "./hooks/useAccount";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function App() {
-  return (
-    <Styled.Wrapper>
-      <p>Test Test</p>
-      {/* <Button>
-        <Link to={`home`}>Home - Profile</Link>
-      </Button>
-      <Button>
-        <Link to={`login`}>Login</Link>
-      </Button> */}
-    </Styled.Wrapper>
-  );
+  /**
+   *  login check
+   *  login 된 상태면 -> main
+   *  안된 상태면 -> login
+   *  useAccount 전역 필요해보임
+   */
+  const { isLogined, handleLogIn, handleLogout } = useAccount();
+  if (isLogined) return <Home handleLogout={handleLogout} />;
+  return <Login handleLogin={handleLogIn} />;
 }
 
 export default App;
-
-const Styled = {
-  Wrapper: styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  `,
-};

@@ -1,19 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { User, getUser } from "../../service/api/user";
+import { User, getUser, requestLogout } from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
 
-export const Home = () => {
+export const Home = (props: { handleLogout: () => void }) => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem("accessToken");
-  useEffect(() => {
-    if (accessToken === null) {
-      navigate("/");
-    }
-  }, [accessToken, navigate]);
-
   /**
    * TODO
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
@@ -23,9 +16,13 @@ export const Home = () => {
     getUser("Test")
   );
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+  const handleLogout = async () => {
+    const ret = await requestLogout("Test", "");
+    if (ret) {
+      props.handleLogout();
+    } else {
+      alert("logout error retry it");
+    }
   };
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;

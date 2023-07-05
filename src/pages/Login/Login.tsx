@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { LOGIN } from "../../service/login/constant";
 import { testAsync } from "../../utils/test-promise";
@@ -14,25 +12,20 @@ export async function loginLoader() {
   return await testAsync(getLoginInfo);
 }
 
-export const Login = () => {
-  const navigate = useNavigate();
-  // TODO: accessToken 으로 임시처리, 후에 로직 수정
-  const accessToken = localStorage.getItem("accessToken");
-  useEffect(() => {
-    if (accessToken !== null) {
-      navigate("/home");
-    }
-  }, [accessToken, navigate]);
-
+export const Login = (props: {
+  handleLogin: (accessToken: string, refreshToken: string) => void;
+}) => {
   // TODO: login handling 방식에 따라 다를듯
   const handleKakaoLogin = () => {
     alert("Kakao Login");
   };
   //
   const handleTestLogin = () => {
-    localStorage.setItem("accessToken", LOGIN.TEST_INFO.accessToken);
-    localStorage.setItem("refreshToken", LOGIN.TEST_INFO.refreshToken);
-    navigate("/home");
+    // TODO: Login 검증 request 필요
+    props.handleLogin(
+      LOGIN.TEST_INFO.accessToken,
+      LOGIN.TEST_INFO.refreshToken
+    );
   };
 
   return (

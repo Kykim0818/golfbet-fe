@@ -22,3 +22,15 @@ const mockUserInfo = {
   screenGameScore: 30,
   status: null,
 };
+
+// TODO : db 에서 토큰 검증
+export const checkLoginValidation = (token: string): Promise<boolean> =>
+  testAsync(() => true, 100).then((res) => res as boolean);
+
+export async function requestLogout(
+  userId: string,
+  token: string
+): Promise<boolean> {
+  const testResult = Math.floor(Math.random() * 10) > 0;
+  return testAsync(() => testResult, 100).then((res) => res as boolean);
+}
