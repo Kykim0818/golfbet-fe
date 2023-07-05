@@ -1,11 +1,9 @@
-import { useState } from "react";
 import QrReader from "react-qr-reader";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export const EnterGame = () => {
   const navigate = useNavigate();
-  const [result, setResult] = useState("No result");
 
   const handleError = (err: any) => {
     console.log(err);
@@ -13,7 +11,8 @@ export const EnterGame = () => {
 
   const handleScan = (result: any) => {
     if (result) {
-      setResult(result);
+      // TODO: 유효성 체크후 방이동
+      alert(result);
     }
   };
 
@@ -36,11 +35,18 @@ export const EnterGame = () => {
           onError={handleError}
           onScan={handleScan}
         />
-        <S.Btn onClick={handleBtnClick}>X</S.Btn>
+        <S.QRArea
+          src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_camera.svg"}
+          alt=""
+        />
+        <S.CloseBtn
+          src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_close.svg"}
+          onClick={handleBtnClick}
+          alt="closeBtn"
+        />
       </S.Camera>
       <S.Desc>
         게임방 QR 코드를 화면에 비추면 게임방으로 참여할 수 있습니다.
-        {result}
       </S.Desc>
     </S.Wrapper>
   );
@@ -77,19 +83,37 @@ const S = {
         border-radius: 34px;
 
         > div {
-          height: 180px;
+          display: none;
         }
       }
     }
   `,
-  Btn: styled.div`
-    width: 50px;
-    height: 50px;
+  QRArea: styled.img`
+    //
+    background-color: transparent;
     position: absolute;
-    bottom: -25px;
-    left: calc(50% - 25px);
-    background-color: var(--color-main);
+    left: 20.5px;
+    bottom: 47.37px;
+  `,
+  // Btn: styled.div`
+  //   width: 50px;
+  //   height: 50px;
+  //   position: absolute;
+  //   bottom: -25px;
+  //   left: calc(50% - 25px);
+  //   background-color: var(--color-main);
 
+  //   //
+  //   &:hover {
+  //     cursor: pointer;
+  //   }
+  // `,
+
+  CloseBtn: styled.img`
+    position: absolute;
+    bottom: -35px;
+    left: calc(50% - 35px);
+    z-index: 2;
     //
     &:hover {
       cursor: pointer;
