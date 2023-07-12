@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import Modal from "../../components/Modal";
 import SegmentCell from "../../components/SegmentCell";
 import Stepper from "../../components/Stepper";
 import TitleAsset from "../../components/TitleAsset";
@@ -50,6 +51,7 @@ const defaultGameRule: GameInfo["gameRule"] = {
 const MakeGameContent = () => {
   const gameType = useRef<GameInfo["gameType"]>("Field");
   const [golfCourse, setgolfCourse] = useState<GameInfo["golfCourse"]>("");
+  const [visibleSearchGolfCourse, setVisibleSarchGolfCourse] = useState(false);
   const [betType, setBetType] = useState<GameInfo["betType"]>("Stroke");
   const playerCount = useRef<GameInfo["playerCount"]>(0);
   const [gameRule, setGameRule] =
@@ -61,6 +63,11 @@ const MakeGameContent = () => {
 
   const mockHandleGolfCourse = () => {
     setgolfCourse("골프벳 골프장");
+    setVisibleSarchGolfCourse(true);
+  };
+
+  const handleModalClose = () => {
+    setVisibleSarchGolfCourse(false);
   };
   return (
     <div>
@@ -85,6 +92,20 @@ const MakeGameContent = () => {
           value={golfCourse}
           onClick={mockHandleGolfCourse}
         />
+        {visibleSearchGolfCourse && (
+          <Modal handleClose={handleModalClose}>
+            <div style={{ backgroundColor: "var(--color-bg)" }}>
+              <TitleAsset
+                title="골프장 선택"
+                visibleBack
+                handleBack={() => setVisibleSarchGolfCourse(false)}
+              />
+              <button onClick={() => setVisibleSarchGolfCourse(false)}>
+                close
+              </button>
+            </div>
+          </Modal>
+        )}
       </div>
       {/* ////// 내기종류 TODO: css */}
       <div>
