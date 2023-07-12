@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Button from "../../components/Button";
 import { LOGIN } from "../../service/login/constant";
 import { testAsync } from "../../utils/test-promise";
 
@@ -37,7 +38,7 @@ export const Login = (props: {
       <Styled.AppName>GOLF BET</Styled.AppName>
       <Styled.BtnGroup>
         <button onClick={handleKakaoLogin}>Kakao login</button>
-        <button onClick={handleTestLogin}>Test login</button>
+        <Button onClick={handleTestLogin}>Test login</Button>
       </Styled.BtnGroup>
     </Styled.Wrapper>
   );

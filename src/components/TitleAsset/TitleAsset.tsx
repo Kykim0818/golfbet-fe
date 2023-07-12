@@ -17,21 +17,20 @@ export const TitleAsset = ({
 }: TitleAssetProps) => {
   return (
     <S.Wrapper>
-      {visibleBack && (
+      <S.BackButton onClick={handleBack} visible={visibleBack}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_back.svg"}
-          alt="no icons"
+          alt="back"
           onClick={handleBack}
         />
-      )}
+      </S.BackButton>
       <div>{title}</div>
-      {visibleClose && (
+      <S.CloseButton onClick={handleBack} visible={visibleClose}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
-          alt="no icons"
-          onClick={handleClose}
+          alt="close"
         />
-      )}
+      </S.CloseButton>
     </S.Wrapper>
   );
 };
@@ -39,13 +38,14 @@ export const TitleAsset = ({
 const S = {
   Wrapper: styled.div`
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
     padding-left: 20px;
+    padding-right: 20px;
     margin-bottom: 30px;
-    height: 41px;
-    gap: 114px;
+    min-height: 41px;
+    background-color: var(--color-bg, #f6f8fc);
   `,
   Title: styled.div`
     // TODO : typo
@@ -54,5 +54,19 @@ const S = {
     font-style: normal;
     font-weight: 400;
     line-height: 22px;
+  `,
+  BackButton: styled.button<{ visible: boolean }>`
+    display: flex;
+    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+    border: none;
+    align-items: center;
+    background-color: transparent;
+  `,
+  CloseButton: styled.button<{ visible: boolean }>`
+    display: flex;
+    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+    border: none;
+    align-items: center;
+    background-color: transparent;
   `,
 };
