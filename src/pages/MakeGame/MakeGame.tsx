@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+import SegmentCell from "../../components/SegmentCell";
+import Stepper from "../../components/Stepper";
 import TitleAsset from "../../components/TitleAsset";
+import { BetMoney } from "./BetMoney";
+import { Rule } from "./Rule";
 
 export const MakeGame = () => {
   const navigate = useNavigate();
@@ -12,7 +18,9 @@ export const MakeGame = () => {
         visibleBack
         handleBack={() => navigate(-1)}
       />
-      <S.Content>Content</S.Content>
+      <S.Content>
+        <MakeGameContent />
+      </S.Content>
     </S.Wrapper>
   );
 };
@@ -28,21 +36,22 @@ const S = {
     display: flex;
     flex-direction: column;
     padding: 0px 26px;
+    overflow: auto;
   `,
 };
 
 const defaultGameRule: GameInfo["gameRule"] = {
   handiType: "None",
-  spcialBetRequirements: [],
+  spcialBetRequirements: ["버디이상", "3명 이상 동타", "트리플 이상"],
   ddang: "꼴등만",
   nearestType: "별도 지정",
 };
 
 const MakeGameContent = () => {
-  const [gameType, setGameType] = useState<GameInfo["gameType"]>("Field");
+  const gameType = useRef<GameInfo["gameType"]>("Field");
   const [golfCourse, setgolfCourse] = useState<GameInfo["golfCourse"]>("");
   const [betType, setBetType] = useState<GameInfo["betType"]>("Stroke");
-  const [playerCount, setPlayerCount] = useState<GameInfo["playerCount"]>(0);
+  const playerCount = useRef<GameInfo["playerCount"]>(0);
   const [gameRule, setGameRule] =
     useState<GameInfo["gameRule"]>(defaultGameRule);
   const [betAmountPerStroke, setBetAmountPerStroke] =
@@ -50,14 +59,80 @@ const MakeGameContent = () => {
   const [bettingLimit, setBettingLimit] =
     useState<GameInfo["betAmountPerStroke"]>(0);
 
-  <div>
+  const mockHandleGolfCourse = () => {
+    setgolfCourse("골프벳 골프장");
+  };
+  return (
     <div>
-      <h5>게임분류</h5>
+      {/* ////// 게임분류  */}
+      <div>
+        <h5>게임분류</h5>
+        <SegmentCell<GameInfo["gameType"]>
+          cells={[
+            { label: "필드", value: "Field" },
+            { label: "스크린", value: "Screen" },
+          ]}
+          selectCellValue={"Field"}
+          handleSelectCell={(cell) => (gameType.current = cell.value)}
+        />
+      </div>
+      {/* ////// 골프장  */}
+      <div>
+        <h5>골프장</h5>
+        <Input
+          readOnly
+          placeholder="골프장을 검색해주세요"
+          value={golfCourse}
+          onClick={mockHandleGolfCourse}
+        />
+      </div>
+      {/* ////// 내기종류 TODO: css */}
+      <div>
+        <h5>내기종류</h5>
+        <div>{betType}</div>
+      </div>
+
+      {/* ////// 참여인원 TODO: css */}
+      <div>
+        <h5>참여인원</h5>
+        <Stepper
+          max={4}
+          min={0}
+          value={playerCount.current}
+          onChange={(value) => (playerCount.current = value)}
+        />
+      </div>
+
+      {/* ////// 게임규칙 TODO: css */}
+      <div>
+        <h5>게임규칙</h5>
+        <Rule rule={gameRule} />
+      </div>
+
+      {/* ////// 내기금액 TODO: css */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+        <h5>내기금액</h5>
+        <BetMoney
+          value={betAmountPerStroke}
+          fixedText="1타당"
+          placeHolder="금액을 입력해주세요"
+          plusMoneyArr={[1000, 5000, 10000]}
+        />
+        <BetMoney
+          value={bettingLimit}
+          fixedText="한도 금액"
+          placeHolder="금액을 입력해주세요"
+          plusMoneyArr={[10000, 100000, 500000]}
+        />
+      </div>
+      <Button style={{ marginTop: "30px", marginBottom: "19.5px" }}>
+        다음
+      </Button>
     </div>
-  </div>;
+  );
 };
 
-interface GameInfo {
+export interface GameInfo {
   gameId: string;
   createUser: string;
   gameType: "Field" | "Screen";
