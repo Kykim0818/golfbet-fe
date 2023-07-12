@@ -1,12 +1,12 @@
-import { HTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
-  readonly?: boolean;
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
+  // custom varaints
 }
 
-export const Input = ({ readonly, ...props }: Props) => {
-  return <StyledInput readOnly={readonly} {...props} />;
+export const Input = ({ ...props }: Props) => {
+  return <StyledInput {...props} />;
 };
 
 const StyledInput = styled.input`
