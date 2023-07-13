@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
@@ -51,7 +51,6 @@ const defaultGameRule: GameInfo["gameRule"] = {
 const MakeGameContent = () => {
   const gameType = useRef<GameInfo["gameType"]>("Field");
   const [golfCourse, setgolfCourse] = useState<GameInfo["golfCourse"]>("");
-  const [visibleSearchGolfCourse, setVisibleSarchGolfCourse] = useState(false);
   const [betType, setBetType] = useState<GameInfo["betType"]>("Stroke");
   const playerCount = useRef<GameInfo["playerCount"]>(0);
   const [gameRule, setGameRule] =
@@ -61,14 +60,26 @@ const MakeGameContent = () => {
   const [bettingLimit, setBettingLimit] =
     useState<GameInfo["betAmountPerStroke"]>(0);
 
+  const [visibleSearchGolfCourse, setVisibleSarchGolfCourse] = useState(false);
+
   const mockHandleGolfCourse = () => {
-    setgolfCourse("골프벳 골프장");
+    console.log("open");
+    // setgolfCourse("골프벳 골프장");
+    window.history.pushState(null, "", "");
     setVisibleSarchGolfCourse(true);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
+    console.log("handleModalClose");
     setVisibleSarchGolfCourse(false);
-  };
+  }, []);
+
+  // useEffect(() => {
+  //   if (visibleSearchGolfCourse === false) {
+  //     window.onpopstate = () => {};
+  //   }
+  // }, [visibleSearchGolfCourse]);
+
   return (
     <div>
       {/* ////// 게임분류  */}
