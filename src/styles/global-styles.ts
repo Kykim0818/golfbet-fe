@@ -11,6 +11,8 @@ const GlobalStyle = createGlobalStyle`
     ${color}
     overflow: auto;
     height: 100vh;
+    // refresh 방지 확인
+    overscroll-behavior-y: contain;
   }
 
   * {
