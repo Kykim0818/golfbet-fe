@@ -35,6 +35,9 @@ export const BetMoney = ({
       <div style={{ position: "relative" }}>
         <Styled.InputFixedText>{fixedText}</Styled.InputFixedText>
         <Styled.Input
+          type="number"
+          inputMode="numeric"
+          pattern="[0-9]*"
           onChange={handleOnChange}
           value={money === 0 ? "" : money}
           placeholder={placeHolder}

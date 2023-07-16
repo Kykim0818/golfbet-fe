@@ -9,6 +9,7 @@ import Stepper from "../../components/Stepper";
 import TitleAsset from "../../components/TitleAsset";
 import { BetMoney } from "./BetMoney";
 import { Rule } from "./Rule";
+import RuleChange from "./RuleChange";
 
 export const MakeGame = () => {
   const navigate = useNavigate();
@@ -61,24 +62,29 @@ const MakeGameContent = () => {
     useState<GameInfo["betAmountPerStroke"]>(0);
 
   const [visibleSearchGolfCourse, setVisibleSarchGolfCourse] = useState(false);
+  const [visibleChangeGameRule, setVisibleChangeGameRule] = useState(false);
 
-  const mockHandleGolfCourse = () => {
-    console.log("open");
-    // setgolfCourse("골프벳 골프장");
+  // golf course
+  const handleOpenGolfCourse = () => {
+    setgolfCourse("골프벳 골프장");
     window.history.pushState(null, "", "");
     setVisibleSarchGolfCourse(true);
   };
 
-  const handleModalClose = useCallback(() => {
+  const handleCloseGolfCourse = useCallback(() => {
     console.log("handleModalClose");
     setVisibleSarchGolfCourse(false);
   }, []);
 
-  // useEffect(() => {
-  //   if (visibleSearchGolfCourse === false) {
-  //     window.onpopstate = () => {};
-  //   }
-  // }, [visibleSearchGolfCourse]);
+  //
+  const handleOpenChangeGameRule = () => {
+    window.history.pushState(null, "", "");
+    setVisibleChangeGameRule(true);
+  };
+
+  const handleCloseChangeGameRule = useCallback(() => {
+    setVisibleChangeGameRule(false);
+  }, []);
 
   return (
     <div>
@@ -101,10 +107,10 @@ const MakeGameContent = () => {
           readOnly
           placeholder="골프장을 검색해주세요"
           value={golfCourse}
-          onClick={mockHandleGolfCourse}
+          onClick={handleOpenGolfCourse}
         />
         {visibleSearchGolfCourse && (
-          <Modal handleClose={handleModalClose}>
+          <Modal handleClose={handleCloseGolfCourse}>
             <div style={{ backgroundColor: "var(--color-bg)" }}>
               <TitleAsset
                 title="골프장 선택"
@@ -136,10 +142,15 @@ const MakeGameContent = () => {
       </div>
 
       {/* ////// 게임규칙 TODO: css */}
-      <div>
+      <div onClick={handleOpenChangeGameRule}>
         <h5>게임규칙</h5>
         <Rule rule={gameRule} />
       </div>
+      {visibleChangeGameRule && (
+        <Modal handleClose={handleCloseChangeGameRule}>
+          <RuleChange handleClose={handleCloseChangeGameRule} />
+        </Modal>
+      )}
 
       {/* ////// 내기금액 TODO: css */}
       <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>

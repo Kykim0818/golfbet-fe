@@ -1,25 +1,16 @@
 import { ReactElement, useEffect } from "react";
 import styled from "styled-components";
 
-type Props = {
+interface Props {
   children: ReactElement;
   handleClose: () => void;
-  preventFlag?: boolean;
-};
+}
 export const Modal = ({ children, handleClose }: Props) => {
   useEffect(() => {
     const handlePopstate = (e: Event) => {
       handleClose();
-      // 여기에 원하는 동작을 작성하세요.
     };
 
-    // window.onpopstate = (e: Event) => {
-    //   handlePopstate(e);
-    //   // handleClose();
-    //   console.log("close");
-    //   window.onpopstate = () => {};
-    // };
-    // popstate 이벤트 리스너 등록
     window.addEventListener("popstate", handlePopstate);
 
     // 컴포넌트가 언마운트될 때 이벤트 리스너 해제
