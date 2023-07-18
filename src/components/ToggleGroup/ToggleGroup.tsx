@@ -1,28 +1,24 @@
-import styled, { css } from "styled-components";
-import { Toggle } from "../Toggle/Toggle";
 import { useState } from "react";
+import styled from "styled-components";
 import { deepClone } from "../../utils/deepClone";
+import { Toggle } from "../Toggle/Toggle";
 
 type ToggleGroupProps = {
   isMultiSelect?: boolean;
-  value: unknown[];
-  group: Info[];
-  onChange?: (value: unknown[]) => unknown;
-};
-
-type Info = {
-  label: string;
-  value: unknown;
+  selectedValues: string[];
+  group: { label: string; value: string }[];
+  onChange?: (values: string[]) => void;
 };
 
 export const ToggleGroup = ({
   isMultiSelect = false,
   group,
-  value,
+  selectedValues,
+  onChange,
 }: ToggleGroupProps) => {
-  const [currentValue, setCurrentValue] = useState(new Set(value));
+  const [currentValue, setCurrentValue] = useState(new Set(selectedValues));
 
-  const handleToggleChange = (selectValue: unknown) => {
+  const handleToggleChange = (selectValue: string) => {
     const cloneValue = deepClone(currentValue);
     if (isMultiSelect) {
       if (currentValue.has(selectValue)) {
@@ -31,11 +27,14 @@ export const ToggleGroup = ({
         cloneValue.add(selectValue);
       }
       setCurrentValue(cloneValue);
+      onChange?.(Array.from(currentValue));
       return;
     }
+
     // Single Select
     if (!currentValue.has(selectValue)) {
       setCurrentValue(new Set([selectValue]));
+      onChange?.(Array.from(currentValue));
       return;
     }
     // false
