@@ -8,7 +8,6 @@ interface Props {
 export const Modal = ({ children, handleClose }: Props) => {
   useEffect(() => {
     const handlePopstate = (e: Event) => {
-      window.history.back();
       handleClose();
     };
 
