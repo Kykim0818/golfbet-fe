@@ -52,7 +52,6 @@ const defaultGameRule: GameRule = {
 };
 
 const MakeGameContent = () => {
-  const navigate = useNavigate();
   const gameType = useRef<GameInfo["gameType"]>("field");
   const [golfCourse, setgolfCourse] = useState<GameInfo["golfCourse"]>("");
   const [betType, setBetType] = useState<GameInfo["betType"]>("Stroke");
@@ -77,7 +76,7 @@ const MakeGameContent = () => {
   const handleCloseGolfCourse = useCallback(() => {
     console.log("handleModalClose");
     setVisibleSarchGolfCourse(false);
-  }, [navigate]);
+  }, []);
 
   //
   const handleOpenChangeGameRule = () => {
@@ -88,7 +87,7 @@ const MakeGameContent = () => {
 
   const handleCloseChangeGameRule = useCallback(() => {
     setVisibleChangeGameRule(false);
-  }, [navigate]);
+  }, []);
 
   return (
     <div>
@@ -156,7 +155,9 @@ const MakeGameContent = () => {
             gameRule={gameRule}
             playerCount={playerCount.current}
             handleClose={handleCloseChangeGameRule}
-            onChange={(gameRule) => setGameRule(gameRule)}
+            onChange={(gameRule) => {
+              setGameRule(gameRule);
+            }}
           />
         </Modal>
       )}

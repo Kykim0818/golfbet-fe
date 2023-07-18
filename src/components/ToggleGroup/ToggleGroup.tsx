@@ -19,7 +19,7 @@ export const ToggleGroup = ({
   const [currentValue, setCurrentValue] = useState(new Set(selectedValues));
 
   const handleToggleChange = (selectValue: string) => {
-    const cloneValue = deepClone(currentValue);
+    let cloneValue = deepClone(currentValue);
     if (isMultiSelect) {
       if (currentValue.has(selectValue)) {
         cloneValue.delete(selectValue);
@@ -27,14 +27,15 @@ export const ToggleGroup = ({
         cloneValue.add(selectValue);
       }
       setCurrentValue(cloneValue);
-      onChange?.(Array.from(currentValue));
+      onChange?.(Array.from(cloneValue));
       return;
     }
 
     // Single Select
     if (!currentValue.has(selectValue)) {
-      setCurrentValue(new Set([selectValue]));
-      onChange?.(Array.from(currentValue));
+      cloneValue = new Set([selectValue]);
+      setCurrentValue(cloneValue);
+      onChange?.(Array.from(cloneValue));
       return;
     }
     // false
