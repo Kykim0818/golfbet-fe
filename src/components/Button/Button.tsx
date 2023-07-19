@@ -33,6 +33,10 @@ const StyledButton = styled.button<{
 
   outline: none;
   border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const VARAIANTS = {

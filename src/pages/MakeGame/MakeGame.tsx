@@ -8,7 +8,9 @@ import SegmentCell from "../../components/SegmentCell";
 import Stepper from "../../components/Stepper";
 import TitleAsset from "../../components/TitleAsset";
 import { BetMoney } from "./BetMoney";
-import { Rule } from "./Rule";
+import { Rule } from "./Rule/Rule";
+import { RuleChange } from "./Rule/RuleChange";
+import { GameRule } from "./Rule/type";
 
 export const MakeGame = () => {
   const navigate = useNavigate();
@@ -36,20 +38,21 @@ const S = {
   Content: styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 30px;
     padding: 0px 26px;
     overflow: auto;
   `,
 };
 
-const defaultGameRule: GameInfo["gameRule"] = {
-  handiType: "None",
-  spcialBetRequirements: ["버디이상", "3명 이상 동타", "트리플 이상"],
-  ddang: "꼴등만",
-  nearestType: "별도 지정",
+const defaultGameRule: GameRule = {
+  handiType: ["none"],
+  specialBetRequirements: ["buddy", "tripple", "threeOrMorePlayersTied"],
+  ddang: ["last"],
+  nearestType: ["specified"],
 };
 
 const MakeGameContent = () => {
-  const gameType = useRef<GameInfo["gameType"]>("Field");
+  const gameType = useRef<GameInfo["gameType"]>("field");
   const [golfCourse, setgolfCourse] = useState<GameInfo["golfCourse"]>("");
   const [betType, setBetType] = useState<GameInfo["betType"]>("Stroke");
   const playerCount = useRef<GameInfo["playerCount"]>(0);
@@ -61,24 +64,30 @@ const MakeGameContent = () => {
     useState<GameInfo["betAmountPerStroke"]>(0);
 
   const [visibleSearchGolfCourse, setVisibleSarchGolfCourse] = useState(false);
+  const [visibleChangeGameRule, setVisibleChangeGameRule] = useState(false);
 
-  const mockHandleGolfCourse = () => {
-    console.log("open");
-    // setgolfCourse("골프벳 골프장");
+  // golf course
+  const handleOpenGolfCourse = () => {
+    setgolfCourse("골프벳 골프장");
     window.history.pushState(null, "", "");
     setVisibleSarchGolfCourse(true);
   };
 
-  const handleModalClose = useCallback(() => {
+  const handleCloseGolfCourse = useCallback(() => {
     console.log("handleModalClose");
     setVisibleSarchGolfCourse(false);
   }, []);
 
-  // useEffect(() => {
-  //   if (visibleSearchGolfCourse === false) {
-  //     window.onpopstate = () => {};
-  //   }
-  // }, [visibleSearchGolfCourse]);
+  //
+  const handleOpenChangeGameRule = () => {
+    console.log("gamerule push");
+    window.history.pushState(null, "", "");
+    setVisibleChangeGameRule(true);
+  };
+
+  const handleCloseChangeGameRule = useCallback(() => {
+    setVisibleChangeGameRule(false);
+  }, []);
 
   return (
     <div>
@@ -87,10 +96,10 @@ const MakeGameContent = () => {
         <h5>게임분류</h5>
         <SegmentCell<GameInfo["gameType"]>
           cells={[
-            { label: "필드", value: "Field" },
-            { label: "스크린", value: "Screen" },
+            { label: "필드", value: "field" },
+            { label: "스크린", value: "screen" },
           ]}
-          selectCellValue={"Field"}
+          selectCellValue={"field"}
           handleSelectCell={(cell) => (gameType.current = cell.value)}
         />
       </div>
@@ -101,10 +110,10 @@ const MakeGameContent = () => {
           readOnly
           placeholder="골프장을 검색해주세요"
           value={golfCourse}
-          onClick={mockHandleGolfCourse}
+          onClick={handleOpenGolfCourse}
         />
         {visibleSearchGolfCourse && (
-          <Modal handleClose={handleModalClose}>
+          <Modal handleClose={handleCloseGolfCourse}>
             <div style={{ backgroundColor: "var(--color-bg)" }}>
               <TitleAsset
                 title="골프장 선택"
@@ -132,14 +141,27 @@ const MakeGameContent = () => {
           min={0}
           value={playerCount.current}
           onChange={(value) => (playerCount.current = value)}
+          unit="명"
         />
       </div>
 
       {/* ////// 게임규칙 TODO: css */}
-      <div>
+      <div onClick={handleOpenChangeGameRule}>
         <h5>게임규칙</h5>
         <Rule rule={gameRule} />
       </div>
+      {visibleChangeGameRule && (
+        <Modal handleClose={handleCloseChangeGameRule}>
+          <RuleChange
+            gameRule={gameRule}
+            playerCount={playerCount.current}
+            handleClose={handleCloseChangeGameRule}
+            onChange={(gameRule) => {
+              setGameRule(gameRule);
+            }}
+          />
+        </Modal>
+      )}
 
       {/* ////// 내기금액 TODO: css */}
       <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -167,18 +189,13 @@ const MakeGameContent = () => {
 export interface GameInfo {
   gameId: string;
   createUser: string;
-  gameType: "Field" | "Screen";
+  gameType: "field" | "screen";
   golfCourse: string;
   isFrontNine: boolean;
   isBackNine: boolean;
   betType: "Stroke";
   playerCount: number;
-  gameRule: {
-    handiType: "None" | "Pre" | "Post";
-    spcialBetRequirements: string[];
-    ddang: "None" | "꼴등만";
-    nearestType: "게임에 포함" | "별도 지정";
-  };
+  gameRule: GameRule;
   betAmountPerStroke: number;
   bettingLimit: number;
 }

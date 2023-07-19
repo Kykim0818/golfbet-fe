@@ -6,6 +6,7 @@ type StepperProps = {
   onChange?: (value: number) => unknown;
   max?: number;
   min?: number;
+  unit?: string;
 };
 
 export const Stepper = ({
@@ -13,6 +14,7 @@ export const Stepper = ({
   onChange,
   max = Number.MAX_SAFE_INTEGER,
   min = Number.MIN_SAFE_INTEGER,
+  unit = "",
 }: StepperProps) => {
   const [_value, setValue] = useState(value);
 
@@ -40,7 +42,7 @@ export const Stepper = ({
           alt="minus"
         />
       </Styled.Button>
-      <Styled.Span>{_value}</Styled.Span>
+      <Styled.Span>{_value + unit}</Styled.Span>
       <Styled.Button onClick={handleIncrement}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/stepper_plus.svg"}
