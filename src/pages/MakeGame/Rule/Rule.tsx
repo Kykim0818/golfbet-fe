@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { GameInfo } from "../MakeGame";
-import { HandiType } from "./type";
+import { getDisplayText } from "./getDisplayText";
+import { SpecialBetRequirements } from "./type";
 
 type RuleProps = {
   rule: GameInfo["gameRule"];
@@ -11,22 +12,24 @@ export const Rule = ({ rule }: RuleProps) => {
     <Styled.Wrapper>
       <Styled.Detail>
         <div>핸디</div>
-        <div>{getHandiDisplayTxt(rule.handiType[0])}</div>
+        <div>{getDisplayText("handiType", rule.handiType[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
         <div>배판</div>
-        <div>{rule.specialBetRequirements.join(",")}</div>
+        <div>
+          {getSpecialBetRequirementsDiplay(rule.specialBetRequirements)}
+        </div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
         <div>땅</div>
-        <div>{rule.ddang[0] === "none" ? "없음" : "꼴등"}</div>
+        <div>{getDisplayText("handiType", rule.handiType[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
         <div>니어</div>
-        <div>{rule.nearestType}</div>
+        <div>{getDisplayText("nearestType", rule.nearestType[0])}</div>
       </Styled.Detail>
     </Styled.Wrapper>
   );
@@ -51,8 +54,10 @@ const Styled = {
   `,
 };
 
-const getHandiDisplayTxt = (handiType: HandiType["value"]) => {
-  if (handiType === "none") return "없음";
-  if (handiType === "pre") return "선핸디";
-  if (handiType === "post") return "후핸디";
+const getSpecialBetRequirementsDiplay = (
+  values: SpecialBetRequirements["value"][]
+) => {
+  return values
+    .map((value) => getDisplayText("specialBetRequirements", value))
+    .join(",");
 };

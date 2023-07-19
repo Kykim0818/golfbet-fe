@@ -19,7 +19,7 @@ export const BetMoney = ({
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isNumeric(e.target.value)) {
-      setMoney(Number(e.target.value));
+      setMoney(Number(e.target.value) >= 0 ? Number(e.target.value) : 0);
       return;
     }
     alert("숫자만 입력 가능합니다.");

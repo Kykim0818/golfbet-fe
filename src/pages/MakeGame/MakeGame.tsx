@@ -141,6 +141,7 @@ const MakeGameContent = () => {
           min={0}
           value={playerCount.current}
           onChange={(value) => (playerCount.current = value)}
+          unit="명"
         />
       </div>
 
