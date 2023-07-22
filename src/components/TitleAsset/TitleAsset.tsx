@@ -43,7 +43,6 @@ const S = {
     box-sizing: border-box;
     padding-left: 20px;
     padding-right: 20px;
-    margin-bottom: 30px;
     min-height: 41px;
     background-color: var(--color-bg, #f6f8fc);
   `,
