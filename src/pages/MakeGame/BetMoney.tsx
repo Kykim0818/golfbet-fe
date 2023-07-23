@@ -44,8 +44,9 @@ export const BetMoney = ({
         />
       </div>
       <Styled.ButtonGroup>
-        {plusMoneyArr.map((plusMoney) => (
+        {plusMoneyArr.map((plusMoney, index) => (
           <Styled.Button
+            key={index + plusMoney}
             variants={"custom"}
             onClick={() => handlePlusMoneyButtonClick(plusMoney)}
           >
