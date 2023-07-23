@@ -29,6 +29,7 @@ const S = {
   Content: styled.div`
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     margin-top: 30px;
     padding: 0px 26px;
     overflow: auto;
