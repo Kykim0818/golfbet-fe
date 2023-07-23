@@ -1,16 +1,15 @@
 import { useCallback, useRef, useState } from "react";
-import { GameInfo } from "../MakeGame";
-import SegmentCell from "../../../components/SegmentCell";
+import { useNavigate } from "react-router-dom";
+import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Modal from "../../../components/Modal";
-import TitleAsset from "../../../components/TitleAsset";
+import SegmentCell from "../../../components/SegmentCell";
 import Stepper from "../../../components/Stepper";
+import { BetMoney } from "../BetMoney";
+import { GameInfo } from "../MakeGame";
 import Rule from "../Rule";
 import { RuleChange } from "../Rule/RuleChange";
-import { BetMoney } from "../BetMoney";
-import Button from "../../../components/Button";
 import { GameRule } from "../Rule/type";
-import { useNavigate } from "react-router-dom";
 
 const defaultGameRule: GameRule = {
   handiType: ["none"],
@@ -32,17 +31,14 @@ export const Setup = () => {
   const [bettingLimit, setBettingLimit] =
     useState<GameInfo["betAmountPerStroke"]>(0);
 
-  const [visibleChangeGameRule, setVisibleChangeGameRule] = useState(false);
   //
   const handleOpenChangeGameRule = () => {
-    console.log("gamerule push");
-    window.history.pushState(null, "", "");
-    setVisibleChangeGameRule(true);
+    navigate("rule_change");
   };
 
   const handleCloseChangeGameRule = useCallback(() => {
-    setVisibleChangeGameRule(false);
-  }, []);
+    navigate(-1);
+  }, [navigate]);
 
   return (
     <div>
@@ -91,18 +87,17 @@ export const Setup = () => {
         <h5>게임규칙</h5>
         <Rule rule={gameRule} />
       </div>
-      {visibleChangeGameRule && (
-        <Modal handleClose={handleCloseChangeGameRule}>
-          <RuleChange
-            gameRule={gameRule}
-            playerCount={playerCount.current}
-            handleClose={handleCloseChangeGameRule}
-            onChange={(gameRule) => {
-              setGameRule(gameRule);
-            }}
-          />
-        </Modal>
-      )}
+      {/* TODO: 페이지 작업중 */}
+      <Modal handleClose={handleCloseChangeGameRule}>
+        <RuleChange
+          gameRule={gameRule}
+          playerCount={playerCount.current}
+          handleClose={handleCloseChangeGameRule}
+          onChange={(gameRule) => {
+            setGameRule(gameRule);
+          }}
+        />
+      </Modal>
 
       {/* ////// 내기금액 TODO: css */}
       <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
