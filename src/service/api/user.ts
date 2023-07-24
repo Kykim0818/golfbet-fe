@@ -40,7 +40,7 @@ export async function testApi() {
   console.log("testApi");
   axios
     .get<any>(`${process.env.API_URL}/v1/fields`)
-    .then((res) => alert(res))
+    .then((res) => console.log(res))
     .catch((e) => console.log(e))
     .finally(() => console.log("finally"));
   // process.env.API_URL;
