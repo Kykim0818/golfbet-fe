@@ -1,3 +1,4 @@
+import axios from "axios";
 import { testAsync } from "../../utils/test-promise";
 
 export type User = {
@@ -33,4 +34,14 @@ export async function requestLogout(
 ): Promise<boolean> {
   const testResult = Math.floor(Math.random() * 10) > 0;
   return testAsync(() => testResult, 100).then((res) => res as boolean);
+}
+
+export async function testApi() {
+  console.log("testApi");
+  axios
+    .get<any>(`${process.env.API_URL}/v1/fields`)
+    .then((res) => alert(res))
+    .catch((e) => console.log(e))
+    .finally(() => console.log("finally"));
+  // process.env.API_URL;
 }

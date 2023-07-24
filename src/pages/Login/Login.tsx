@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
+import { testApi } from "../../service/api/user";
 import { LOGIN } from "../../service/login/constant";
 import { testAsync } from "../../utils/test-promise";
 
@@ -17,8 +18,8 @@ export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
 }) => {
   // TODO: login handling 방식에 따라 다를듯
-  const handleKakaoLogin = () => {
-    alert("Kakao Login");
+  const handleKakaoLogin = async () => {
+    await testApi();
   };
   //
   const handleTestLogin = () => {
