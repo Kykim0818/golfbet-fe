@@ -1,13 +1,21 @@
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
 import { TabItem } from "../../../components/Tabs/Tabs";
+import TitleAsset from "../../../components/TitleAsset";
 import { CourseInfo, CourseList } from "./CourseList";
 
 export const SelectGolfCourse = () => {
+  const navigate = useNavigate();
   return (
     <Styled.Wrapper>
+      <TitleAsset
+        title="게임 만들기"
+        visibleBack
+        handleBack={() => navigate("/make_game")}
+      />
       <Styled.Body>
         <div>
           <Input placeholder="골프장을 검색해주세요" />
