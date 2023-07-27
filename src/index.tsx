@@ -7,12 +7,15 @@ import App from "./App";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
 import MakeGame from "./pages/MakeGame";
+import MakeGolfCourse from "./pages/MakeGame/MakeGolfCourse";
+import { MakeGolfCourseDetail } from "./pages/MakeGame/MakeGolfCourse/MakeGolfCourseDetail";
+import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
+import { SelectGolfCourse } from "./pages/MakeGame/SelectGolfCourse/SelectGolfCourse";
+import Setup from "./pages/MakeGame/Setup";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import { SelectGolfCourse } from "./pages/MakeGame/SelectGolfCourse/SelectGolfCourse";
-import Setup from "./pages/MakeGame/Setup";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -37,6 +40,18 @@ const router = createBrowserRouter([
       {
         path: "select_golf_course",
         element: <SelectGolfCourse />,
+      },
+      {
+        path: "make_golf_course",
+        element: <MakeGolfCourse />,
+      },
+      {
+        path: "make_golf_course_detail",
+        element: <MakeGolfCourseDetail />,
+      },
+      {
+        path: "rule_change",
+        element: <RuleChange />,
       },
     ],
     errorElement: <ErrorPage />,

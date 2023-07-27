@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import ToggleGroup from "../../../components/ToggleGroup";
 import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
+import { useGameInfo } from "../MakeGame";
 import { GAME_RULES } from "./constant";
 import { getDisplayText } from "./getDisplayText";
 import {
-  GameRule,
   Rules,
   isDdangValue,
   isHandiTypeValue,
@@ -16,23 +17,14 @@ import {
   isSpecialBetRequirementsValue,
 } from "./type";
 
-type RuleChangeProps = {
-  gameRule: GameRule;
-  playerCount: number;
-  handleClose: () => void;
-  onChange: (rule: GameRule) => void;
-};
+export const RuleChange = () => {
+  const navigate = useNavigate();
+  const { gameInfo } = useGameInfo();
 
-export const RuleChange = ({
-  gameRule,
-  playerCount,
-  handleClose,
-  onChange,
-}: RuleChangeProps) => {
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
-  const rules = getRule(playerCount);
+  const rules = getRule(gameInfo.playerCount);
 
-  const [currentRule, setCurrentRule] = useState(gameRule);
+  const [currentRule, setCurrentRule] = useState(gameInfo.gameRule);
 
   const handleOnChange = (ruleType: Rules["ruleType"], values: string[]) => {
     let changedRule = deepClone(currentRule);
@@ -55,7 +47,11 @@ export const RuleChange = ({
 
   return (
     <Styled.Wrapper>
-      <TitleAsset title="게임 규칙" handleBack={handleClose} visibleBack />
+      <TitleAsset
+        title="게임 규칙"
+        handleBack={() => navigate(-1)}
+        visibleBack
+      />
       <Styled.Body>
         {rules.map((rule) => {
           return (
@@ -63,7 +59,7 @@ export const RuleChange = ({
               <span>{rule.title}</span>
               <ToggleGroup
                 isMultiSelect={multiSelectOptions.includes(rule.optionType)}
-                selectedValues={gameRule[rule.optionType]}
+                selectedValues={currentRule[rule.optionType]}
                 group={rule.options}
                 onChange={(values) => handleOnChange(rule.optionType, values)}
               />
@@ -88,8 +84,8 @@ export const RuleChange = ({
         <Button
           onClick={() => {
             // TODO: 뒤로가기
-            onChange(currentRule);
-            handleClose();
+            gameInfo.gameRule = currentRule;
+            navigate(-1);
           }}
         >
           수정하기
