@@ -20,7 +20,11 @@ export const SelectGolfCourse = () => {
         <div>
           <Input placeholder="골프장을 검색해주세요" />
         </div>
-        <Button style={{ width: "fit-content" }} variants="outlined">
+        <Button
+          onClick={() => navigate("../make_golf_course")}
+          style={{ width: "fit-content" }}
+          variants="outlined"
+        >
           +직접 추가하기
         </Button>
         <Styled.Section>
