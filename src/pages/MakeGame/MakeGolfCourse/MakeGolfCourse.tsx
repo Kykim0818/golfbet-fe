@@ -1,9 +1,9 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import TitleAsset from "../../../components/TitleAsset";
-import { useRef } from "react";
 import { GameInfo } from "../MakeGame";
 
 type GolfCourseInfo = {
@@ -74,5 +74,14 @@ export const MakeGolfCourse = () => {
 
 const Styled = {
   Wrapper: styled.div``,
-  Body: styled.div``,
+  Body: styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 25px;
+    margin-top: 40px;
+    padding: 0px 26px;
+
+    overflow: auto;
+  `,
 };

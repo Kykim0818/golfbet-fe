@@ -15,6 +15,7 @@ const defaultGameRule: GameRule = {
 };
 
 export const MakeGame = () => {
+  // TODO : 새로고침시 경고 문구 띄우면 좋아보임
   const gameInfo = useRef<GameInfo>({
     gameId: "",
     gameType: "field",
@@ -36,11 +37,7 @@ export const MakeGame = () => {
   });
   return (
     <S.Wrapper>
-      <S.Content>
-        <Outlet
-          context={{ gameInfo: gameInfo.current } satisfies ContextType}
-        />
-      </S.Content>
+      <Outlet context={{ gameInfo: gameInfo.current } satisfies ContextType} />
     </S.Wrapper>
   );
 };

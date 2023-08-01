@@ -59,5 +59,14 @@ export const MakeGolfCourseDetail = () => {
 
 const Styled = {
   Wrapper: styled.div``,
-  Body: styled.div``,
+  Body: styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 25px;
+    margin-top: 40px;
+    padding: 0px 26px;
+
+    overflow: auto;
+  `,
 };
