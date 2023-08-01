@@ -84,6 +84,11 @@ const Styled = {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    gap: 25px;
+    margin-top: 40px;
+    padding: 0px 26px;
+
+    overflow: auto;
   `,
   Section: styled.section`
     margin-top: 25px;
