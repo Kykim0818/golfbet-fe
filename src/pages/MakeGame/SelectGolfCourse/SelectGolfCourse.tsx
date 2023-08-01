@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
@@ -5,10 +6,17 @@ import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
 import { TabItem } from "../../../components/Tabs/Tabs";
 import TitleAsset from "../../../components/TitleAsset";
+import { useGameInfo } from "../MakeGame";
 import { CourseInfo, CourseList } from "./CourseList";
 
 export const SelectGolfCourse = () => {
   const navigate = useNavigate();
+  const { resetCourseInfoForAdd } = useGameInfo();
+
+  useEffect(() => {
+    resetCourseInfoForAdd();
+  }, [resetCourseInfoForAdd]);
+
   return (
     <Styled.Wrapper>
       <TitleAsset
