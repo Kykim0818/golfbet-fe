@@ -1,22 +1,43 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import { FixedGolfCourse } from "../FixedGolfCourse";
 import { HoleDetail } from "../HoleDetail";
-
-const todoData = {
-  courseType: "field",
-  name: "이천 실크밸리 GC",
-  frontNineCourseName: "레이크",
-  backNineCourseName: "밸리",
-};
+import { useGameInfo } from "../MakeGame";
 
 // TODO 전역값 관리 어디서할지 정하면 수정
 const GOLF_COURSE_COUNT = 9;
 
 export const MakeGolfCourseDetail = () => {
   const navigate = useNavigate();
+  const { gameInfo, tmpGolfCourseInfoForAdd } = useGameInfo();
+  const frontNineCourseDetail = useRef(
+    tmpGolfCourseInfoForAdd.frontNineCourse.holeCounts
+  );
+  const backNineCourseDetail = useRef(
+    tmpGolfCourseInfoForAdd.backNineCourse.holeCounts
+  );
+
+  const handleClickSelectGolfCourseBtn = () => {
+    // TODO-Server : 저장전 서버에 데이터 전송후,
+    // 성공 response 후에 그 값을 선택으로 지정
+    gameInfo.golfCourse = {
+      name: tmpGolfCourseInfoForAdd.name,
+      location: tmpGolfCourseInfoForAdd.location,
+      frontNineCourse: {
+        name: tmpGolfCourseInfoForAdd.frontNineCourse.name,
+        holeCounts: frontNineCourseDetail.current,
+      },
+      backNineCourse: {
+        name: tmpGolfCourseInfoForAdd.backNineCourse.name,
+        holeCounts: backNineCourseDetail.current,
+      },
+    };
+    navigate("/make_game");
+  };
+
   return (
     <Styled.Wrapper>
       <TitleAsset
@@ -26,33 +47,39 @@ export const MakeGolfCourseDetail = () => {
       />
       <Styled.Body>
         <FixedGolfCourse
-          courseType={todoData.courseType as "field"}
-          name={todoData.name}
-          frontNineCourseName={todoData.frontNineCourseName}
-          backNineCourseName={todoData.backNineCourseName}
+          courseType={gameInfo.gameType}
+          name={tmpGolfCourseInfoForAdd.name}
+          frontNineCourseName={tmpGolfCourseInfoForAdd.frontNineCourse.name}
+          backNineCourseName={tmpGolfCourseInfoForAdd.backNineCourse.name}
         />
         <div>
-          <span>{todoData.frontNineCourseName}</span>
+          <span>{tmpGolfCourseInfoForAdd.frontNineCourse.name}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
             <HoleDetail
               key={index + 1}
-              holeCount={index + 1}
-              onChange={() => console.log("change")}
+              holeNumber={index + 1}
+              parCount={frontNineCourseDetail.current[index]}
+              onChange={(parCount) =>
+                (frontNineCourseDetail.current[index] = parCount)
+              }
             />
           ))}
         </div>
         <div>
-          <span>{todoData.backNineCourseName}</span>
+          <span>{tmpGolfCourseInfoForAdd.backNineCourse.name}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
             <HoleDetail
               key={index + 1}
-              holeCount={index + 1}
-              onChange={() => console.log("change")}
+              holeNumber={index + 1}
+              parCount={backNineCourseDetail.current[index]}
+              onChange={(parCount) =>
+                (backNineCourseDetail.current[index] = parCount)
+              }
             />
           ))}
         </div>
       </Styled.Body>
-      <Button onClick={() => navigate("/make_game")}>추가 후 선택하기</Button>
+      <Button onClick={handleClickSelectGolfCourseBtn}>추가 후 선택하기</Button>
     </Styled.Wrapper>
   );
 };

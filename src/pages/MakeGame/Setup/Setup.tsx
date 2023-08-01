@@ -17,7 +17,6 @@ export const Setup = () => {
   const handleOpenChangeGameRule = () => {
     navigate("rule_change");
   };
-
   return (
     <>
       <TitleAsset
