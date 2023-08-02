@@ -22,7 +22,7 @@ export const Setup = () => {
       <TitleAsset
         title="게임 만들기"
         visibleBack
-        handleBack={() => navigate("/")}
+        handleBack={() => navigate("/", { replace: true })}
       />
       <Styled.Body>
         {/* ////// 게임분류  */}

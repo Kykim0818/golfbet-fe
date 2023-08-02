@@ -1,17 +1,6 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { LOGIN } from "../../service/login/constant";
-import { testAsync } from "../../utils/test-promise";
-
-function getLoginInfo() {
-  // localStorge 확인후 없으면 로그인페이지 , 있으면 메인페이지
-  return { token: null };
-}
-
-export async function loginLoader() {
-  // isLogined
-  return await testAsync(getLoginInfo);
-}
 
 export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
