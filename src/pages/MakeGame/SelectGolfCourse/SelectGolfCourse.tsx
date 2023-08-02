@@ -22,7 +22,7 @@ export const SelectGolfCourse = () => {
       <TitleAsset
         title="게임 만들기"
         visibleBack
-        handleBack={() => navigate("/make_game")}
+        handleBack={() => navigate("/make_game", { replace: true })}
       />
       <Styled.Body>
         <div>
@@ -46,7 +46,6 @@ export const SelectGolfCourse = () => {
   );
 };
 
-// TODO 데이터 세팅 부분 로직 필요
 const testCourses: CourseInfo[] = [
   {
     id: "1",
@@ -73,7 +72,6 @@ const testCourses: CourseInfo[] = [
     backNineCourses: ["후반코스 1", "후반코스 2"],
   },
 ];
-
 const testTabItems: TabItem[] = [
   {
     id: "1",

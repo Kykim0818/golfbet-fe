@@ -49,7 +49,7 @@ export const RuleChange = () => {
     <Styled.Wrapper>
       <TitleAsset
         title="게임 규칙"
-        handleBack={() => navigate("/make_game")}
+        handleBack={() => navigate("/make_game", { replace: true })}
         visibleBack
       />
       <Styled.Body>

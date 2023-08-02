@@ -42,7 +42,7 @@ export const MakeGolfCourse = () => {
       <TitleAsset
         title="골프장 추가"
         visibleBack
-        handleBack={() => navigate("../select_golf_course")}
+        handleBack={() => navigate("../select_golf_course", { replace: true })}
       />
       <Styled.Body>
         <div>
