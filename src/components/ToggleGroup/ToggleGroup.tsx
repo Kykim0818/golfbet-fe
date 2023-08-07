@@ -5,6 +5,8 @@ import { Toggle } from "../Toggle/Toggle";
 
 type ToggleGroupProps = {
   isMultiSelect?: boolean;
+  // multi toggle case
+  multiSelectResetValue?: string;
   selectedValues: string[];
   group: { label: string; value: string }[];
   onChange?: (values: string[]) => void;
@@ -12,6 +14,7 @@ type ToggleGroupProps = {
 
 export const ToggleGroup = ({
   isMultiSelect = false,
+  multiSelectResetValue,
   group,
   selectedValues,
   onChange,
@@ -21,11 +24,28 @@ export const ToggleGroup = ({
   const handleToggleChange = (selectValue: string) => {
     let cloneValue = deepClone(currentValue);
     if (isMultiSelect) {
+      // reset
+      if (selectValue === multiSelectResetValue) {
+        cloneValue = new Set([selectValue]);
+        setCurrentValue(cloneValue);
+        onChange?.(Array.from(cloneValue));
+        return;
+      }
+
       if (currentValue.has(selectValue)) {
         cloneValue.delete(selectValue);
       } else {
         cloneValue.add(selectValue);
       }
+
+      // 없음 누른상태에서 다른거 누르면 없음 해제
+      if (multiSelectResetValue !== undefined)
+        cloneValue.delete(multiSelectResetValue);
+      // 해제 했을때 아무것도 없으면 없음 체크
+      if (cloneValue.size === 0 && multiSelectResetValue) {
+        cloneValue.add(multiSelectResetValue);
+      }
+
       setCurrentValue(cloneValue);
       onChange?.(Array.from(cloneValue));
       return;

@@ -59,6 +59,7 @@ export const RuleChange = () => {
               <span>{rule.title}</span>
               <ToggleGroup
                 isMultiSelect={multiSelectOptions.includes(rule.optionType)}
+                multiSelectResetValue="none"
                 selectedValues={currentRule[rule.optionType]}
                 group={rule.options}
                 onChange={(values) => handleOnChange(rule.optionType, values)}
