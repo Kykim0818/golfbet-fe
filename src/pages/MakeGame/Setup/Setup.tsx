@@ -43,7 +43,7 @@ export const Setup = () => {
           <Input
             readOnly
             placeholder="골프장을 검색해주세요"
-            value={gameInfo.golfCourse.name}
+            value={gameInfo.golfCenter.name}
             onClick={() => navigate("select_golf_course")}
           />
         </div>

@@ -10,9 +10,10 @@ import { useGameInfo } from "../MakeGame";
 // TODO 전역값 관리 어디서할지 정하면 수정
 const GOLF_COURSE_COUNT = 9;
 
-export const MakeGolfCourseDetail = () => {
+export const MakeGolfCenterDetail = () => {
   const navigate = useNavigate();
-  const { gameInfo, tmpGolfCourseInfoForAdd } = useGameInfo();
+  const { gameInfo, tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } =
+    useGameInfo();
   const frontNineCourseDetail = useRef(
     tmpGolfCourseInfoForAdd.frontNineCourse.holeCounts
   );
@@ -20,10 +21,10 @@ export const MakeGolfCourseDetail = () => {
     tmpGolfCourseInfoForAdd.backNineCourse.holeCounts
   );
 
-  const handleClickSelectGolfCourseBtn = () => {
+  const handleClickSelectGolfCenterBtn = () => {
     // TODO-Server : 저장전 서버에 데이터 전송후,
     // 성공 response 후에 그 값을 선택으로 지정
-    gameInfo.golfCourse = {
+    gameInfo.golfCenter = {
       name: tmpGolfCourseInfoForAdd.name,
       location: tmpGolfCourseInfoForAdd.location,
       frontNineCourse: {
@@ -79,7 +80,7 @@ export const MakeGolfCourseDetail = () => {
           ))}
         </div>
       </Styled.Body>
-      <Button onClick={handleClickSelectGolfCourseBtn}>추가 후 선택하기</Button>
+      <Button onClick={handleClickSelectGolfCenterBtn}>추가 후 선택하기</Button>
     </Styled.Wrapper>
   );
 };

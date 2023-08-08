@@ -1,21 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
-import { TabItem } from "../../../components/Tabs/Tabs";
 import TitleAsset from "../../../components/TitleAsset";
 import { useGameInfo } from "../MakeGame";
-import { CourseInfo, CourseList } from "./CourseList";
+import { useSelectGolfCenter } from "./useSelectGolfCenter";
 
-export const SelectGolfCourse = () => {
+const NO_SEARCH_INPUT = "";
+
+export const SelectGolfCenter = () => {
   const navigate = useNavigate();
-  const { resetCourseInfoForAdd } = useGameInfo();
+  const { resetCenterInfoForAdd, gameInfo } = useGameInfo();
 
+  const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
+
+  const { uiTabItems, currentSelectCenter, btnDisable } = useSelectGolfCenter(
+    gameInfo.golfCenter
+  );
+
+  // reset
   useEffect(() => {
-    resetCourseInfoForAdd();
-  }, [resetCourseInfoForAdd]);
+    resetCenterInfoForAdd();
+  }, [resetCenterInfoForAdd]);
+
+  const handleSelectGolfCenter = () => {
+    gameInfo.golfCenter = currentSelectCenter.current;
+    navigate("/make_game");
+  };
 
   return (
     <Styled.Wrapper>
@@ -36,49 +49,52 @@ export const SelectGolfCourse = () => {
           +직접 추가하기
         </Button>
         <Styled.Section>
-          <Tabs items={testTabItems} onChange={() => {}} />
+          {serachInputValue === NO_SEARCH_INPUT ? (
+            <Tabs items={uiTabItems} onChange={() => {}} />
+          ) : (
+            <div>list</div>
+          )}
         </Styled.Section>
       </Styled.Body>
       <Styled.Footer>
-        <Button disabled>선택하기</Button>
+        <Button onClick={handleSelectGolfCenter} disabled={btnDisable}>
+          선택하기
+        </Button>
       </Styled.Footer>
     </Styled.Wrapper>
   );
 };
 
-const testCourses: CourseInfo[] = [
-  {
-    id: "1",
-    name: "골프클럽 Q",
-    region: "경기 안성",
-    holeCount: 36,
-    frontNineCourses: ["Q 전반코스 1", "Q 전반코스 2"],
-    backNineCourses: ["후반코스 1", "후반코스 2"],
-  },
-  {
-    id: "2",
-    name: "포레스트힐",
-    region: "경기 포천",
-    holeCount: 36,
-    frontNineCourses: ["힐 전반코스 1", "힐 전반코스 2"],
-    backNineCourses: ["후반코스 1", "후반코스 2"],
-  },
-  {
-    id: "3",
-    name: "몽베르",
-    region: "경기 안성",
-    holeCount: 36,
-    frontNineCourses: ["몽 전반코스 1", "몽 전반코스 2"],
-    backNineCourses: ["후반코스 1", "후반코스 2"],
-  },
-];
-const testTabItems: TabItem[] = [
-  {
-    id: "1",
-    label: "최근",
-    children: <CourseList items={testCourses} />,
-  },
-];
+export type GolfCenterList = {
+  group: string;
+  centers: CenterInfo[];
+}[];
+
+export type CenterInfo = {
+  id: string;
+  type: "field" | "screen";
+  name: string;
+  region1: string;
+  region2: string;
+  holeCount: number;
+  courses: CourseInfo[];
+};
+
+export type CourseInfo = {
+  id: string;
+  name: string;
+  nameDetail: string;
+  parsSum: number;
+  pars: number[];
+};
+
+// const testTabItems: TabItem[] = [
+//   {
+//     id: "1",
+//     label: "최근",
+//     children: <CenterList centers={golfCenterList} />,
+//   },
+// ];
 
 const Styled = {
   Wrapper: styled.div`
