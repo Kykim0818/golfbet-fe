@@ -11,24 +11,24 @@ export const Rule = ({ rule }: RuleProps) => {
   return (
     <Styled.Wrapper>
       <Styled.Detail>
-        <div>핸디</div>
+        <Styled.Label>핸디</Styled.Label>
         <div>{getDisplayText("handiType", rule.handiType[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
-        <div>배판</div>
+        <Styled.Label>배판</Styled.Label>
         <div>
           {getSpecialBetRequirementsDiplay(rule.specialBetRequirements)}
         </div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
-        <div>땅</div>
+        <Styled.Label>땅</Styled.Label>
         <div>{getDisplayText("handiType", rule.handiType[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
-        <div>니어</div>
+        <Styled.Label>니어</Styled.Label>
         <div>{getDisplayText("nearestType", rule.nearestType[0])}</div>
       </Styled.Detail>
     </Styled.Wrapper>
@@ -46,6 +46,14 @@ const Styled = {
   Detail: styled.div`
     display: flex;
     justify-content: space-between;
+  `,
+  Label: styled.div`
+    // TODO typo
+    color: var(--sub-text-grey, #bcbcbc);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
   `,
   Line: styled.div`
     height: 1px;

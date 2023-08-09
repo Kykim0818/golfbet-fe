@@ -43,9 +43,19 @@ export const SegmentCell = <T extends unknown>({
 const Styled = {
   Wrapper: styled.div`
     display: flex;
+    background-color: white;
+    border-radius: 25px;
   `,
   Button: styled.button<{ isActive?: boolean }>`
-    background-color: ${(props) => (props.isActive ? "green" : "white")};
+    width: 100%;
+    background-color: ${(props) =>
+      props.isActive ? `var(--color-main,#009eb2)` : "white"};
     color: ${(props) => (props.isActive ? "white" : "black")};
+    box-shadow: ${(props) =>
+      props.isActive ? `0px 2px 4px 0px rgba(0, 0, 0, 0.1)` : ""};
+
+    border-radius: 25px;
+    border: none;
+    padding: 11px 55px;
   `,
 };
