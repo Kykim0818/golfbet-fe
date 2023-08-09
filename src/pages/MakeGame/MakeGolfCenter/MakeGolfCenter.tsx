@@ -11,7 +11,7 @@ export const MakeGolfCenter = () => {
   const { tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } = useGameInfo();
 
   const [centerName, setCenterName] = useState(tmpGolfCourseInfoForAdd.name);
-  const [location, setLocation] = useState(tmpGolfCourseInfoForAdd.location);
+  const [region, setRegion] = useState(tmpGolfCourseInfoForAdd.region);
   const [frontNineCourseName, setFrontNineCourseName] = useState(
     tmpGolfCourseInfoForAdd.frontNineCourse.name
   );
@@ -31,7 +31,7 @@ export const MakeGolfCenter = () => {
       return;
     }
     tmpGolfCourseInfoForAdd.name = centerName;
-    tmpGolfCourseInfoForAdd.location = location;
+    tmpGolfCourseInfoForAdd.region = region;
     tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
     tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
     navigate("../make_golf_course_detail");
@@ -55,7 +55,7 @@ export const MakeGolfCenter = () => {
         </div>
         <div>
           <h5>지역</h5>
-          <div>{location}</div>
+          <div>{region}</div>
         </div>
         <div>
           <h5>전반</h5>

@@ -5,8 +5,8 @@ import { CourseInfo } from "./SelectGolfCenter";
 type Props = {
   courses: CourseInfo[];
   onChange: (value: {
-    selectFrontCourse: CourseInfo;
-    selectBackCourse: CourseInfo;
+    selectFrontCourseId: string;
+    selectBackCourseId: string;
   }) => void;
 };
 
@@ -21,7 +21,23 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
   const handleChangeToggle = (
     courseType: "front" | "back",
     toggleValue: string[]
-  ) => {};
+  ) => {
+    if (courseType === "front") {
+      onChange({
+        selectFrontCourseId: toggleValue[0],
+        selectBackCourseId: currentBackNineCourse.current.id,
+      });
+      return;
+    }
+
+    if (courseType === "back") {
+      onChange({
+        selectFrontCourseId: currentFrontNineCourse.current.id,
+        selectBackCourseId: toggleValue[0],
+      });
+      return;
+    }
+  };
 
   return (
     <div>

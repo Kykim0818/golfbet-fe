@@ -12,12 +12,12 @@ const NO_SEARCH_INPUT = "";
 
 export const SelectGolfCenter = () => {
   const navigate = useNavigate();
-  const { resetCenterInfoForAdd, gameInfo } = useGameInfo();
-
+  const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
 
   const { uiTabItems, currentSelectCenter, btnDisable } = useSelectGolfCenter(
-    gameInfo.golfCenter
+    gameInfo.golfCenter,
+    golfCenterList
   );
 
   // reset
@@ -29,7 +29,6 @@ export const SelectGolfCenter = () => {
     gameInfo.golfCenter = currentSelectCenter.current;
     navigate("/make_game");
   };
-
   return (
     <Styled.Wrapper>
       <TitleAsset

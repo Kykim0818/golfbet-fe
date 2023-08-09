@@ -15,10 +15,10 @@ export const MakeGolfCenterDetail = () => {
   const { gameInfo, tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } =
     useGameInfo();
   const frontNineCourseDetail = useRef(
-    tmpGolfCourseInfoForAdd.frontNineCourse.holeCounts
+    tmpGolfCourseInfoForAdd.frontNineCourse.pars
   );
   const backNineCourseDetail = useRef(
-    tmpGolfCourseInfoForAdd.backNineCourse.holeCounts
+    tmpGolfCourseInfoForAdd.backNineCourse.pars
   );
 
   const handleClickSelectGolfCenterBtn = () => {
@@ -26,14 +26,14 @@ export const MakeGolfCenterDetail = () => {
     // 성공 response 후에 그 값을 선택으로 지정
     gameInfo.golfCenter = {
       name: tmpGolfCourseInfoForAdd.name,
-      location: tmpGolfCourseInfoForAdd.location,
+      region: tmpGolfCourseInfoForAdd.region,
       frontNineCourse: {
         name: tmpGolfCourseInfoForAdd.frontNineCourse.name,
-        holeCounts: frontNineCourseDetail.current,
+        pars: frontNineCourseDetail.current,
       },
       backNineCourse: {
         name: tmpGolfCourseInfoForAdd.backNineCourse.name,
-        holeCounts: backNineCourseDetail.current,
+        pars: backNineCourseDetail.current,
       },
     };
     navigate("/make_game");

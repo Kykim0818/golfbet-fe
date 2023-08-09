@@ -14,7 +14,7 @@ export async function apiGetAllGolfCenter() {
     return response;
   } catch (e) {
     // 응답실패
-    alert("데이터 불러오기 실패, 임시데이터 대체");
+    // alert 적으면 계속 query 실행됨
     return { result: testCourses1 } as APIResponse<GolfCenterList>;
   }
 }
