@@ -84,8 +84,8 @@ export const CenterList = ({ centers, onChange }: Props) => {
     <RadioGroup value={centerId} onChange={handleClickCenter}>
       {centers.map((center) => {
         return (
-          <div>
-            <Styled.Item key={center.id}>
+          <div key={center.id}>
+            <Styled.Item>
               <Radio
                 value={center.id}
               >{`${center.name}(${center.holeCount}홀)`}</Radio>

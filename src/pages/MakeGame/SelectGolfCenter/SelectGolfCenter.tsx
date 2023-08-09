@@ -6,6 +6,7 @@ import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
 import TitleAsset from "../../../components/TitleAsset";
 import { useGameInfo } from "../MakeGame";
+import { CenterList } from "./CenterList";
 import { useSelectGolfCenter } from "./useSelectGolfCenter";
 
 const NO_SEARCH_INPUT = "";
@@ -15,10 +16,19 @@ export const SelectGolfCenter = () => {
   const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
 
-  const { uiTabItems, currentSelectCenter, btnDisable } = useSelectGolfCenter(
-    gameInfo.golfCenter,
-    golfCenterList
+  // 검색 결과
+  const allCenters =
+    golfCenterList.filter((center) => center.group === "전체")[0]?.centers ??
+    [];
+  const searchedCenters = allCenters.filter((center) =>
+    center.name.includes(serachInputValue)
   );
+
+  const { uiTabItems, currentSelectCenter, btnDisable, handleOnChange } =
+    useSelectGolfCenter(
+      gameInfo.golfCenter,
+      golfCenterList.filter((centerList) => centerList.group !== "전체")
+    );
 
   // reset
   useEffect(() => {
@@ -38,7 +48,10 @@ export const SelectGolfCenter = () => {
       />
       <Styled.Body>
         <div>
-          <Input placeholder="골프장을 검색해주세요" />
+          <Input
+            placeholder="골프장을 검색해주세요"
+            onChange={(e) => setSearchInputValue(e.target.value)}
+          />
         </div>
         <Button
           onClick={() => navigate("../make_golf_course")}
@@ -51,7 +64,7 @@ export const SelectGolfCenter = () => {
           {serachInputValue === NO_SEARCH_INPUT ? (
             <Tabs items={uiTabItems} onChange={() => {}} />
           ) : (
-            <div>list</div>
+            <CenterList centers={searchedCenters} onChange={handleOnChange} />
           )}
         </Styled.Section>
       </Styled.Body>

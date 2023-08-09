@@ -34,5 +34,7 @@ export const useSelectGolfCenter = (
     uiTabItems,
     currentSelectCenter,
     btnDisable,
+
+    handleOnChange,
   };
 };
