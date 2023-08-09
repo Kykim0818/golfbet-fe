@@ -10,6 +10,7 @@ import { APIResponse } from "./type";
 export async function apiGetAllGolfCenter() {
   try {
     // 응답성공
+    throw new Error();
     const response = await getData<GolfCenterList>(API_URL.GET_ALL_GOLF_CENTER);
     return response;
   } catch (e) {
