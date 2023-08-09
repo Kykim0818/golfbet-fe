@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { GameInfo } from "./MakeGame";
 
 type Props = {
-  courseType: GameInfo["gameType"];
+  centerType: GameInfo["gameType"];
   name: string;
   frontNineCourseName: string;
   backNineCourseName: string;
 };
 
-export const FixedGolfCourse = ({
-  courseType,
+export const FixedGolfCenter = ({
+  centerType: courseType,
   name,
   frontNineCourseName,
   backNineCourseName,
@@ -17,10 +17,10 @@ export const FixedGolfCourse = ({
   return (
     <Styled.Wrapper>
       {/* 필드 타입, 이름 */}
-      <Styled.CourseName>
+      <Styled.CenterName>
         <span>{courseType}</span>
         <span>{name}</span>
-      </Styled.CourseName>
+      </Styled.CenterName>
       <Styled.NineCourseNameWrapper>
         {/* 전반 이름 */}
         <Styled.NineCourseName>
@@ -42,7 +42,7 @@ const Styled = {
     display: flex;
     flex-direction: column;
   `,
-  CourseName: styled.div`
+  CenterName: styled.div`
     display: flex;
   `,
 

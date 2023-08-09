@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
-import { FixedGolfCourse } from "../FixedGolfCourse";
+import { FixedGolfCenter } from "../FixedGolfCenter";
 import { HoleDetail } from "../HoleDetail";
 import { useGameInfo } from "../MakeGame";
 
@@ -47,8 +47,8 @@ export const MakeGolfCenterDetail = () => {
         handleBack={() => navigate("../make_golf_course", { replace: true })}
       />
       <Styled.Body>
-        <FixedGolfCourse
-          courseType={gameInfo.gameType}
+        <FixedGolfCenter
+          centerType={gameInfo.gameType}
           name={tmpGolfCourseInfoForAdd.name}
           frontNineCourseName={tmpGolfCourseInfoForAdd.frontNineCourse.name}
           backNineCourseName={tmpGolfCourseInfoForAdd.backNineCourse.name}
