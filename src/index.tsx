@@ -7,10 +7,10 @@ import App from "./App";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
 import MakeGame from "./pages/MakeGame";
-import MakeGolfCourse from "./pages/MakeGame/MakeGolfCourse";
-import { MakeGolfCourseDetail } from "./pages/MakeGame/MakeGolfCourse/MakeGolfCourseDetail";
+import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
+import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
 import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
-import { SelectGolfCourse } from "./pages/MakeGame/SelectGolfCourse/SelectGolfCourse";
+import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -39,15 +39,15 @@ const router = createBrowserRouter([
       },
       {
         path: "select_golf_course",
-        element: <SelectGolfCourse />,
+        element: <SelectGolfCenter />,
       },
       {
         path: "make_golf_course",
-        element: <MakeGolfCourse />,
+        element: <MakeGolfCenter />,
       },
       {
         path: "make_golf_course_detail",
-        element: <MakeGolfCourseDetail />,
+        element: <MakeGolfCenterDetail />,
       },
       {
         path: "rule_change",
@@ -58,7 +58,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // window focus 설정
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -1,41 +1,46 @@
+import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Outlet, useOutletContext } from "react-router-dom";
 import styled from "styled-components";
+import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
+import { apiGetAllGolfCenter } from "../../service/api/golfCenter";
 import { deepClone } from "../../utils/deepClone";
 import { GameRule } from "./Rule/type";
+import { GolfCenterList } from "./SelectGolfCenter/SelectGolfCenter";
 
 type ContextType = ContextStateType & ContextActionType;
 
 type ContextStateType = {
   gameInfo: GameInfo;
   // 골프장 추가 시나리오에서 사용하는 임시 정보
-  tmpGolfCourseInfoForAdd: GameInfo["golfCourse"];
+  tmpGolfCenterInfoForAdd: GameInfo["golfCenter"];
+  golfCenterList: GolfCenterList;
 };
 
 type ContextActionType = {
-  resetCourseInfoForAdd: () => void;
+  resetCenterInfoForAdd: () => void;
 };
 
 export const initialContextState: ContextStateType = {
   gameInfo: {
     gameId: "",
     gameType: "field",
-    golfCourse: {
+    golfCenter: {
       name: "",
-      location: "",
+      region: "",
       frontNineCourse: {
         name: "",
-        holeCounts: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+        pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
       backNineCourse: {
         name: "",
-        holeCounts: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+        pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
     },
     betType: "Stroke",
     playerCount: 2,
     gameRule: {
-      handiType: ["none"],
+      handiType: ["post"],
       specialBetRequirements: ["buddy", "tripple"],
       ddang: ["last"],
       nearestType: ["specified"],
@@ -43,47 +48,54 @@ export const initialContextState: ContextStateType = {
     betAmountPerStroke: 0,
     bettingLimit: 0,
   },
-  tmpGolfCourseInfoForAdd: {
+  tmpGolfCenterInfoForAdd: {
     name: "",
-    location: "",
+    region: "",
     frontNineCourse: {
       name: "",
-      holeCounts: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
     backNineCourse: {
       name: "",
-      holeCounts: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+      pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
   },
+  golfCenterList: [],
 };
 
 export const MakeGame = () => {
+  const { data } = useQuery(
+    [UNIQUE_QUERY_KEY.GET_ALL_GOLF_CENTER],
+    apiGetAllGolfCenter,
+    {
+      retry: 0,
+    }
+  );
   // TODO : 새로고침시 경고 문구 띄우면 좋아보임
   const gameInfo = useRef<GameInfo>(deepClone(initialContextState.gameInfo));
-  const tmpGolfCourseInfo = useRef<GameInfo["golfCourse"]>(
-    deepClone(initialContextState.tmpGolfCourseInfoForAdd)
+  const tmpGolfCenterInfo = useRef<GameInfo["golfCenter"]>(
+    deepClone(initialContextState.tmpGolfCenterInfoForAdd)
   );
-
-  const resetTmpGolfCourseInfo = () => {
+  const resetTmpGolfCenterInfo = () => {
     // ISSUE: 왜 한번에 초기하는 안되는지 모르겠음
-    tmpGolfCourseInfo.current.name =
-      initialContextState.tmpGolfCourseInfoForAdd.name;
+    tmpGolfCenterInfo.current.name =
+      initialContextState.tmpGolfCenterInfoForAdd.name;
 
     // frontNineCourse
-    tmpGolfCourseInfo.current.frontNineCourse.name =
-      initialContextState.tmpGolfCourseInfoForAdd.frontNineCourse.name;
-    tmpGolfCourseInfo.current.frontNineCourse.holeCounts =
-      initialContextState.tmpGolfCourseInfoForAdd.frontNineCourse.holeCounts;
+    tmpGolfCenterInfo.current.frontNineCourse.name =
+      initialContextState.tmpGolfCenterInfoForAdd.frontNineCourse.name;
+    tmpGolfCenterInfo.current.frontNineCourse.pars =
+      initialContextState.tmpGolfCenterInfoForAdd.frontNineCourse.pars;
 
     // backNineCourse
-    tmpGolfCourseInfo.current.backNineCourse.name =
-      initialContextState.tmpGolfCourseInfoForAdd.backNineCourse.name;
-    tmpGolfCourseInfo.current.backNineCourse.holeCounts =
-      initialContextState.tmpGolfCourseInfoForAdd.backNineCourse.holeCounts;
+    tmpGolfCenterInfo.current.backNineCourse.name =
+      initialContextState.tmpGolfCenterInfoForAdd.backNineCourse.name;
+    tmpGolfCenterInfo.current.backNineCourse.pars =
+      initialContextState.tmpGolfCenterInfoForAdd.backNineCourse.pars;
 
     // location
-    tmpGolfCourseInfo.current.location =
-      initialContextState.tmpGolfCourseInfoForAdd.location;
+    tmpGolfCenterInfo.current.region =
+      initialContextState.tmpGolfCenterInfoForAdd.region;
   };
 
   return (
@@ -92,8 +104,9 @@ export const MakeGame = () => {
         context={
           {
             gameInfo: gameInfo.current,
-            tmpGolfCourseInfoForAdd: tmpGolfCourseInfo.current,
-            resetCourseInfoForAdd: resetTmpGolfCourseInfo,
+            tmpGolfCenterInfoForAdd: tmpGolfCenterInfo.current,
+            golfCenterList: data?.result ?? [],
+            resetCenterInfoForAdd: resetTmpGolfCenterInfo,
           } satisfies ContextType
         }
       />
@@ -126,16 +139,16 @@ export interface GameInfo {
   gameId?: string;
   createUser?: string;
   gameType: "field" | "screen";
-  golfCourse: {
+  golfCenter: {
     name: string;
-    location: string;
+    region: string;
     frontNineCourse: {
       name: string;
-      holeCounts: number[];
+      pars: number[];
     };
     backNineCourse: {
       name: string;
-      holeCounts: number[];
+      pars: number[];
     };
   };
   betType: "Stroke";

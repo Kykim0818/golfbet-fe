@@ -6,12 +6,12 @@ import Input from "../../../components/Input";
 import TitleAsset from "../../../components/TitleAsset";
 import { useGameInfo } from "../MakeGame";
 
-export const MakeGolfCourse = () => {
+export const MakeGolfCenter = () => {
   const navigate = useNavigate();
-  const { tmpGolfCourseInfoForAdd } = useGameInfo();
+  const { tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } = useGameInfo();
 
-  const [courseName, setCourseName] = useState(tmpGolfCourseInfoForAdd.name);
-  const [location, setLocation] = useState(tmpGolfCourseInfoForAdd.location);
+  const [centerName, setCenterName] = useState(tmpGolfCourseInfoForAdd.name);
+  const [region, setRegion] = useState(tmpGolfCourseInfoForAdd.region);
   const [frontNineCourseName, setFrontNineCourseName] = useState(
     tmpGolfCourseInfoForAdd.frontNineCourse.name
   );
@@ -22,7 +22,7 @@ export const MakeGolfCourse = () => {
   const handleClickNextBtn = () => {
     // save tmp data for add
     if (
-      courseName === "" ||
+      centerName === "" ||
       frontNineCourseName === "" ||
       backNineCourseName === ""
     ) {
@@ -30,8 +30,8 @@ export const MakeGolfCourse = () => {
       alert("공백인 값이 있습니다. 확인해주세요");
       return;
     }
-    tmpGolfCourseInfoForAdd.name = courseName;
-    tmpGolfCourseInfoForAdd.location = location;
+    tmpGolfCourseInfoForAdd.name = centerName;
+    tmpGolfCourseInfoForAdd.region = region;
     tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
     tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
     navigate("../make_golf_course_detail");
@@ -49,13 +49,13 @@ export const MakeGolfCourse = () => {
           <h5>골프장</h5>
           <Input
             placeholder="골프장명을 입력해주세요."
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
+            value={centerName}
+            onChange={(e) => setCenterName(e.target.value)}
           />
         </div>
         <div>
           <h5>지역</h5>
-          <div>{location}</div>
+          <div>{region}</div>
         </div>
         <div>
           <h5>전반</h5>

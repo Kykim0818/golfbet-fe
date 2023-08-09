@@ -59,6 +59,7 @@ export const RuleChange = () => {
               <span>{rule.title}</span>
               <ToggleGroup
                 isMultiSelect={multiSelectOptions.includes(rule.optionType)}
+                multiSelectResetValue="none"
                 selectedValues={currentRule[rule.optionType]}
                 group={rule.options}
                 onChange={(values) => handleOnChange(rule.optionType, values)}
@@ -140,10 +141,13 @@ const getRule = (playerCount: number) => {
     }[];
   }[] = Object.keys(copyRules).map((rule) => {
     const ruleInfo = copyRules[rule as Rules["ruleType"]];
-    //
+    // TODO: 4인이상 생길 경우 과반수 이상 규칙 추가 필요
     if (ruleInfo.optionType === "specialBetRequirements") {
       if (playerCount === 3) {
         ruleInfo.options.push("twoOrMorePlayersTied");
+      }
+      if (playerCount === 4) {
+        ruleInfo.options.push("threeOrMorePlayersTied");
       }
     }
     //
