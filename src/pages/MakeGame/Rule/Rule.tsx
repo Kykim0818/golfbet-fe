@@ -24,7 +24,7 @@ export const Rule = ({ rule }: RuleProps) => {
       <Styled.Line />
       <Styled.Detail>
         <Styled.Label>땅</Styled.Label>
-        <div>{getDisplayText("handiType", rule.handiType[0])}</div>
+        <div>{getDisplayText("ddang", rule.ddang[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
