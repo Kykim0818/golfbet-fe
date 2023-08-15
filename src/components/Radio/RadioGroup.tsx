@@ -1,4 +1,5 @@
 import { InputHTMLAttributes, ReactNode, createContext } from "react";
+import styled from "styled-components";
 
 export const RadioContext = createContext<
   Pick<Props<any>, "value" | "onChange" | "disabled">
@@ -26,9 +27,18 @@ export const RadioGroup = <
   ...rest
 }: Props<T>) => {
   return (
-    <fieldset>
+    <Styled.FieldSet>
       <legend>{label}</legend>
       <RadioContext.Provider value={rest}>{children}</RadioContext.Provider>
-    </fieldset>
+    </Styled.FieldSet>
   );
+};
+
+const Styled = {
+  FieldSet: styled.fieldset`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: none;
+  `,
 };

@@ -20,6 +20,7 @@ export const Toggle = ({
 };
 
 const StyledToggle = styled.div<{ isActive: boolean }>`
+  text-align: center;
   border-radius: 34px;
   width: fit-content;
   padding: 10px 22px;
@@ -40,7 +41,9 @@ const StyledToggle = styled.div<{ isActive: boolean }>`
   ${(props) =>
     props.isActive &&
     css`
-      background-color: var(--color-main, #009eb2);
-      color: white;
+      background-color: #b0e6ed;
+      border: 0.5px solid var(--color-main-dark, #009eb2);
+
+      color: var(--color-main-dark, #009eb2);
     `}
 `;

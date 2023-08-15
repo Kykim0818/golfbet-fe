@@ -1,5 +1,6 @@
 import { InputHTMLAttributes, useContext } from "react";
 import { RadioContext } from "./RadioGroup";
+import styled from "styled-components";
 
 interface Props
   extends Pick<
@@ -18,8 +19,8 @@ export const Radio = ({
 }: Props) => {
   const group = useContext(RadioContext);
   return (
-    <label>
-      <input
+    <label style={{ display: "flex", alignItems: "center" }}>
+      <S.Input
         type="radio"
         value={value}
         name={name}
@@ -30,4 +31,20 @@ export const Radio = ({
       {children}
     </label>
   );
+};
+
+const S = {
+  Input: styled.input`
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-main);
+
+    &:checked {
+      outline: var(--color-main) solid 1.5px;
+      border: 4px solid white;
+      background-color: var(--color-main);
+    }
+  `,
 };
