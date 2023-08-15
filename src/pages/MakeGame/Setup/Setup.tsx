@@ -123,14 +123,15 @@ export const Setup = () => {
             plusMoneyArr={[10000, 100000, 500000]}
           />
         </div>
-
+      </Styled.Body>
+      <Styled.Footer>
         <Button
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
           onClick={() => console.log(gameInfo)}
         >
           다음
         </Button>
-      </Styled.Body>
+      </Styled.Footer>
     </>
   );
 };
@@ -162,6 +163,11 @@ const Styled = {
       line-height: normal;
     }
   `,
+  Footer: styled.footer`
+    display: flex;
+    padding: 0px 20px 20px 20px;
+  `,
+
   GolfCourse: styled.div`
     display: flex;
     flex-direction: column;

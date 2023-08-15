@@ -25,7 +25,7 @@ export const TitleAsset = ({
         />
       </S.BackButton>
       <div>{title}</div>
-      <S.CloseButton onClick={handleBack} visible={visibleClose}>
+      <S.CloseButton onClick={handleClose} visible={visibleClose}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
           alt="close"

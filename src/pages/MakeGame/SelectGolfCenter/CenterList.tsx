@@ -86,10 +86,15 @@ export const CenterList = ({ centers, onChange }: Props) => {
         return (
           <div key={center.id}>
             <Styled.Item>
-              <Radio
-                value={center.id}
-              >{`${center.name}(${center.holeCount}홀)`}</Radio>
-              <span>{center.region2}</span>
+              <Radio value={center.id}>
+                <Styled.RadioItemWrapper>
+                  <span className="centerlist__centername__radioitem">
+                    {center.name}
+                  </span>
+                  <span className="centerlist__holecount__radioitem">{`(${center.holeCount}홀)`}</span>
+                </Styled.RadioItemWrapper>
+              </Radio>
+              {/* TODO: // 직접 추가한건 표시예정 */}
             </Styled.Item>
             {selectCenterInfo?.name === center.name ? (
               <CoursePicker
@@ -113,6 +118,26 @@ const Styled = {
   Item: styled.div`
     display: flex;
     justify-content: space-between;
+  `,
+  RadioItemWrapper: styled.div`
+    margin-left: 10px;
+    .centerlist__centername__radioitem {
+      // typo
+      color: #3b3c40;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+    .centerlist__holecount__radioitem {
+      margin-left: 5px;
+      // typo
+      color: #afafaf;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
   `,
 };
 

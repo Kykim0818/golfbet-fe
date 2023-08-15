@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import ToggleGroup from "../../../components/ToggleGroup";
 import { CourseInfo } from "./SelectGolfCenter";
+import styled from "styled-components";
 
 type Props = {
   courses: CourseInfo[];
@@ -40,9 +41,9 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
   };
 
   return (
-    <div>
-      <div>
-        <p>전반 코스</p>
+    <Styled.Wrapper>
+      <Styled.CourseWrapper>
+        <span>전반 코스</span>
         <div>
           {currentFrontNineCourse.current ? (
             <ToggleGroup
@@ -54,10 +55,10 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
             <div>선택 가능한 코스가 없습니다.</div>
           )}
         </div>
-      </div>
+      </Styled.CourseWrapper>
       {/* /////  */}
-      <div>
-        <p>후반 코스</p>
+      <Styled.CourseWrapper>
+        <span>후반 코스</span>
         <div>
           <ToggleGroup
             selectedValues={[currentBackNineCourse.current.id]}
@@ -65,8 +66,8 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
             onChange={(value) => handleChangeToggle("back", value)}
           />
         </div>
-      </div>
-    </div>
+      </Styled.CourseWrapper>
+    </Styled.Wrapper>
   );
 };
 
@@ -77,4 +78,19 @@ const makeToggleGroups = (courses: CourseInfo[]) => {
       value: course.id,
     };
   });
+};
+
+const Styled = {
+  Wrapper: styled.div`
+    margin-top: 30px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  `,
+  CourseWrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+  `,
 };
