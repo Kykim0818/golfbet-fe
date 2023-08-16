@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const FixedGolfCenter = ({
-  centerType: courseType,
+  centerType,
   name,
   frontNineCourseName,
   backNineCourseName,
@@ -17,39 +17,102 @@ export const FixedGolfCenter = ({
   return (
     <Styled.Wrapper>
       {/* 필드 타입, 이름 */}
-      <Styled.CenterName>
-        <span>{courseType}</span>
-        <span>{name}</span>
-      </Styled.CenterName>
-      <Styled.NineCourseNameWrapper>
+      <Styled.CenterNameSection>
+        <Styled.CenterType>
+          {getDisplayCenterTypeText(centerType)}
+        </Styled.CenterType>
+        <Styled.CenterName>{name}</Styled.CenterName>
+      </Styled.CenterNameSection>
+      <Styled.NineCourseNameSection>
         {/* 전반 이름 */}
-        <Styled.NineCourseName>
-          <span>전반</span>
-          <span>{frontNineCourseName}</span>
-        </Styled.NineCourseName>
+        <Styled.NineCourseNameWrapper>
+          <Styled.NineCourseLabel>전반</Styled.NineCourseLabel>
+          <Styled.NineCourseName>{frontNineCourseName}</Styled.NineCourseName>
+        </Styled.NineCourseNameWrapper>
         {/* 후반 이름 */}
-        <Styled.NineCourseName>
-          <span>전반</span>
-          <span>{backNineCourseName}</span>
-        </Styled.NineCourseName>
-      </Styled.NineCourseNameWrapper>
+        <Styled.NineCourseNameWrapper>
+          <Styled.NineCourseLabel>후반</Styled.NineCourseLabel>
+          <Styled.NineCourseName>{backNineCourseName}</Styled.NineCourseName>
+        </Styled.NineCourseNameWrapper>
+      </Styled.NineCourseNameSection>
     </Styled.Wrapper>
   );
+};
+
+const getDisplayCenterTypeText = (gameType: GameInfo["gameType"]) => {
+  if (gameType === "field") {
+    return "필드";
+  }
+  return "스크린";
 };
 
 const Styled = {
   Wrapper: styled.div`
     display: flex;
     flex-direction: column;
+    gap: 17px;
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
   `,
-  CenterName: styled.div`
+  //
+  CenterNameSection: styled.div`
     display: flex;
+    gap: 10px;
+  `,
+  CenterName: styled.span`
+    display: flex;
+    align-items: center;
+    // typo
+    color: #504f4f;
+    font-size: 16px;
+    font-weight: 700;
+  `,
+  CenterType: styled.span`
+    border-radius: 10px;
+    background: #e6f7f9;
+    padding: 5px 12px;
+    // typo
+    color: var(--color-main-dark, #008395);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
   `,
 
+  //
+  NineCourseNameSection: styled.div`
+    display: flex;
+    justify-content: space-between;
+  `,
   NineCourseNameWrapper: styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    gap: 25px;
+    min-width: 144px;
+    min-height: 40px;
+    // todo: color
+    background: #f8fafb;
   `,
-  NineCourseName: styled.div`
-    display: flex;
+  NineCourseLabel: styled.span`
+    border-radius: 18px;
+
+    // todo : color
+    background-color: #3181ae;
+    padding: 5px 7px;
+
+    // typo
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: normal;
+  `,
+  NineCourseName: styled.span`
+    // todo : typo
+    color: #484848;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: normal;
   `,
 };

@@ -12,6 +12,7 @@ import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCe
 import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
 import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
+import SetupCheck from "./pages/MakeGame/SetupCheck";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Setup />,
+      },
+      {
+        path: "setup_check",
+        element: <SetupCheck />,
       },
       {
         path: "select_golf_course",
