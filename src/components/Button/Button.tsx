@@ -32,7 +32,6 @@ const StyledButton = styled.button<{
   width: 100%;
 
   outline: none;
-  border: none;
 
   &:hover {
     cursor: pointer;
@@ -41,6 +40,7 @@ const StyledButton = styled.button<{
 
 const VARAIANTS = {
   primary: css`
+    border: none;
     background-color: var(--color-main, #009eb2);
     color: white;
     border-radius: 15px;
@@ -50,7 +50,16 @@ const VARAIANTS = {
       color: rgba(255, 255, 255, 0.63);
     }
   `,
-  outlined: css``,
+  outlined: css`
+    border: 1px solid var(--color-main, #009eb2);
+    color: var(--color-main, #009eb2);
+    background-color: transparent;
+    border-radius: 15px;
+
+    &:hover {
+      background-color: #e6f7f9;
+    }
+  `,
   custom: css``,
 };
 
