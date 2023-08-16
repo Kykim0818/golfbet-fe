@@ -127,7 +127,7 @@ export const Setup = () => {
       <Styled.Footer>
         <Button
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
-          onClick={() => console.log(gameInfo)}
+          onClick={() => navigate("setup_check")}
         >
           다음
         </Button>
@@ -248,8 +248,7 @@ const Styled = {
     justify-content: space-between;
     margin-bottom: 4px;
     img {
-      height: 25px;
-
+      padding: 5px;
       &:hover {
         cursor: pointer;
       }

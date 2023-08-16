@@ -38,10 +38,10 @@ export const initialContextState: ContextStateType = {
       },
     },
     betType: "Stroke",
-    playerCount: 2,
+    playerCount: 4,
     gameRule: {
       handiType: ["post"],
-      specialBetRequirements: ["buddy", "tripple"],
+      specialBetRequirements: ["buddy", "tripple", "threeOrMorePlayersTied"],
       ddang: ["last"],
       nearestType: ["specified"],
     },
