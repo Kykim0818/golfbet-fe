@@ -1,27 +1,48 @@
+import { useState } from "react";
 import styled, { css } from "styled-components";
 
 type Props = {
   holeIndex: number;
   parCount: number;
+  onChange?: (holeIndex: number, parCount: number) => void;
 };
 
 export const ParDetail = ({ holeIndex, parCount }: Props) => {
+  const [parCountState, setParCountState] = useState(parCount);
+  const [parsOverFive, setParsOverFive] = useState(getParsOverFive(parCount));
+
+  // TODO
+  const handleOnClick = (holeIndex: number, parCount: number) => {};
+
+  // TODO
+  const handlePlusClick = () => {};
   return (
     <S.Wrapper>
       <S.HoleIndex>{holeIndex}H</S.HoleIndex>
       <S.ParSection>
-        <S.Par isActive={parCount === 3}>파3</S.Par>
-        <S.Par isActive={parCount === 4}>파4</S.Par>
-        <S.Par isActive={parCount === 5}>파5</S.Par>
-        {parCount <= 5 ? (
-          <S.Par isActive={false}>+</S.Par>
+        <S.Par isActive={parCountState === 3}>파3</S.Par>
+        <S.Par isActive={parCountState === 4}>파4</S.Par>
+        <S.Par isActive={parCountState === 5}>파5</S.Par>
+        {parsOverFive.length > 0 ? (
+          parsOverFive.map((par) => {
+            return <S.Par isActive={par === parCountState}>파{par}</S.Par>;
+          })
         ) : (
-          <S.Par isActive={true}>파{parCount}</S.Par>
+          <S.Par isActive={false}>+</S.Par>
         )}
       </S.ParSection>
     </S.Wrapper>
   );
 };
+
+function getParsOverFive(parCount: number) {
+  const ret = [];
+  if (parCount <= 5) return [];
+  for (let i = 6; i <= parCount; i++) {
+    ret.push(i);
+  }
+  return ret;
+}
 
 const S = {
   Wrapper: styled.div`
