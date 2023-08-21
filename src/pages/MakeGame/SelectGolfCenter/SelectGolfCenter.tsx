@@ -15,7 +15,7 @@ export const SelectGolfCenter = () => {
   const navigate = useNavigate();
   const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
-
+  const [inputFocus, setInputFocus] = useState(false);
   // 검색 결과
   const allCenters =
     golfCenterList.filter((center) => center.group === "전체")[0]?.centers ??
@@ -51,6 +51,8 @@ export const SelectGolfCenter = () => {
           <Input
             placeholder="골프장을 검색해주세요"
             onChange={(e) => setSearchInputValue(e.target.value)}
+            onFocus={() => setInputFocus(true)}
+            onBlur={() => setInputFocus(false)}
           />
           <button>
             <img
@@ -61,7 +63,7 @@ export const SelectGolfCenter = () => {
         </Styled.InputSection>
         <Styled.AddButtonSection>
           <Button
-            onClick={() => navigate("../make_golf_course")}
+            onClick={() => navigate("../make_golf_center")}
             style={{ width: "fit-content" }}
             variants="outlined"
           >
@@ -69,7 +71,7 @@ export const SelectGolfCenter = () => {
           </Button>
         </Styled.AddButtonSection>
         <Styled.Section>
-          {serachInputValue === NO_SEARCH_INPUT ? (
+          {serachInputValue === NO_SEARCH_INPUT && inputFocus === false ? (
             <Tabs items={uiTabItems} defaultId="최근" />
           ) : (
             <CenterList centers={searchedCenters} onChange={handleOnChange} />

@@ -59,6 +59,7 @@ export const SetupCheck = () => {
               {gameInfo.golfCenter.frontNineCourse.pars.map((par, index) => {
                 return (
                   <ParDetail
+                    key={index}
                     holeIndex={index + 1}
                     parCount={par}
                     onChange={(holeCount, parCount) =>
@@ -77,6 +78,7 @@ export const SetupCheck = () => {
               {gameInfo.golfCenter.backNineCourse.pars.map((par, index) => {
                 return (
                   <ParDetail
+                    key={index}
                     holeIndex={index + 1}
                     parCount={par}
                     onChange={(holeCount, parCount) =>

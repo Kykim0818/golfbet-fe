@@ -43,15 +43,15 @@ const router = createBrowserRouter([
         element: <SetupCheck />,
       },
       {
-        path: "select_golf_course",
+        path: "select_golf_center",
         element: <SelectGolfCenter />,
       },
       {
-        path: "make_golf_course",
+        path: "make_golf_center",
         element: <MakeGolfCenter />,
       },
       {
-        path: "make_golf_course_detail",
+        path: "make_golf_center_detail",
         element: <MakeGolfCenterDetail />,
       },
       {

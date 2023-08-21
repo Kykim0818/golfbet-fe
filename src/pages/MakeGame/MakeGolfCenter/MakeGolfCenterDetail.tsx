@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import { FixedGolfCenter } from "../FixedGolfCenter";
-import { HoleDetail } from "../HoleDetail";
 import { useGameInfo } from "../MakeGame";
+import { ParDetail } from "../SetupCheck/ParDetail";
 
 // TODO 전역값 관리 어디서할지 정하면 수정
 const GOLF_COURSE_COUNT = 9;
@@ -40,11 +40,11 @@ export const MakeGolfCenterDetail = () => {
   };
 
   return (
-    <Styled.Wrapper>
+    <>
       <TitleAsset
         title="골프장 상세"
         visibleBack
-        handleBack={() => navigate("../make_golf_course", { replace: true })}
+        handleBack={() => navigate("../make_golf_center", { replace: true })}
       />
       <Styled.Body>
         <FixedGolfCenter
@@ -56,11 +56,11 @@ export const MakeGolfCenterDetail = () => {
         <div>
           <span>{tmpGolfCourseInfoForAdd.frontNineCourse.name}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
-            <HoleDetail
-              key={index + 1}
-              holeNumber={index + 1}
+            <ParDetail
+              key={index}
+              holeIndex={index + 1}
               parCount={frontNineCourseDetail.current[index]}
-              onChange={(parCount) =>
+              onChange={(_, parCount) =>
                 (frontNineCourseDetail.current[index] = parCount)
               }
             />
@@ -69,24 +69,27 @@ export const MakeGolfCenterDetail = () => {
         <div>
           <span>{tmpGolfCourseInfoForAdd.backNineCourse.name}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
-            <HoleDetail
-              key={index + 1}
-              holeNumber={index + 1}
+            <ParDetail
+              key={index}
+              holeIndex={index + 1}
               parCount={backNineCourseDetail.current[index]}
-              onChange={(parCount) =>
+              onChange={(_, parCount) =>
                 (backNineCourseDetail.current[index] = parCount)
               }
             />
           ))}
         </div>
       </Styled.Body>
-      <Button onClick={handleClickSelectGolfCenterBtn}>추가 후 선택하기</Button>
-    </Styled.Wrapper>
+      <Styled.Footer>
+        <Button onClick={handleClickSelectGolfCenterBtn}>
+          추가 후 선택하기
+        </Button>
+      </Styled.Footer>
+    </>
   );
 };
 
 const Styled = {
-  Wrapper: styled.div``,
   Body: styled.div`
     display: flex;
     flex-direction: column;
@@ -96,5 +99,10 @@ const Styled = {
     padding: 0px 26px;
 
     overflow: auto;
+  `,
+  // footer
+  Footer: styled.footer`
+    display: flex;
+    padding: 0px 20px 20px 20px;
   `,
 };
