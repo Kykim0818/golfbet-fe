@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { GameInfo } from "../MakeGame";
 import { getDisplayText } from "./getDisplayText";
-import { SpecialBetRequirements } from "./type";
+import { NearestType, SpecialBetRequirements } from "./type";
 
 type RuleProps = {
   rule: GameInfo["gameRule"];
@@ -29,7 +29,7 @@ export const Rule = ({ rule }: RuleProps) => {
       <Styled.Line />
       <Styled.Detail>
         <Styled.Label>니어</Styled.Label>
-        <div>{getDisplayText("nearestType", rule.nearestType[0])}</div>
+        <div>{getDisplayNearest(rule.nearestType[0], 0)}</div>
       </Styled.Detail>
     </Styled.Wrapper>
   );
@@ -68,4 +68,9 @@ const getSpecialBetRequirementsDiplay = (
   return values
     .map((value) => getDisplayText("specialBetRequirements", value))
     .join(",");
+};
+
+const getDisplayNearest = (value: NearestType["value"], amount: number) => {
+  if (value === "ingame") return getDisplayText("nearestType", value);
+  return amount;
 };
