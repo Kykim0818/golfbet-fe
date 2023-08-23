@@ -11,7 +11,8 @@ export async function apiGetAllGolfCenter() {
   try {
     // 응답성공
     const response = await getData<{ centerInfos: GolfCenterList }>(
-      API_URL.GET_ALL_GOLF_CENTER
+      API_URL.GET_ALL_GOLF_CENTER,
+      { timeout : 2000 }
     );
     console.log(response);
     if (response.statusCode === 404 || response.statusCode === 500)
