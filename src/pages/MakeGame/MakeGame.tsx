@@ -105,7 +105,7 @@ export const MakeGame = () => {
           {
             gameInfo: gameInfo.current,
             tmpGolfCenterInfoForAdd: tmpGolfCenterInfo.current,
-            golfCenterList: data?.result ?? [],
+            golfCenterList: data?.data?.centerInfos ?? [],
             resetCenterInfoForAdd: resetTmpGolfCenterInfo,
           } satisfies ContextType
         }

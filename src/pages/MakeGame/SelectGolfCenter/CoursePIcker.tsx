@@ -74,7 +74,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
 const makeToggleGroups = (courses: CourseInfo[]) => {
   return courses.map((course) => {
     return {
-      label: course.name + " " + course.nameDetail,
+      label: course.name,
       value: course.id,
     };
   });
