@@ -71,6 +71,7 @@ export const MakeGame = () => {
       retry: 0,
     }
   );
+  console.log("query", data);
   // TODO : 새로고침시 경고 문구 띄우면 좋아보임
   const gameInfo = useRef<GameInfo>(deepClone(initialContextState.gameInfo));
   const tmpGolfCenterInfo = useRef<GameInfo["golfCenter"]>(

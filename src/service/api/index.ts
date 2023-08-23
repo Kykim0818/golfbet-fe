@@ -2,7 +2,7 @@ import axios, { Axios, AxiosRequestConfig } from "axios";
 import { APIResponse } from "./type";
 
 const client: Axios = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 // TODO: get
@@ -11,6 +11,7 @@ export const getData = async <T>(
   config?: AxiosRequestConfig
 ): Promise<APIResponse<T>> => {
   try {
+    console.log(process.env.REACT_APP_API_URL);
     const response = await client.get<APIResponse<T>>(url, config);
     return response.data;
   } catch (error) {
