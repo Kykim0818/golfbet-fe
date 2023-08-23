@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
+import { deepClone } from "../../../utils/deepClone";
 import { FixedGolfCenter } from "../FixedGolfCenter";
 import { useGameInfo } from "../MakeGame";
 import { ParDetail } from "./ParDetail";
@@ -9,6 +10,32 @@ import { ParDetail } from "./ParDetail";
 export const SetupCheck = () => {
   const navigate = useNavigate();
   const { gameInfo } = useGameInfo();
+  const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
+
+  const handleModifyGameCenterInfo = (
+    courseType: "front" | "back",
+    holeIndex: number,
+    par: number
+  ) => {
+    if (courseType === "front") {
+      modifedGameCenterInfo.frontNineCourse.pars[holeIndex - 1] = par;
+    } else {
+      modifedGameCenterInfo.backNineCourse.pars[holeIndex - 1] = par;
+    }
+  };
+
+  const handleMakeGameRoom = () => {
+    // TODO : 게임 생성 요청시에,
+    // 방을 만드는 골프장이, 사용자 추가 거나 , 기존 골프장을 수정한 형태면, DB에 다른방식으로 post를 날려야함
+    const tmpRet = deepClone(gameInfo);
+    tmpRet.golfCenter = modifedGameCenterInfo;
+    console.log("make game Info ", tmpRet);
+
+    // TODO : 방생성 성공시 id 만 전달
+    // websocket 연결
+    // game_room/:gameId
+  };
+
   return (
     <>
       <TitleAsset
@@ -30,7 +57,16 @@ export const SetupCheck = () => {
             </Styled.NineCourseLabel>
             <Styled.ParSection>
               {gameInfo.golfCenter.frontNineCourse.pars.map((par, index) => {
-                return <ParDetail holeIndex={index + 1} parCount={par} />;
+                return (
+                  <ParDetail
+                    key={index}
+                    holeIndex={index + 1}
+                    parCount={par}
+                    onChange={(holeCount, parCount) =>
+                      handleModifyGameCenterInfo("front", holeCount, parCount)
+                    }
+                  />
+                );
               })}
             </Styled.ParSection>
           </Styled.NineCourseSection>
@@ -40,14 +76,23 @@ export const SetupCheck = () => {
             </Styled.NineCourseLabel>
             <Styled.ParSection>
               {gameInfo.golfCenter.backNineCourse.pars.map((par, index) => {
-                return <ParDetail holeIndex={index + 1} parCount={par} />;
+                return (
+                  <ParDetail
+                    key={index}
+                    holeIndex={index + 1}
+                    parCount={par}
+                    onChange={(holeCount, parCount) =>
+                      handleModifyGameCenterInfo("back", holeCount, parCount)
+                    }
+                  />
+                );
               })}
             </Styled.ParSection>
           </Styled.NineCourseSection>
         </Styled.CourseDetailWrapper>
       </Styled.Body>
       <Styled.Footer>
-        <Button onClick={() => console.log("")}>게임 생성하기</Button>
+        <Button onClick={handleMakeGameRoom}>게임 생성하기</Button>
       </Styled.Footer>
     </>
   );

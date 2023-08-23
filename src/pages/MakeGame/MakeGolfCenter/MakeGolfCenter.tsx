@@ -34,20 +34,20 @@ export const MakeGolfCenter = () => {
     tmpGolfCourseInfoForAdd.region = region;
     tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
     tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
-    navigate("../make_golf_course_detail");
+    navigate("../make_golf_center_detail");
   };
 
   return (
-    <Styled.Wrapper>
+    <>
       <TitleAsset
         title="골프장 추가"
         visibleBack
-        handleBack={() => navigate("../select_golf_course", { replace: true })}
+        handleBack={() => navigate("../select_golf_center", { replace: true })}
       />
       <Styled.Body>
         <div>
           <h5>골프장</h5>
-          <Input
+          <Styled.Input
             placeholder="골프장명을 입력해주세요."
             value={centerName}
             onChange={(e) => setCenterName(e.target.value)}
@@ -59,7 +59,7 @@ export const MakeGolfCenter = () => {
         </div>
         <div>
           <h5>전반</h5>
-          <Input
+          <Styled.Input
             placeholder="전반 코스 이름을 입력해주세요."
             value={frontNineCourseName}
             onChange={(e) => setFrontNineCourseName(e.target.value)}
@@ -67,15 +67,17 @@ export const MakeGolfCenter = () => {
         </div>
         <div>
           <h5>후반</h5>
-          <Input
+          <Styled.Input
             placeholder="후반 코스 이름을 입력해주세요."
             value={backNineCourseName}
             onChange={(e) => setBackNineCourseName(e.target.value)}
           />
         </div>
       </Styled.Body>
-      <Button onClick={handleClickNextBtn}>다음</Button>
-    </Styled.Wrapper>
+      <Styled.Footer>
+        <Button onClick={handleClickNextBtn}>다음</Button>
+      </Styled.Footer>
+    </>
   );
 };
 
@@ -90,5 +92,13 @@ const Styled = {
     padding: 0px 26px;
 
     overflow: auto;
+  `,
+  Input: styled(Input)`
+    width: 100%;
+  `,
+  // footer
+  Footer: styled.footer`
+    display: flex;
+    padding: 0px 20px 20px 20px;
   `,
 };

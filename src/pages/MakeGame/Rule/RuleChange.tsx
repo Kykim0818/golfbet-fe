@@ -55,7 +55,7 @@ export const RuleChange = () => {
       <Styled.Body>
         {rules.map((rule) => {
           return (
-            <Styled.Option>
+            <Styled.Option key={rule.title}>
               <span>{rule.title}</span>
               <ToggleGroup
                 isMultiSelect={multiSelectOptions.includes(rule.optionType)}

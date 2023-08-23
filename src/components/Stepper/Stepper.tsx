@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 type StepperProps = {
-  value?: number;
+  currentValue?: number;
   onChange?: (value: number) => unknown;
   max?: number;
   min?: number;
@@ -10,28 +10,24 @@ type StepperProps = {
 };
 
 export const Stepper = ({
-  value = 0,
+  currentValue = 0,
   onChange,
   max = Number.MAX_SAFE_INTEGER,
   min = Number.MIN_SAFE_INTEGER,
   unit = "",
 }: StepperProps) => {
-  const [_value, setValue] = useState(value);
+  const [value, setValue] = useState(currentValue);
 
   const handleIncrement = () => {
-    if (_value === max) return;
-    setValue((prevState) => {
-      onChange?.(prevState + 1);
-      return prevState + 1;
-    });
+    if (value === max) return;
+    setValue(value + 1);
+    onChange?.(value + 1);
   };
 
   const handleDecrement = () => {
-    if (_value === min) return;
-    setValue((prevState) => {
-      onChange?.(prevState - 1);
-      return prevState - 1;
-    });
+    if (value === min) return;
+    setValue(value - 1);
+    onChange?.(value - 1);
   };
 
   return (
@@ -42,7 +38,7 @@ export const Stepper = ({
           alt="minus"
         />
       </Styled.Button>
-      <Styled.Span>{_value + unit}</Styled.Span>
+      <Styled.Span>{value + unit}</Styled.Span>
       <Styled.Button onClick={handleIncrement}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/stepper_plus.svg"}

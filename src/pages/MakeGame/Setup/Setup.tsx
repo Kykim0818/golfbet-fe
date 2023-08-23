@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
@@ -8,10 +9,27 @@ import TitleAsset from "../../../components/TitleAsset";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
 import Rule from "../Rule";
+import { GameRule } from "../Rule/type";
 
 export const Setup = () => {
   const navigate = useNavigate();
   const { gameInfo } = useGameInfo();
+
+  const [, setRenderFlag] = useState(false);
+  const repaint = () => {
+    setRenderFlag((prev) => !prev);
+  };
+
+  const handleChangePlayerCount = (playerCount: number) => {
+    // #1
+    gameInfo.playerCount = playerCount;
+    // #2
+    gameInfo.gameRule.specialBetRequirements =
+      getDefaultSpecialBetRequirements(playerCount);
+    // #3
+    repaint();
+    // console.log(gameInfo);
+  };
 
   //
   const handleOpenChangeGameRule = () => {
@@ -43,7 +61,7 @@ export const Setup = () => {
           <Styled.GolfCourse>
             <div
               className="golfCenter__input"
-              onClick={() => navigate("select_golf_course")}
+              onClick={() => navigate("select_golf_center")}
             >
               <StyledInput
                 readOnly
@@ -89,8 +107,10 @@ export const Setup = () => {
           <Stepper
             max={4}
             min={2}
-            value={gameInfo.playerCount}
-            onChange={(value) => (gameInfo.playerCount = value)}
+            currentValue={gameInfo.playerCount}
+            onChange={(value) => {
+              handleChangePlayerCount(value);
+            }}
             unit="명"
           />
         </div>
@@ -101,7 +121,7 @@ export const Setup = () => {
             <h5>게임규칙</h5>
             <img
               src={process.env.PUBLIC_URL + "/assets/svg/ic_edit_rule.svg"}
-              alt="no icons"
+              alt="edit rule"
               onClick={handleOpenChangeGameRule}
             />
           </Styled.RuleHeader>
@@ -138,6 +158,20 @@ export const Setup = () => {
 
 const getDisplayText = (value: string) => {
   if (value === "Stroke") return "스트로크";
+};
+
+const getDefaultSpecialBetRequirements = (
+  playerCount: number
+): GameRule["specialBetRequirements"] => {
+  if (playerCount === 4) {
+    return ["buddy", "tripple", "threeOrMorePlayersTied"];
+  }
+  if (playerCount === 3) {
+    return ["buddy", "tripple", "twoOrMorePlayersTied"];
+  }
+
+  // 2
+  return ["buddy", "tripple"];
 };
 
 const Styled = {
