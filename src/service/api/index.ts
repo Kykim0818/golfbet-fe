@@ -12,6 +12,7 @@ export const getData = async <T>(
 ): Promise<APIResponse<T>> => {
   try {
     console.log(url);
+    console.log(process.env.API_URL);
     const response = await client.get<APIResponse<T>>(url, config);
     console.log(response);
     return response.data;
