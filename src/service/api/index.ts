@@ -11,7 +11,9 @@ export const getData = async <T>(
   config?: AxiosRequestConfig
 ): Promise<APIResponse<T>> => {
   try {
+    console.log(url);
     const response = await client.get<APIResponse<T>>(url, config);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);

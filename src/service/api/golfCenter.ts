@@ -13,6 +13,7 @@ export async function apiGetAllGolfCenter() {
     const response = await getData<{ centerInfos: GolfCenterList }>(
       API_URL.GET_ALL_GOLF_CENTER
     );
+    console.log(response);
     if (response.statusCode === 404 || response.statusCode === 500)
       throw new Error();
     return response;
