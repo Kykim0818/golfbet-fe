@@ -19,28 +19,25 @@ export const CenterList = ({ centers, onChange }: Props) => {
   const selectCenterInfo = findCenter(centerId, centers);
 
   const handleClickCenter = (centerId: string) => {
-    setCenterId(centerId);
     const targetCenter = findCenter(centerId, centers);
     // 누르는 순간 default course로 세팅 되어야함
-    if (targetCenter) {
+    if (targetCenter && targetCenter.courses.length > 0) {
       onChange({
         name: targetCenter.name,
-        region: targetCenter.region2,
+        region: targetCenter.region,
         frontNineCourse: {
-          name:
-            targetCenter.courses[FIRST_COURSE_IDX].name +
-            " " +
-            targetCenter.courses[FIRST_COURSE_IDX].nameDetail,
+          name: targetCenter.courses[FIRST_COURSE_IDX].name,
           pars: targetCenter.courses[FIRST_COURSE_IDX].pars,
         },
         backNineCourse: {
-          name:
-            targetCenter.courses[SECOND_COURSE_IDX].name +
-            " " +
-            targetCenter.courses[SECOND_COURSE_IDX].nameDetail,
+          name: targetCenter.courses[SECOND_COURSE_IDX].name,
+
           pars: targetCenter.courses[SECOND_COURSE_IDX].pars,
         },
       });
+      setCenterId(centerId);
+    } else {
+      alert("선택한 골프장의 코스가 없습니다.");
     }
   };
 
@@ -67,13 +64,13 @@ export const CenterList = ({ centers, onChange }: Props) => {
 
       onChange({
         name: selectCenterInfo.name,
-        region: selectCenterInfo.region2,
+        region: selectCenterInfo.region,
         frontNineCourse: {
-          name: frontCourseInfo.name + " " + frontCourseInfo.nameDetail,
+          name: frontCourseInfo.name,
           pars: frontCourseInfo.pars,
         },
         backNineCourse: {
-          name: backCourseInfo.name + " " + backCourseInfo.nameDetail,
+          name: backCourseInfo.name,
           pars: backCourseInfo.pars,
         },
       });
@@ -91,7 +88,11 @@ export const CenterList = ({ centers, onChange }: Props) => {
                   <span className="centerlist__centername__radioitem">
                     {center.name}
                   </span>
-                  <span className="centerlist__holecount__radioitem">{`(${center.holeCount}홀)`}</span>
+                  {
+                    <span className="centerlist__holecount__radioitem">{`(${
+                      center.holeCount ?? "미입력"
+                    } 홀)`}</span>
+                  }
                 </Styled.RadioItemWrapper>
               </Radio>
               {/* TODO: // 직접 추가한건 표시예정 */}

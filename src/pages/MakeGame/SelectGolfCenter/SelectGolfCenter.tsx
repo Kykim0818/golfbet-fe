@@ -25,10 +25,7 @@ export const SelectGolfCenter = () => {
   );
 
   const { uiTabItems, currentSelectCenter, btnDisable, handleOnChange } =
-    useSelectGolfCenter(
-      gameInfo.golfCenter,
-      golfCenterList.filter((centerList) => centerList.group !== "전체")
-    );
+    useSelectGolfCenter(gameInfo.golfCenter, golfCenterList);
 
   // reset
   useEffect(() => {
@@ -94,8 +91,7 @@ export type CenterInfo = {
   id: string;
   type: "field" | "screen";
   name: string;
-  region1: string;
-  region2: string;
+  region: string;
   holeCount: number;
   courses: CourseInfo[];
 };
@@ -103,7 +99,7 @@ export type CenterInfo = {
 export type CourseInfo = {
   id: string;
   name: string;
-  nameDetail: string;
+  // nameDetail: string;
   parsSum: number;
   pars: number[];
 };
