@@ -1,13 +1,19 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { LOGIN } from "../../service/login/constant";
+import { useNavigate } from "react-router-dom";
+
+const REACT_APP_KAKAO_API = "kakao_api_key";
+const REACT_APP_KAKAO_REDIRECT = "http://localhost:3000/login";
 
 export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
 }) => {
+  const navigate = useNavigate();
   // TODO: login handling 방식에 따라 다를듯
   const handleKakaoLogin = () => {
     alert("Kakao Login");
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`;
   };
   //
   const handleTestLogin = () => {
