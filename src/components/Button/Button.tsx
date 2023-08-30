@@ -60,7 +60,10 @@ const VARAIANTS = {
       background-color: #e6f7f9;
     }
   `,
-  custom: css``,
+  custom: css`
+    border: none;
+    border-radius: 15px;
+  `,
 };
 
 const SIZE = {
