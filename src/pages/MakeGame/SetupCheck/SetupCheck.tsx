@@ -31,7 +31,9 @@ export const SetupCheck = () => {
     tmpRet.golfCenter = modifedGameCenterInfo;
     console.log("make game Info ", tmpRet);
 
-    // TODO : 방생성 성공시 id 만 전달
+    // TODO : 방생성 요청후(post)방번호 return;
+    const gameId = "1";
+    navigate(`/game_room/${gameId}`);
     // websocket 연결
     // game_room/:gameId
   };
