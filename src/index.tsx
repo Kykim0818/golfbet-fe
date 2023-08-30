@@ -17,6 +17,8 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
+import GameRoom from "./pages/GameRoom";
+import { WaitRoom } from "./pages/GameRoom/WaitRoom";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -28,6 +30,17 @@ const router = createBrowserRouter([
   {
     path: "/enter_game",
     element: <EnterGame />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/game_room/:gameId",
+    element: <GameRoom />,
+    children: [
+      {
+        path: "",
+        element: <WaitRoom />,
+      },
+    ],
     errorElement: <ErrorPage />,
   },
   {
