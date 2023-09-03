@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export type PlayersInfoUI = {
@@ -13,11 +14,18 @@ type Props = {
   gameMaxPlayer: number;
 };
 export const PlayersInfo = ({ players, gameMaxPlayer }: Props) => {
+  const navigate = useNavigate();
+
+  const handleNavigateHandiCapPage = () => {
+    navigate("handicap");
+  };
   return (
     <S.Wrapper>
       <S.Header>
         <S.HeaderLeft>{`플레이어(${players.length}/${gameMaxPlayer})`}</S.HeaderLeft>
-        <S.HeaderRight>핸디캡 주기</S.HeaderRight>
+        <S.HeaderRight onClick={handleNavigateHandiCapPage}>
+          핸디캡 주기
+        </S.HeaderRight>
       </S.Header>
       <S.Body>
         {players.map((player) => {
@@ -55,11 +63,14 @@ const S = {
     font-weight: 500;
     line-height: normal;
   `,
-  HeaderRight: styled.div`
+  HeaderRight: styled.button`
     color: var(--color-text-grey, #494949);
     font-size: 12px;
     font-weight: 500;
     line-height: normal;
+
+    border: none;
+    background-color: transparent;
   `,
 
   Body: styled.div`

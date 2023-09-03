@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "../../components/Button";
-import { GameInfo } from "../MakeGame/MakeGame";
+import Button from "../../../components/Button";
+import { GameInfo } from "../../MakeGame/MakeGame";
 
 type Props = {
   centerType: GameInfo["gameType"];

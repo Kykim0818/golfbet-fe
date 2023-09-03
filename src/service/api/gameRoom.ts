@@ -66,6 +66,7 @@ const testGameRoomInfo: any = {
         imgSrc: "",
         avgScore: 85,
         readyState: true,
+        handicaps: [],
       },
       {
         userId: "user1",
@@ -73,6 +74,7 @@ const testGameRoomInfo: any = {
         imgSrc: "",
         avgScore: 80,
         readyState: false,
+        handicaps: [],
       },
       {
         userId: "user2",
@@ -80,6 +82,7 @@ const testGameRoomInfo: any = {
         imgSrc: "",
         avgScore: 81,
         readyState: true,
+        handicaps: [],
       },
     ],
   },

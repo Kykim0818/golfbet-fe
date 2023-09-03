@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import GameTitleAsset from "../../components/domain/GameTitleAsset";
-import { useGameRoomInfo } from "./GameRoom";
-import Button from "../../components/Button";
+import GameTitleAsset from "../../../components/domain/GameTitleAsset";
+import { useGameRoomInfo } from "../GameRoom";
+import Button from "../../../components/Button";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
+import { getUserId } from "../../../utils/getUserId";
 
 export const WaitRoom = () => {
   const { gameId, gameRoomInfo } = useGameRoomInfo();
@@ -17,7 +18,7 @@ export const WaitRoom = () => {
     };
   });
   // TODO userId 가져오는 부분 구현 확인 필요
-  const isRoomMaker = true;
+  const isRoomMaker = getUserId() === gameRoomInfo.roomMakerId;
   return (
     <>
       <GameTitleAsset title={gameId} />

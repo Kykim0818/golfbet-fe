@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import {
   Outlet,
   useNavigate,
@@ -5,12 +7,9 @@ import {
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
-import GameTitleAsset from "../../components/domain/GameTitleAsset";
-import { GameInfo } from "../MakeGame/MakeGame";
-import { useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
 import { apiGetGameRoom } from "../../service/api/gameRoom";
+import { GameInfo } from "../MakeGame/MakeGame";
 
 type ContextType = ContextStateType & ContextActionType;
 
@@ -22,9 +21,14 @@ type ContextStateType = {
     players: any[];
   };
 };
-
 type ContextActionType = {
   // resetCenterInfoForAdd: () => void;
+};
+
+export type HandicapInfo = {
+  // 핸디 줄 상대방 id
+  to: string;
+  amount: number;
 };
 
 export const GameRoom = () => {
