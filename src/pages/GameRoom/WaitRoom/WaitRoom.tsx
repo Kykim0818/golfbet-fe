@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import GameTitleAsset from "../../components/domain/GameTitleAsset";
-import { useGameRoomInfo } from "./GameRoom";
-import Button from "../../components/Button";
+import Button from "../../../components/Button";
+import GameTitleAsset from "../../../components/domain/GameTitleAsset";
+import { getUserId } from "../../../utils/getUserId";
+import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 
@@ -17,7 +18,12 @@ export const WaitRoom = () => {
     };
   });
   // TODO userId 가져오는 부분 구현 확인 필요
-  const isRoomMaker = true;
+  const isRoomMaker = getUserId() === gameRoomInfo.roomMakerId;
+
+  const handleGameStart = () => {
+    //
+  };
+
   return (
     <>
       <GameTitleAsset title={gameId} />
@@ -32,12 +38,13 @@ export const WaitRoom = () => {
         <PlayersInfo
           players={playerInfos}
           gameMaxPlayer={gameRoomInfo.gameInfo.playerCount}
+          isHandicapPre={gameRoomInfo?.gameInfo.gameRule.handiType[0] === "pre"}
         />
       </S.Body>
       <S.Footer>
         {/* id가 방장 id와 일치하면 시작하기 아니면 ,규칙 동의 후 준비하기 */}
         {isRoomMaker ? (
-          <Button>시작하기</Button>
+          <Button onClick={handleGameStart}>시작하기</Button>
         ) : (
           <Button variants="outlined">규칙 동의 후, 준비하기</Button>
         )}

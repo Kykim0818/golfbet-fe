@@ -6,6 +6,9 @@ import { ThemeProvider } from "styled-components";
 import App from "./App";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
+import GameRoom from "./pages/GameRoom";
+import HandicapSetup from "./pages/GameRoom/HandicapSetup";
+import WaitRoom from "./pages/GameRoom/WaitRoom";
 import MakeGame from "./pages/MakeGame";
 import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
 import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
@@ -17,8 +20,6 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import GameRoom from "./pages/GameRoom";
-import { WaitRoom } from "./pages/GameRoom/WaitRoom";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <WaitRoom />,
+      },
+      {
+        path: "handicap_setup",
+        element: <HandicapSetup />,
       },
     ],
     errorElement: <ErrorPage />,

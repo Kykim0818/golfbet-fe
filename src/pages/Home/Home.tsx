@@ -13,11 +13,11 @@ export const Home = (props: { handleLogout: () => void }) => {
    * - 가져와서 해당정보로 화면에 그려주기
    */
   const { isLoading, error, data } = useQuery(["userInfo"], () =>
-    getUser("Test")
+    getUser("test")
   );
 
   const handleLogout = async () => {
-    const ret = await requestLogout("Test", "");
+    const ret = await requestLogout("test", "");
     if (ret) {
       props.handleLogout();
     } else {
