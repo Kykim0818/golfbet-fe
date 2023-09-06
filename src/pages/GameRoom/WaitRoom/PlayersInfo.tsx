@@ -12,20 +12,27 @@ export type PlayersInfoUI = {
 type Props = {
   players: PlayersInfoUI[];
   gameMaxPlayer: number;
+  isHandicapPre: boolean;
 };
-export const PlayersInfo = ({ players, gameMaxPlayer }: Props) => {
+export const PlayersInfo = ({
+  players,
+  gameMaxPlayer,
+  isHandicapPre,
+}: Props) => {
   const navigate = useNavigate();
 
   const handleNavigateHandiCapPage = () => {
-    navigate("handicap");
+    navigate("handicap_setup");
   };
   return (
     <S.Wrapper>
       <S.Header>
         <S.HeaderLeft>{`플레이어(${players.length}/${gameMaxPlayer})`}</S.HeaderLeft>
-        <S.HeaderRight onClick={handleNavigateHandiCapPage}>
-          핸디캡 주기
-        </S.HeaderRight>
+        {isHandicapPre && (
+          <S.HeaderRight onClick={handleNavigateHandiCapPage}>
+            핸디캡 주기
+          </S.HeaderRight>
+        )}
       </S.Header>
       <S.Body>
         {players.map((player) => {

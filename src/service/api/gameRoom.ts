@@ -1,6 +1,8 @@
 //  리스트 조회
 
 import { getData } from ".";
+import { GameRoomUser } from "../../pages/GameRoom/GameRoom";
+import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
 
@@ -18,7 +20,6 @@ export async function apiGetGameRoom(gameId: string) {
         },
       }
     );
-    console.log(response);
     if (response.statusCode === 404 || response.statusCode === 500)
       throw new Error();
     return response;
@@ -30,7 +31,13 @@ export async function apiGetGameRoom(gameId: string) {
 }
 
 // TODO 데이터 세팅 부분 로직 필요
-const testGameRoomInfo: any = {
+const testGameRoomInfo: {
+  gameRoomInfo: {
+    gameInfo: GameInfo;
+    roomMakerId: string;
+    players: GameRoomUser[];
+  };
+} = {
   gameRoomInfo: {
     gameInfo: {
       gameId: "",

@@ -18,9 +18,21 @@ type ContextStateType = {
   gameRoomInfo: {
     gameInfo: GameInfo;
     roomMakerId: string;
-    players: any[];
+    players: GameRoomUser[];
   };
 };
+export type GameRoomUser = {
+  userId: string;
+  nickName: string;
+  imgSrc: string;
+  avgScore: number;
+  readyState: boolean;
+  handicaps: {
+    to: string;
+    money: number;
+  }[];
+};
+
 type ContextActionType = {
   // resetCenterInfoForAdd: () => void;
 };
