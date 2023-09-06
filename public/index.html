@@ -9,7 +9,10 @@
     />
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
     <!-- android status bar color -->
     <meta name="theme-color" content="#f6f8fc" />
     <meta name="description" content="golfbet appPage" />
@@ -65,6 +68,34 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>GolfBet</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // 이곳에 이벤트 리스너 또는 초기화 코드를 작성하세요.
+        document.documentElement.addEventListener(
+          "touchstart",
+          function (event) {
+            if (event.touches.length > 1) {
+              event.preventDefault();
+            }
+          },
+          false
+        );
+
+        var lastTouchEnd = 0;
+
+        document.documentElement.addEventListener(
+          "touchend",
+          function (event) {
+            var now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+              event.preventDefault();
+            }
+            lastTouchEnd = now;
+          },
+          false
+        );
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

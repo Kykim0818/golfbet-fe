@@ -33,6 +33,15 @@ export const SelectGolfCenter = () => {
   }, [resetCenterInfoForAdd]);
 
   const handleSelectGolfCenter = () => {
+    // course 동일한지 확인
+    if (
+      currentSelectCenter.current.backNineCourse.name ===
+      currentSelectCenter.current.frontNineCourse.name
+    ) {
+      alert("전반과 후반 코스를 다르게 선택해주세요");
+      return;
+    }
+
     gameInfo.golfCenter = currentSelectCenter.current;
     navigate("/make_game");
   };
