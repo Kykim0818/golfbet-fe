@@ -13,6 +13,13 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     // refresh 방지 확인
     overscroll-behavior-y: contain;
+    // 좌우 swipe 방지
+    overscroll-behavior-x: none;
+    //
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
   }
 
   * {
