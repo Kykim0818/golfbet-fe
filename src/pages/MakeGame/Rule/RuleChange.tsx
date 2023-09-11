@@ -8,7 +8,7 @@ import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
 import { useGameInfo } from "../MakeGame";
 import { GAME_RULES } from "./constant";
-import { getDisplayText } from "./getDisplayText";
+import { getDisplayRuleText } from "./getDisplayText";
 import {
   Rules,
   isDdangValue,
@@ -163,7 +163,7 @@ const getRule = (playerCount: number) => {
   function makeOptions(ruleTypes: Rules["ruleType"], values: Rules["value"][]) {
     return values.map((value) => {
       return {
-        label: getDisplayText(ruleTypes, value),
+        label: getDisplayRuleText(ruleTypes, value),
         value,
       };
     });

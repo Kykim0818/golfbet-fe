@@ -1,7 +1,7 @@
 import { DISPLAY_TEXT } from "./constant";
 import { Rules } from "./type";
 
-export const getDisplayText = (
+export const getDisplayRuleText = (
   ruleType: Rules["ruleType"],
   value: Rules["value"]
 ) => {
