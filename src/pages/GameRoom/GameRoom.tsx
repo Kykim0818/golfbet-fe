@@ -26,6 +26,8 @@ export type GameRoomUser = {
   nickName: string;
   imgSrc: string;
   avgScore: number;
+  currentScore: number;
+  currentMoney: number;
   readyState: boolean;
   handicaps: {
     to: string;

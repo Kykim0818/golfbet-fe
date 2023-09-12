@@ -1,11 +1,14 @@
 import styled from "styled-components";
+import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
 import {
-  getDisplayCenterTypeText,
   getDisplayBetTypeText,
+  getDisplayCenterTypeText,
 } from "../../utils/display";
-import { GameInfo } from "../MakeGame/MakeGame";
 import { GameRoomUser } from "../GameRoom/GameRoom";
+import { GameInfo } from "../MakeGame/MakeGame";
+import GameBoard from "./GameBoard";
+import RankBoard from "./RankBoard";
 
 const testGameRoomInfo: {
   gameRoomInfo: {
@@ -22,11 +25,11 @@ const testGameRoomInfo: {
         name: "이천 실크밸리GG",
         region: "",
         frontNineCourse: {
-          name: "",
+          name: "레이크",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
-          name: "",
+          name: "벨리",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
       },
@@ -50,6 +53,8 @@ const testGameRoomInfo: {
         avgScore: 85,
         readyState: true,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
       {
         userId: "user1",
@@ -58,6 +63,8 @@ const testGameRoomInfo: {
         avgScore: 80,
         readyState: false,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
       {
         userId: "user2",
@@ -66,6 +73,8 @@ const testGameRoomInfo: {
         avgScore: 81,
         readyState: true,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
     ],
   },
@@ -80,6 +89,10 @@ export const GameProcess = () => {
   const betAmountPerStroke =
     testGameRoomInfo.gameRoomInfo.gameInfo.betAmountPerStroke;
   const bettingLimit = testGameRoomInfo.gameRoomInfo.gameInfo.bettingLimit;
+  // TODO
+  const currentHole = 4;
+  const centerInfo = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter;
+  const players = testGameRoomInfo.gameRoomInfo.players;
 
   return (
     <S.Wrapper>
@@ -87,7 +100,14 @@ export const GameProcess = () => {
         visibleBack
         title={testGameRoomInfo.gameRoomInfo.gameInfo.gameId}
       />
-      <div style={{ padding: "0px 15px" }}>
+      <div
+        style={{
+          padding: "0px 15px",
+          display: "flex",
+          flexDirection: "column",
+          flex: "1",
+        }}
+      >
         <S.Top>
           {/* 1 */}
           <S.CenterNameSection>
@@ -108,8 +128,14 @@ export const GameProcess = () => {
               </S.BetInfo>
             </div>
           </S.Info>
+          <Button size="small">땅하기</Button>
+          <GameBoard currentHole={currentHole} centerInfo={centerInfo} />
         </S.Top>
+        <RankBoard players={players} />
       </div>
+      <S.Footer>
+        <Button>+스코어 입력하기</Button>
+      </S.Footer>
     </S.Wrapper>
   );
 };
@@ -166,5 +192,11 @@ const S = {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  `,
+
+  //
+  Footer: styled.footer`
+    display: flex;
+    padding: 0px 20px 20px 20px;
   `,
 };

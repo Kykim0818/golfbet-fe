@@ -74,6 +74,8 @@ const testGameRoomInfo: {
         avgScore: 85,
         readyState: true,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
       {
         userId: "user1",
@@ -82,6 +84,8 @@ const testGameRoomInfo: {
         avgScore: 80,
         readyState: false,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
       {
         userId: "user2",
@@ -90,6 +94,8 @@ const testGameRoomInfo: {
         avgScore: 81,
         readyState: true,
         handicaps: [],
+        currentMoney: 0,
+        currentScore: 0,
       },
     ],
   },
