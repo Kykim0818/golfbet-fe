@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import { GameInfo } from "../../MakeGame/MakeGame";
+import {
+  getDisplayBetTypeText,
+  getDisplayCenterTypeText,
+} from "../../../utils/display";
 
 type Props = {
   centerType: GameInfo["gameType"];
@@ -26,7 +30,7 @@ export const GameRoomInfo = ({
       </S.CenterNameSection>
       {/* 2 */}
       <S.Info>
-        <div>{getDisplayText(betType)}</div>
+        <div>{getDisplayBetTypeText(betType)}</div>
         <div style={{ display: "flex" }}>
           <S.BetInfo>
             <span>1타당</span>
@@ -51,17 +55,6 @@ export const GameRoomInfo = ({
       </S.BtnGroup>
     </S.Wrapper>
   );
-};
-
-const getDisplayText = (value: string) => {
-  if (value === "Stroke") return "스트로크";
-};
-
-const getDisplayCenterTypeText = (gameType: GameInfo["gameType"]) => {
-  if (gameType === "field") {
-    return "필드";
-  }
-  return "스크린";
 };
 
 const S = {
