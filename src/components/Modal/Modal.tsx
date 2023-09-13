@@ -1,36 +1,45 @@
-import { ReactElement, useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
+import { history } from "../..";
 
 interface Props {
-  children: ReactElement;
-  handleClose: () => void;
+  children: React.ReactNode;
+  closeModal: () => void;
 }
-export const Modal = ({ children, handleClose }: Props) => {
+
+export const Modal = ({ children, closeModal }: Props) => {
   useEffect(() => {
-    const handlePopstate = (e: Event) => {
-      handleClose();
-    };
+    const event = history.listen((listener) => {
+      if (listener.action === "POP") {
+        history.back();
+        closeModal();
+      }
+    });
+    return event;
+  }, [closeModal]);
 
-    window.addEventListener("popstate", handlePopstate);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 해제
-    return () => {
-      window.removeEventListener("popstate", handlePopstate);
-    };
-  }, [handleClose]);
-
-  return <Styled.Wrapper className="test_modal">{children}</Styled.Wrapper>;
+  return (
+    <S.Background>
+      <S.Content>{children}</S.Content>
+    </S.Background>
+  );
 };
 
-const Styled = {
-  Wrapper: styled.div`
+const S = {
+  Background: styled.div`
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--color-bg, #f6f8fc);
-    // z-index
+    background-color: rgba(79, 77, 77, 0.61);
     z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  `,
+  Content: styled.div`
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
   `,
 };

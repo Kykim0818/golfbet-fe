@@ -39,10 +39,10 @@ const S = {
   `,
   Sheet: styled.div`
     position: absolute;
-
+    padding-top: 55px;
     bottom: 0;
     background-color: white;
-    min-height: 50%;
+    max-height: 80%;
     width: 100%;
     border-radius: 25px 25px 0px 0px;
     animation: slideUp 0.3s ease-in-out;
