@@ -9,6 +9,8 @@ import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
 import RankBoard from "./RankBoard";
+import BottomSheetModal from "../../components/BottomSheetModal";
+import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 
 const testGameRoomInfo: {
   gameRoomInfo: {
@@ -136,6 +138,9 @@ export const GameProcess = () => {
       <S.Footer>
         <Button>+스코어 입력하기</Button>
       </S.Footer>
+      <BottomSheetModal>
+        <EnterAndCheckScore />
+      </BottomSheetModal>
     </S.Wrapper>
   );
 };

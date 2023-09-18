@@ -15,18 +15,22 @@ type ContextType = ContextStateType & ContextActionType;
 
 type ContextStateType = {
   gameId: string;
-  gameRoomInfo: {
-    gameInfo: GameInfo;
-    roomMakerId: string;
-    players: GameRoomUser[];
-  };
+  gameRoomInfo: GameRoomInfo;
 };
+
+export type GameRoomInfo = {
+  gameInfo: GameInfo;
+  roomMakerId: string;
+  players: GameRoomUser[];
+};
+
 export type GameRoomUser = {
   userId: string;
   nickName: string;
   imgSrc: string;
   avgScore: number;
   currentScore: number;
+  holeScores: number[];
   currentMoney: number;
   readyState: boolean;
   handicaps: {
