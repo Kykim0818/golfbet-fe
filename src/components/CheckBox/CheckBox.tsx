@@ -24,7 +24,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           ref={ref}
         />
         {props.checked ? <Checked /> : <UnChecked />}
-        {props.label !== undefined && <p>{props.label}</p>}
+        {props.label !== undefined && props.label}
       </StyledCheckbox>
     );
   }
@@ -44,7 +44,7 @@ const StyledCheckbox = styled.label`
 
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
 `;
 
 const UnChecked = styled.div`
