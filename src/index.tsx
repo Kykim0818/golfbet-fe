@@ -7,6 +7,7 @@ import { ThemeProvider } from "styled-components";
 import App from "./App";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
+import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
 import HandicapSetup from "./pages/GameRoom/HandicapSetup";
 import WaitRoom from "./pages/GameRoom/WaitRoom";
@@ -17,17 +18,28 @@ import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
 import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
 import SetupCheck from "./pages/MakeGame/SetupCheck";
+import NewUserInfo from "./pages/NewUserInfo";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import GameProcess from "./pages/GameProcess";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/terms_and_conditions",
+    element: <TermsAndConditions />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/new_user_info",
+    element: <NewUserInfo />,
     errorElement: <ErrorPage />,
   },
   {
