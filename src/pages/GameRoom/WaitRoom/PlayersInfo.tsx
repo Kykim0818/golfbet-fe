@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export type PlayersInfoUI = {
+  id: string;
   nickName: string;
   imgSrc: string;
   avgScore: number;
@@ -37,7 +38,7 @@ export const PlayersInfo = ({
       <S.Body>
         {players.map((player) => {
           return (
-            <S.Player>
+            <S.Player key={player.id}>
               <div>
                 <img src={player.imgSrc} alt="avatar" />
               </div>
