@@ -50,9 +50,11 @@ export const PlayersInfo = ({
             </S.Player>
           );
         })}
-        {new Array(gameMaxPlayer - players.length).fill(0).map((noPlayer) => {
-          return <div>플레이어를 기다리고 있어요.</div>;
-        })}
+        {new Array(gameMaxPlayer - players.length)
+          .fill(0)
+          .map((noPlayer, index) => {
+            return <div key={`${index + 1}`}>플레이어를 기다리고 있어요.</div>;
+          })}
       </S.Body>
     </S.Wrapper>
   );

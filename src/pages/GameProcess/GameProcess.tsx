@@ -1,6 +1,10 @@
+import { useRef, useState } from "react";
 import styled from "styled-components";
+import { history } from "../..";
+import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
+import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 import {
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
@@ -9,8 +13,6 @@ import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
 import RankBoard from "./RankBoard";
-import BottomSheetModal from "../../components/BottomSheetModal";
-import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 
 const testGameRoomInfo: {
   gameRoomInfo: {
@@ -57,6 +59,7 @@ const testGameRoomInfo: {
         handicaps: [],
         currentMoney: 0,
         currentScore: 0,
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       {
         userId: "user1",
@@ -67,6 +70,7 @@ const testGameRoomInfo: {
         handicaps: [],
         currentMoney: 0,
         currentScore: 0,
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       {
         userId: "user2",
@@ -77,6 +81,7 @@ const testGameRoomInfo: {
         handicaps: [],
         currentMoney: 0,
         currentScore: 0,
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ],
   },
@@ -85,16 +90,35 @@ const testGameRoomInfo: {
 type GameProcessProps = {};
 
 export const GameProcess = () => {
+  // # bottom sheet
+  const [open, setOpen] = useState(false);
+  const preventBottomSheetClose = useRef(false);
+  const handleOpenModal = () => {
+    window.history.pushState(null, "", window.location.href);
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    history.back();
+    setOpen(false);
+  };
+
+  // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
   const name = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter.name;
   const betType = testGameRoomInfo.gameRoomInfo.gameInfo.betType;
   const betAmountPerStroke =
     testGameRoomInfo.gameRoomInfo.gameInfo.betAmountPerStroke;
   const bettingLimit = testGameRoomInfo.gameRoomInfo.gameInfo.bettingLimit;
-  // TODO
-  const currentHole = 4;
   const centerInfo = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter;
   const players = testGameRoomInfo.gameRoomInfo.players;
+  // TODO
+  const currentHole = 4;
+  // 전후반 결정 요소
+  const isFrontNine = true;
+  const currentPar = isFrontNine
+    ? centerInfo.frontNineCourse.pars[currentHole - 1]
+    : centerInfo.backNineCourse.pars[currentHole - 1];
 
   return (
     <S.Wrapper>
@@ -136,11 +160,18 @@ export const GameProcess = () => {
         <RankBoard players={players} />
       </div>
       <S.Footer>
-        <Button>+스코어 입력하기</Button>
+        <Button onClick={handleOpenModal}>+스코어 입력하기</Button>
       </S.Footer>
-      <BottomSheetModal>
-        <EnterAndCheckScore />
-      </BottomSheetModal>
+      {open && (
+        <BottomSheetModal closeModal={handleCloseModal}>
+          <EnterAndCheckScore
+            handleCloseSheet={handleCloseModal}
+            gameRoomInfo={testGameRoomInfo.gameRoomInfo}
+            holeCount={currentHole}
+            par={currentPar}
+          />
+        </BottomSheetModal>
+      )}
     </S.Wrapper>
   );
 };

@@ -1,22 +1,21 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import styled from "styled-components";
 import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import Button from "../../Button";
 
 type EnterHoleScoreProps = {
+  handleNext: () => void;
   players: GameRoomUser[];
   holeCount: number;
   par: number;
 };
 
-type EnterHoleScoreStatus = "Enter" | "Check";
-
 export const EnterHoleScore = ({
+  handleNext,
   players,
   holeCount,
   par,
 }: EnterHoleScoreProps) => {
-  const [status, setStatus] = useState<EnterHoleScoreStatus>("Enter");
   // 예외 : par 나 holecount 없을 경우, 닫기
 
   //
@@ -32,20 +31,8 @@ export const EnterHoleScore = ({
     }
     return [];
   }, [par]);
-
-  const handleCheckScore = () => {
-    window.history.pushState(null, "", window.location.href);
-    setStatus("Check");
-  };
-
   return (
     <S.Wrapper>
-      <S.Header>
-        <div>스코어 입력하기</div>
-        <span>
-          {holeCount}H | 파{par}
-        </span>
-      </S.Header>
       <S.Body>
         <S.Section>
           {players.map((player) => {
@@ -73,7 +60,7 @@ export const EnterHoleScore = ({
         </S.Section>
       </S.Body>
       <S.Footer>
-        <Button onClick={handleCheckScore}>확인</Button>
+        <Button onClick={handleNext}>확인</Button>
       </S.Footer>
     </S.Wrapper>
   );
