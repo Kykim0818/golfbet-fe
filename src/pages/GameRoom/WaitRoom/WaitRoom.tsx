@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
@@ -5,13 +6,13 @@ import { getUserId } from "../../../utils/getUserId";
 import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
-import { useNavigate } from "react-router-dom";
 
 export const WaitRoom = () => {
   const navigate = useNavigate();
   const { gameId, gameRoomInfo } = useGameRoomInfo();
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
     return {
+      id: player.userId,
       nickName: player.nickName,
       imgSrc: player.imgSrc,
       avgScore: player.avgScore,

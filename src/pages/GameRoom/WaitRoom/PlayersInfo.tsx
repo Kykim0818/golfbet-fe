@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export type PlayersInfoUI = {
+  id: string;
   nickName: string;
   imgSrc: string;
   avgScore: number;
@@ -37,7 +38,7 @@ export const PlayersInfo = ({
       <S.Body>
         {players.map((player) => {
           return (
-            <S.Player>
+            <S.Player key={player.id}>
               <div>
                 <img src={player.imgSrc} alt="avatar" />
               </div>
@@ -49,9 +50,11 @@ export const PlayersInfo = ({
             </S.Player>
           );
         })}
-        {new Array(gameMaxPlayer - players.length).fill(0).map((noPlayer) => {
-          return <div>플레이어를 기다리고 있어요.</div>;
-        })}
+        {new Array(gameMaxPlayer - players.length)
+          .fill(0)
+          .map((noPlayer, index) => {
+            return <div key={`${index + 1}`}>플레이어를 기다리고 있어요.</div>;
+          })}
       </S.Body>
     </S.Wrapper>
   );

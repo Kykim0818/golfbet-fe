@@ -1,8 +1,7 @@
 //  리스트 조회
 
 import { getData } from ".";
-import { GameRoomUser } from "../../pages/GameRoom/GameRoom";
-import { GameInfo } from "../../pages/MakeGame/MakeGame";
+import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
 
@@ -26,17 +25,15 @@ export async function apiGetGameRoom(gameId: string) {
   } catch (e) {
     // 응답실패
     // alert 적으면 계속 query 실행됨
-    return { data: testGameRoomInfo } as APIResponse<{ gameRoomInfo: any }>;
+    return { data: testGameRoomInfo } as APIResponse<{
+      gameRoomInfo: GameRoomInfo;
+    }>;
   }
 }
 
 // TODO 데이터 세팅 부분 로직 필요
 const testGameRoomInfo: {
-  gameRoomInfo: {
-    gameInfo: GameInfo;
-    roomMakerId: string;
-    players: GameRoomUser[];
-  };
+  gameRoomInfo: GameRoomInfo;
 } = {
   gameRoomInfo: {
     gameInfo: {
@@ -75,7 +72,10 @@ const testGameRoomInfo: {
         readyState: true,
         handicaps: [],
         currentMoney: 0,
+        // parScores 의 합
         currentScore: 0,
+        // 각 Hole별 점수
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       {
         userId: "user1",
@@ -85,7 +85,10 @@ const testGameRoomInfo: {
         readyState: false,
         handicaps: [],
         currentMoney: 0,
+        // parScores 의 합
         currentScore: 0,
+        // 각 Hole별 점수
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       {
         userId: "user2",
@@ -95,7 +98,10 @@ const testGameRoomInfo: {
         readyState: true,
         handicaps: [],
         currentMoney: 0,
+        // parScores 의 합
         currentScore: 0,
+        // 각 Hole별 점수
+        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ],
   },
