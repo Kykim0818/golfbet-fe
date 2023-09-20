@@ -32,6 +32,8 @@ const S = {
   Background: styled.div`
     position: absolute;
     background-color: rgba(79, 77, 77, 0.61);
+    display: flex;
+    flex-grow: 1;
     z-index: 2;
     width: 100%;
     height: 100%;

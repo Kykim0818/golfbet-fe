@@ -21,7 +21,7 @@ export const Home = (props: { handleLogout: () => void }) => {
   );
 
   const handleOpenModal = () => {
-    window.history.pushState(null, "", window.location.href);
+    window.history.pushState(null, "", "#Back");
     setOpen(true);
   };
 
@@ -122,10 +122,6 @@ const Styled = {
     // color ?
     background-color: var(--color-bg, #f6f8fc);
     padding: 0px 30px;
-    // height가 510 아래면 body 120 추가
-    @media (max-height: 510px) {
-      height: calc(100% + 120px);
-    }
   `,
   Top: styled.div`
     display: flex;
