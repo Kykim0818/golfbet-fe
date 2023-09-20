@@ -30,7 +30,7 @@ export const BottomSheetModal = ({
 
 const S = {
   Background: styled.div`
-    position: absolute;
+    position: fixed;
     background-color: rgba(79, 77, 77, 0.61);
     display: flex;
     flex-grow: 1;
@@ -40,7 +40,7 @@ const S = {
     overflow: hidden;
   `,
   Sheet: styled.div`
-    position: absolute;
+    position: fixed;
     padding-top: 55px;
     bottom: 0;
     background-color: white;
