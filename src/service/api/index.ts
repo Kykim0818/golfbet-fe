@@ -20,5 +20,18 @@ export const getData = async <T>(
 };
 
 // TODO: post
+export const postData = async <T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig
+): Promise<APIResponse<T>> => {
+  try {
+    const response = await client.post<APIResponse<T>>(url, data, config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`[${url}] api get request error`);
+  }
+};
 // TODO: put
 // TODO: delete

@@ -1,10 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { LOGIN } from "../../service/login/constant";
-import { useNavigate } from "react-router-dom";
 
 const REACT_APP_KAKAO_API = "kakao_api_key";
-const REACT_APP_KAKAO_REDIRECT = "http://localhost:3000/login";
+export const REACT_APP_KAKAO_REDIRECT = "http://localhost:3000/login";
 
 export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;

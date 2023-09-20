@@ -1,4 +1,7 @@
+import { postData } from ".";
+import { REACT_APP_KAKAO_REDIRECT } from "../../pages/Login/Login";
 import { testAsync } from "../../utils/test-promise";
+import { API_URL } from "./constant";
 
 export type User = {
   id: string;
@@ -33,4 +36,22 @@ export async function requestLogout(
 ): Promise<boolean> {
   const testResult = Math.floor(Math.random() * 10) > 0;
   return testAsync(() => testResult, 100).then((res) => res as boolean);
+}
+
+export async function apiStartKakao(authCode: string) {
+  try {
+    const response = await postData(
+      API_URL.START_KAKAO,
+      {
+        data: {
+          code: authCode,
+          redirectUrl: REACT_APP_KAKAO_REDIRECT,
+        },
+      },
+      { timeout: 2000 }
+    );
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
 }
