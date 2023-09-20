@@ -43,10 +43,8 @@ export async function apiStartKakao(authCode: string) {
     const response = await postData(
       API_URL.START_KAKAO,
       {
-        data: {
-          code: authCode,
-          redirectUrl: REACT_APP_KAKAO_REDIRECT,
-        },
+        code: authCode,
+        redirectUrl: REACT_APP_KAKAO_REDIRECT,
       },
       { timeout: 2000 }
     );
