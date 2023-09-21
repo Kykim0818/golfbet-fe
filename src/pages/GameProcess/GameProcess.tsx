@@ -1,6 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { history } from "../..";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
@@ -9,6 +8,7 @@ import {
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../utils/display";
+import { preventGoBack } from "../../utils/preventGoBack";
 import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
@@ -94,14 +94,23 @@ export const GameProcess = () => {
   const [open, setOpen] = useState(false);
   const preventBottomSheetClose = useRef(false);
   const handleOpenModal = () => {
-    window.history.pushState(null, "", window.location.href);
     setOpen(true);
   };
 
   const handleCloseModal = () => {
-    history.back();
+    // history.back();
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", preventGoBack);
+    } else {
+      console.log("close");
+      window.removeEventListener("popstate", preventGoBack);
+    }
+  }, [open]);
 
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;

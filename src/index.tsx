@@ -48,7 +48,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/process_game/:gameId",
+    path: "/process_game",
     element: <GameProcess />,
     errorElement: <ErrorPage />,
   },

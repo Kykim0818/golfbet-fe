@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { history } from "../..";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import { User, getUser, requestLogout } from "../../service/api/user";
+import { preventGoBack } from "../../utils/preventGoBack";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
@@ -21,7 +22,6 @@ export const Home = (props: { handleLogout: () => void }) => {
   );
 
   const handleOpenModal = () => {
-    window.history.pushState(null, "", "#Back");
     setOpen(true);
   };
 
@@ -38,6 +38,16 @@ export const Home = (props: { handleLogout: () => void }) => {
       alert("logout error retry it");
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", preventGoBack);
+    } else {
+      console.log("close");
+      window.removeEventListener("popstate", preventGoBack);
+    }
+  }, [open]);
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;
   if (error) return <div>error</div>;

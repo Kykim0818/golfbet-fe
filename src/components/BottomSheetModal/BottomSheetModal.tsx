@@ -14,7 +14,6 @@ export const BottomSheetModal = ({
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
-        history.back();
         closeModal();
       }
     });
