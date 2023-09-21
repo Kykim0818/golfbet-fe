@@ -4,21 +4,21 @@ import { history } from "../..";
 
 type BottomSheetModalProps = {
   children: React.ReactNode;
-  closeModal: () => void;
+  closeModalByUI: () => void;
 };
 
 export const BottomSheetModal = ({
   children,
-  closeModal,
+  closeModalByUI,
 }: BottomSheetModalProps) => {
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
-        closeModal();
+        closeModalByUI();
       }
     });
     return event;
-  }, [closeModal]);
+  }, [closeModalByUI]);
 
   return (
     <S.Background>

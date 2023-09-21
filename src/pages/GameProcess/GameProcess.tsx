@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
 import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
+import { useModal } from "../../hooks/useModal";
 import {
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../utils/display";
-import { preventGoBack } from "../../utils/preventGoBack";
 import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
@@ -91,26 +90,7 @@ type GameProcessProps = {};
 
 export const GameProcess = () => {
   // # bottom sheet
-  const [open, setOpen] = useState(false);
-  const preventBottomSheetClose = useRef(false);
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    // history.back();
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    if (open) {
-      window.history.pushState(null, "", window.location.href);
-      window.addEventListener("popstate", preventGoBack);
-    } else {
-      console.log("close");
-      window.removeEventListener("popstate", preventGoBack);
-    }
-  }, [open]);
+  const { open, openModal, closeModalByUI, closeModal } = useModal();
 
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
@@ -169,12 +149,12 @@ export const GameProcess = () => {
         <RankBoard players={players} />
       </div>
       <S.Footer>
-        <Button onClick={handleOpenModal}>+스코어 입력하기</Button>
+        <Button onClick={openModal}>+스코어 입력하기</Button>
       </S.Footer>
       {open && (
-        <BottomSheetModal closeModal={handleCloseModal}>
+        <BottomSheetModal closeModalByUI={closeModalByUI}>
           <EnterAndCheckScore
-            handleCloseSheet={handleCloseModal}
+            handleCloseSheet={closeModal}
             gameRoomInfo={testGameRoomInfo.gameRoomInfo}
             holeCount={currentHole}
             par={currentPar}

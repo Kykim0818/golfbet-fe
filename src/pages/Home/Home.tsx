@@ -1,17 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { history } from "../..";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
+import { useModal } from "../../hooks/useModal";
 import { User, getUser, requestLogout } from "../../service/api/user";
-import { preventGoBack } from "../../utils/preventGoBack";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
+  const { open, openModal, closeModalByUI, closeModal } = useModal();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   /**
    * TODO
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
@@ -21,15 +20,6 @@ export const Home = (props: { handleLogout: () => void }) => {
     getUser("test")
   );
 
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    history.back();
-    setOpen(false);
-  };
-
   const handleLogout = async () => {
     const ret = await requestLogout("test", "");
     if (ret) {
@@ -38,16 +28,6 @@ export const Home = (props: { handleLogout: () => void }) => {
       alert("logout error retry it");
     }
   };
-
-  useEffect(() => {
-    if (open) {
-      window.history.pushState(null, "", window.location.href);
-      window.addEventListener("popstate", preventGoBack);
-    } else {
-      console.log("close");
-      window.removeEventListener("popstate", preventGoBack);
-    }
-  }, [open]);
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;
   if (error) return <div>error</div>;
@@ -76,7 +56,7 @@ export const Home = (props: { handleLogout: () => void }) => {
             alt="no icons"
           />
         </Styled.FooterB>
-        <Styled.FooterB onClick={handleOpenModal}>
+        <Styled.FooterB onClick={openModal}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
             alt="no icons"
@@ -84,9 +64,9 @@ export const Home = (props: { handleLogout: () => void }) => {
         </Styled.FooterB>
       </Styled.Footer>
       {open && (
-        <BottomSheetModal closeModal={() => setOpen(false)}>
+        <BottomSheetModal closeModalByUI={closeModalByUI}>
           <div>Hello World</div>
-          <Button onClick={handleCloseModal}>닫기</Button>
+          <Button onClick={closeModal}>닫기</Button>
         </BottomSheetModal>
       )}
     </Styled.Wrapper>
