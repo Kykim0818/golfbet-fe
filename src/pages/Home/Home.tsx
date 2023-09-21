@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { history } from "../..";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
+import { useModal } from "../../hooks/useModal";
 import { User, getUser, requestLogout } from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
+  const { open, openModal, closeModalByUI, closeModal } = useModal();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   /**
    * TODO
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
@@ -19,16 +19,6 @@ export const Home = (props: { handleLogout: () => void }) => {
   const { isLoading, error, data } = useQuery(["userInfo"], () =>
     getUser("test")
   );
-
-  const handleOpenModal = () => {
-    window.history.pushState(null, "", window.location.href);
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    history.back();
-    setOpen(false);
-  };
 
   const handleLogout = async () => {
     const ret = await requestLogout("test", "");
@@ -66,7 +56,7 @@ export const Home = (props: { handleLogout: () => void }) => {
             alt="no icons"
           />
         </Styled.FooterB>
-        <Styled.FooterB onClick={handleOpenModal}>
+        <Styled.FooterB onClick={openModal}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
             alt="no icons"
@@ -74,9 +64,9 @@ export const Home = (props: { handleLogout: () => void }) => {
         </Styled.FooterB>
       </Styled.Footer>
       {open && (
-        <BottomSheetModal closeModal={() => setOpen(false)}>
+        <BottomSheetModal closeModalByUI={closeModalByUI}>
           <div>Hello World</div>
-          <Button onClick={handleCloseModal}>닫기</Button>
+          <Button onClick={closeModal}>닫기</Button>
         </BottomSheetModal>
       )}
     </Styled.Wrapper>
@@ -116,16 +106,12 @@ const UserInfoSection = ({ user }: { user: User }) => {
 const Styled = {
   Wrapper: styled.div`
     display: flex;
-    height: 100%;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
     // color ?
     background-color: var(--color-bg, #f6f8fc);
     padding: 0px 30px;
-    // height가 510 아래면 body 120 추가
-    @media (max-height: 510px) {
-      height: calc(100% + 120px);
-    }
   `,
   Top: styled.div`
     display: flex;

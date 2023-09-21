@@ -4,22 +4,21 @@ import { history } from "../..";
 
 type BottomSheetModalProps = {
   children: React.ReactNode;
-  closeModal: () => void;
+  closeModalByUI: () => void;
 };
 
 export const BottomSheetModal = ({
   children,
-  closeModal,
+  closeModalByUI,
 }: BottomSheetModalProps) => {
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
-        history.back();
-        closeModal();
+        closeModalByUI();
       }
     });
     return event;
-  }, [closeModal]);
+  }, [closeModalByUI]);
 
   return (
     <S.Background>
@@ -30,15 +29,17 @@ export const BottomSheetModal = ({
 
 const S = {
   Background: styled.div`
-    position: absolute;
+    position: fixed;
     background-color: rgba(79, 77, 77, 0.61);
+    display: flex;
+    flex-grow: 1;
     z-index: 2;
     width: 100%;
     height: 100%;
     overflow: hidden;
   `,
   Sheet: styled.div`
-    position: absolute;
+    position: fixed;
     padding-top: 55px;
     bottom: 0;
     background-color: white;

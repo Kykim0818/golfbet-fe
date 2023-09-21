@@ -107,6 +107,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 export const history = createBrowserHistory();
 
 const root = ReactDOM.createRoot(
