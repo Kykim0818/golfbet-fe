@@ -116,7 +116,7 @@ const UserInfoSection = ({ user }: { user: User }) => {
 const Styled = {
   Wrapper: styled.div`
     display: flex;
-    height: 100%;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
     // color ?
