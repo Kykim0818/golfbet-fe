@@ -12,3 +12,15 @@ export const PageStyle = {
     padding: 0px 20px 20px 20px;
   `,
 };
+
+export const ModalStyle = {
+  Wrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+  `,
+  Footer: styled.footer`
+    display: flex;
+    padding: 0px 20px 20px 20px;
+  `,
+};

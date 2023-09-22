@@ -3,9 +3,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import BottomSheetModal from "../../components/BottomSheetModal";
-import Button from "../../components/Button";
 import { useModal } from "../../hooks/useModal";
 import { User, getUser, requestLogout } from "../../service/api/user";
+import { SelectRegion } from "../MakeGame/MakeGolfCenter/SelectRegion";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
@@ -27,6 +27,11 @@ export const Home = (props: { handleLogout: () => void }) => {
     } else {
       alert("logout error retry it");
     }
+  };
+
+  const handleSelectRegion = (value: string) => {
+    console.log(value);
+    closeModal();
   };
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;
@@ -65,8 +70,7 @@ export const Home = (props: { handleLogout: () => void }) => {
       </Styled.Footer>
       {open && (
         <BottomSheetModal closeModalByUI={closeModalByUI}>
-          <div>Hello World</div>
-          <Button onClick={closeModal}>닫기</Button>
+          <SelectRegion handleSelectRegion={handleSelectRegion} />
         </BottomSheetModal>
       )}
     </Styled.Wrapper>
