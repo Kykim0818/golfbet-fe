@@ -30,7 +30,11 @@ export const WaitRoom = () => {
 
   return (
     <>
-      <GameTitleAsset title={gameId} />
+      <GameTitleAsset
+        visibleBack
+        handleBack={() => navigate(-1)}
+        title={gameId}
+      />
       <S.Body>
         <GameRoomInfo
           centerType={gameRoomInfo?.gameInfo.gameType}
