@@ -39,6 +39,7 @@ export const GameBoard = ({ currentHole, centerInfo }: GameBoardProps) => {
 const S = {
   Wrapper: styled.div`
     display: flex;
+    flex-wrap: wrap;
   `,
   CourseName: styled.span``,
 };
