@@ -16,7 +16,7 @@ import RankBoard from "./RankBoard";
 import { typo } from "../../styles/typo";
 import { useNavigate } from "react-router-dom";
 
-const testGameRoomInfo: {
+export const testGameRoomInfo: {
   gameRoomInfo: {
     gameInfo: GameInfo;
     roomMakerId: string;
@@ -94,6 +94,8 @@ type GameProcessProps = {};
 export const GameProcess = () => {
   // # bottom sheet
   const { open, openModal, closeModalByUI, closeModal } = useModal();
+  const gameEndModal = useModal();
+
   const navigate = useNavigate();
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
