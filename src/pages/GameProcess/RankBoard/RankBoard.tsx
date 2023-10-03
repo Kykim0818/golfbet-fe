@@ -36,9 +36,6 @@ const S = {
   Wrapper: styled.div`
     display: flex;
     flex-direction: column;
-  `,
-
-  Player: styled.div`
-    display: flex;
+    gap: 10px;
   `,
 };

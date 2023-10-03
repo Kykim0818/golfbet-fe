@@ -14,6 +14,7 @@ import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
 import RankBoard from "./RankBoard";
 import { typo } from "../../styles/typo";
+import { useNavigate } from "react-router-dom";
 
 const testGameRoomInfo: {
   gameRoomInfo: {
@@ -31,7 +32,7 @@ const testGameRoomInfo: {
         region: "",
         frontNineCourse: {
           name: "레이크",
-          pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+          pars: [3, 3, 3, 5, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
           name: "벨리",
@@ -93,7 +94,7 @@ type GameProcessProps = {};
 export const GameProcess = () => {
   // # bottom sheet
   const { open, openModal, closeModalByUI, closeModal } = useModal();
-
+  const navigate = useNavigate();
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
   const name = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter.name;
@@ -114,6 +115,7 @@ export const GameProcess = () => {
   return (
     <S.Wrapper>
       <TitleAsset
+        handleBack={() => navigate(-1)}
         visibleBack
         title={testGameRoomInfo.gameRoomInfo.gameInfo.gameId}
       />
@@ -161,16 +163,24 @@ export const GameProcess = () => {
               </S.BetMoneyInfo>
             </div>
           </S.Info>
-          <Button size="small">땅하기</Button>
+          <div>
+            <Button size="small">땅하기</Button>
+          </div>
           <GameBoard currentHole={currentHole} centerInfo={centerInfo} />
         </S.Top>
-        <RankBoard players={players} />
+        <S.Mid>
+          <S.RankBoardHeader>순위</S.RankBoardHeader>
+          <RankBoard players={players} />
+        </S.Mid>
       </div>
       <S.Footer>
         <Button onClick={openModal}>+스코어 입력하기</Button>
       </S.Footer>
       {open && (
-        <BottomSheetModal closeModalByUI={closeModalByUI}>
+        <BottomSheetModal
+          closeModalByUI={closeModalByUI}
+          sheetStyle={{ backgroundColor: `#F8FAFB` }}
+        >
           <EnterAndCheckScore
             handleCloseSheet={closeModal}
             gameRoomInfo={testGameRoomInfo.gameRoomInfo}
@@ -281,6 +291,18 @@ const S = {
   Money: styled.span`
     ${typo.s12w700}
     color: #008395;
+  `,
+  // # Rank
+  Mid: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    margin-top: 20px;
+  `,
+  RankBoardHeader: styled.div`
+    ${typo.s14w700}
+    color : #00AFC6;
   `,
 
   //

@@ -14,3 +14,8 @@ export const getDisplayCenterTypeText = (gameType: GameInfo["gameType"]) => {
   }
   return "스크린";
 };
+
+export const getDisplayEnterScore = (value: number) => {
+  if (value > 0) return `+${value}`;
+  return value;
+};

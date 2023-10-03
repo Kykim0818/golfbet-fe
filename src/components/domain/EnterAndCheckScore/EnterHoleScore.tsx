@@ -1,7 +1,9 @@
 import { useMemo } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import Button from "../../Button";
+import { typo } from "../../../styles/typo";
+import { getDisplayEnterScore } from "../../../utils/display";
 
 type EnterHoleScoreProps = {
   handleNext: () => void;
@@ -18,7 +20,6 @@ export const EnterHoleScore = ({
 }: EnterHoleScoreProps) => {
   // 예외 : par 나 holecount 없을 경우, 닫기
 
-  //
   const inputScores = useMemo(() => {
     if (par) {
       const scores = [];
@@ -37,11 +38,11 @@ export const EnterHoleScore = ({
         <S.Section>
           {players.map((player) => {
             return (
-              <div>
-                <div>
-                  <span>nickName</span>
-                  <img alt="profile_image" />
-                </div>
+              <div key={player.userId}>
+                <S.UserSection>
+                  <img src={player.imgSrc} alt="avatar" />
+                  <span>{player.nickName}</span>
+                </S.UserSection>
                 <S.ScoreButtons>
                   {inputScores.map((score) => {
                     return (
@@ -49,7 +50,7 @@ export const EnterHoleScore = ({
                         key={score}
                         isSelected={player.holeScores[holeCount - 1] === score}
                       >
-                        {score}
+                        {getDisplayEnterScore(score)}
                       </S.ScoreButton>
                     );
                   })}
@@ -80,7 +81,27 @@ const S = {
   `,
   Section: styled.section`
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    padding: 25px 20px;
+  `,
+  UserSection: styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    img {
+      width: 35px;
+      height: 35px;
+      min-width: 35px;
+      min-height: 35px;
+    }
+    span {
+      ${typo.s14w700}
+      color : #504F4F;
+    }
+    margin-bottom: 15px;
   `,
   Footer: styled.footer`
     display: flex;
@@ -89,6 +110,27 @@ const S = {
 
   ScoreButtons: styled.div`
     display: flex;
+    gap: 10px;
   `,
-  ScoreButton: styled.button<{ isSelected: boolean }>``,
+  ScoreButton: styled.button<{ isSelected: boolean }>`
+    display: flex;
+    padding: 16px 14px;
+
+    box-sizing: border-box;
+    border: none;
+    border-radius: 15px;
+
+    ${typo.s14w700}
+
+    ${(props) =>
+      props.isSelected
+        ? css`
+            background-color: #b0e6ed;
+            color: var(--color-main, #009eb2);
+          `
+        : css`
+            background-color: #f4f7fd;
+            color: #d3dae7;
+          `}
+  `,
 };

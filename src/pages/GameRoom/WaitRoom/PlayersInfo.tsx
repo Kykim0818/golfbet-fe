@@ -111,6 +111,8 @@ const S = {
   `,
 
   PlayerImgSection: styled.div`
+    display: flex;
+    align-items: center;
     min-width: 50px;
     max-width: 50px;
     max-height: 50px;
