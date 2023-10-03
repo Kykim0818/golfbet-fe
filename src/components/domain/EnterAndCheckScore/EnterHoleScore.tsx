@@ -4,6 +4,7 @@ import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import Button from "../../Button";
 import { typo } from "../../../styles/typo";
 import { getDisplayEnterScore } from "../../../utils/display";
+import { useNavigate } from "react-router-dom";
 
 type EnterHoleScoreProps = {
   handleNext: () => void;
@@ -19,7 +20,7 @@ export const EnterHoleScore = ({
   par,
 }: EnterHoleScoreProps) => {
   // 예외 : par 나 holecount 없을 경우, 닫기
-
+  const navigate = useNavigate();
   const inputScores = useMemo(() => {
     if (par) {
       const scores = [];
@@ -32,6 +33,15 @@ export const EnterHoleScore = ({
     }
     return [];
   }, [par]);
+
+  const handleGameFinish = () => {
+    handleNext();
+
+    setTimeout(() => {
+      navigate("/game_end");
+    }, 100);
+  };
+
   return (
     <S.Wrapper>
       <S.Body>
@@ -61,7 +71,7 @@ export const EnterHoleScore = ({
         </S.Section>
       </S.Body>
       <S.Footer>
-        <Button onClick={handleNext}>확인</Button>
+        <Button onClick={handleGameFinish}>확인</Button>
       </S.Footer>
     </S.Wrapper>
   );
@@ -86,6 +96,7 @@ const S = {
     gap: 20px;
     background-color: white;
     padding: 25px 20px;
+    overflow: auto;
   `,
   UserSection: styled.div`
     display: flex;

@@ -14,6 +14,7 @@ type Props = {
   betType: GameInfo["betType"];
   betAmountPerStroke: GameInfo["betAmountPerStroke"];
   bettingLimit: GameInfo["bettingLimit"];
+  uiType?: "waitRoom" | "gameEnd";
 };
 
 export const GameRoomInfo = ({
@@ -22,6 +23,7 @@ export const GameRoomInfo = ({
   betType,
   betAmountPerStroke,
   bettingLimit,
+  uiType = "waitRoom",
 }: Props) => {
   return (
     <S.Wrapper>
@@ -61,16 +63,18 @@ export const GameRoomInfo = ({
         </div>
       </S.Info>
       {/* 3 */}
-      <S.BtnGroup>
-        <Button
-          size="small"
-          variants="custom"
-          style={{ backgroundColor: "F5F5F5", color: "#004F59" }}
-        >
-          골프장 정보
-        </Button>
-        <Button size="small">규칙 보기</Button>
-      </S.BtnGroup>
+      {uiType === "waitRoom" && (
+        <S.BtnGroup>
+          <Button
+            size="small"
+            variants="custom"
+            style={{ backgroundColor: "F5F5F5", color: "#004F59" }}
+          >
+            골프장 정보
+          </Button>
+          <Button size="small">규칙 보기</Button>
+        </S.BtnGroup>
+      )}
     </S.Wrapper>
   );
 };
