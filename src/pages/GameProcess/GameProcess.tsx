@@ -5,6 +5,7 @@ import TitleAsset from "../../components/TitleAsset";
 import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 import { useModal } from "../../hooks/useModal";
 import {
+  getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../utils/display";
@@ -12,6 +13,8 @@ import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
 import RankBoard from "./RankBoard";
+import { typo } from "../../styles/typo";
+import { useNavigate } from "react-router-dom";
 
 const testGameRoomInfo: {
   gameRoomInfo: {
@@ -29,7 +32,7 @@ const testGameRoomInfo: {
         region: "",
         frontNineCourse: {
           name: "레이크",
-          pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
+          pars: [3, 3, 3, 5, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
           name: "벨리",
@@ -91,7 +94,7 @@ type GameProcessProps = {};
 export const GameProcess = () => {
   // # bottom sheet
   const { open, openModal, closeModalByUI, closeModal } = useModal();
-
+  const navigate = useNavigate();
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
   const name = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter.name;
@@ -112,6 +115,7 @@ export const GameProcess = () => {
   return (
     <S.Wrapper>
       <TitleAsset
+        handleBack={() => navigate(-1)}
         visibleBack
         title={testGameRoomInfo.gameRoomInfo.gameInfo.gameId}
       />
@@ -131,28 +135,52 @@ export const GameProcess = () => {
           </S.CenterNameSection>
           {/* 2 */}
           <S.Info>
-            <div>{getDisplayBetTypeText(betType)}</div>
-            <div style={{ display: "flex" }}>
-              <S.BetInfo>
-                <span>1타당</span>
-                <span>{betAmountPerStroke}원</span>
-              </S.BetInfo>
-              <S.BetInfo>
-                <span>한도</span>
-                <span>{bettingLimit}원</span>
-              </S.BetInfo>
+            <div style={{ display: "flex", gap: "9px" }}>
+              <S.BetIcon>{getDisplayBetTypeIconText(betType)}</S.BetIcon>
+              <S.BetTypeText>{getDisplayBetTypeText(betType)}</S.BetTypeText>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "32px",
+                flexGrow: 1,
+                justifyContent: "flex-end",
+              }}
+            >
+              <S.BetMoneyInfo>
+                <S.BetMoneyText>1타당</S.BetMoneyText>
+                <S.MoneySection>
+                  <S.Money>{betAmountPerStroke}</S.Money>
+                  <span>원</span>
+                </S.MoneySection>
+              </S.BetMoneyInfo>
+              <S.BetMoneyInfo>
+                <S.BetMoneyText>게임 준비금</S.BetMoneyText>
+                <S.MoneySection>
+                  <S.Money>{bettingLimit}</S.Money>
+                  <span>원</span>
+                </S.MoneySection>
+              </S.BetMoneyInfo>
             </div>
           </S.Info>
-          <Button size="small">땅하기</Button>
+          <div>
+            <Button size="small">땅하기</Button>
+          </div>
           <GameBoard currentHole={currentHole} centerInfo={centerInfo} />
         </S.Top>
-        <RankBoard players={players} />
+        <S.Mid>
+          <S.RankBoardHeader>순위</S.RankBoardHeader>
+          <RankBoard players={players} />
+        </S.Mid>
       </div>
       <S.Footer>
         <Button onClick={openModal}>+스코어 입력하기</Button>
       </S.Footer>
       {open && (
-        <BottomSheetModal closeModalByUI={closeModalByUI}>
+        <BottomSheetModal
+          closeModalByUI={closeModalByUI}
+          sheetStyle={{ backgroundColor: `#F8FAFB` }}
+        >
           <EnterAndCheckScore
             handleCloseSheet={closeModal}
             gameRoomInfo={testGameRoomInfo.gameRoomInfo}
@@ -178,7 +206,7 @@ const S = {
     flex-direction: column;
     gap: 16px;
     margin-top: 8px;
-    padding: 0px 15px;
+    padding: 15px 15px;
     border-radius: 15px;
     background: #fff;
     box-shadow: 0px 4px 2px 0px rgba(205, 209, 202, 0.12);
@@ -211,12 +239,70 @@ const S = {
   Info: styled.div`
     display: flex;
     align-items: center;
+    gap: 45px;
+    border-radius: 15px;
+    background-color: #f8fafb;
+    padding: 12px 23px;
   `,
   BetInfo: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  `,
+  BetIcon: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 2px;
+    background: #008395;
+
+    // typo
+    color: #fff;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  `,
+  BetTypeText: styled.div`
+    ${typo.s14w700}
+  `,
+  BetMoneyInfo: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  `,
+  BetMoneyText: styled.span`
+    ${typo.s10w400}
+    color: #504F4F
+  `,
+  MoneySection: styled.div`
+    display: flex;
+    span {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  `,
+  Money: styled.span`
+    ${typo.s12w700}
+    color: #008395;
+  `,
+  // # Rank
+  Mid: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    margin-top: 20px;
+  `,
+  RankBoardHeader: styled.div`
+    ${typo.s14w700}
+    color : #00AFC6;
   `,
 
   //

@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import styled from "styled-components";
+import styled, { CSSProp } from "styled-components";
 import { history } from "../..";
 
 type BottomSheetModalProps = {
   children: React.ReactNode;
   closeModalByUI: () => void;
+  sheetStyle?: CSSProp;
 };
 
 export const BottomSheetModal = ({
   children,
   closeModalByUI,
+  sheetStyle,
 }: BottomSheetModalProps) => {
   useEffect(() => {
     const event = history.listen((listener) => {
@@ -22,7 +24,7 @@ export const BottomSheetModal = ({
 
   return (
     <S.Background>
-      <S.Sheet>{children}</S.Sheet>
+      <S.Sheet sheetStyle={sheetStyle}>{children}</S.Sheet>
     </S.Background>
   );
 };
@@ -38,7 +40,7 @@ const S = {
     height: 100%;
     overflow: hidden;
   `,
-  Sheet: styled.div`
+  Sheet: styled.div<{ sheetStyle?: CSSProp }>`
     position: fixed;
     padding-top: 55px;
     bottom: 0;
@@ -56,5 +58,7 @@ const S = {
         transform: translateY(0); /* 최종 위치: 페이지 상단으로 이동 */
       }
     }
+
+    ${(props) => props.sheetStyle}
   `,
 };

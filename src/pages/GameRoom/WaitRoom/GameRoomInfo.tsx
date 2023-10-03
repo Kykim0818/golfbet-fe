@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import { GameInfo } from "../../MakeGame/MakeGame";
 import {
+  getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../../utils/display";
+import { typo } from "../../../styles/typo";
 
 type Props = {
   centerType: GameInfo["gameType"];
@@ -30,16 +32,32 @@ export const GameRoomInfo = ({
       </S.CenterNameSection>
       {/* 2 */}
       <S.Info>
-        <div>{getDisplayBetTypeText(betType)}</div>
-        <div style={{ display: "flex" }}>
-          <S.BetInfo>
-            <span>1타당</span>
-            <span>{betAmountPerStroke}원</span>
-          </S.BetInfo>
-          <S.BetInfo>
-            <span>한도</span>
-            <span>{bettingLimit}원</span>
-          </S.BetInfo>
+        <div style={{ display: "flex", gap: "9px" }}>
+          <S.BetIcon>{getDisplayBetTypeIconText(betType)}</S.BetIcon>
+          <S.BetTypeText>{getDisplayBetTypeText(betType)}</S.BetTypeText>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "32px",
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
+        >
+          <S.BetMoneyInfo>
+            <S.BetMoneyText>1타당</S.BetMoneyText>
+            <S.MoneySection>
+              <S.Money>{betAmountPerStroke}</S.Money>
+              <span>원</span>
+            </S.MoneySection>
+          </S.BetMoneyInfo>
+          <S.BetMoneyInfo>
+            <S.BetMoneyText>게임 준비금</S.BetMoneyText>
+            <S.MoneySection>
+              <S.Money>{bettingLimit}</S.Money>
+              <span>원</span>
+            </S.MoneySection>
+          </S.BetMoneyInfo>
         </div>
       </S.Info>
       {/* 3 */}
@@ -65,6 +83,7 @@ const S = {
     border-radius: 15px;
     background-color: white;
     padding: 15px;
+    margin-bottom: 16px;
   `,
   CenterNameSection: styled.div`
     display: flex;
@@ -94,12 +113,52 @@ const S = {
   Info: styled.div`
     display: flex;
     align-items: center;
+    gap: 45px;
+    border-radius: 15px;
+    background-color: #f8fafb;
+    padding: 12px 23px;
   `,
-  BetInfo: styled.div`
+  BetIcon: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 2px;
+    background: #008395;
+
+    // typo
+    color: #fff;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  `,
+  BetTypeText: styled.div`
+    ${typo.s14w700}
+  `,
+  BetMoneyInfo: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  `,
+  BetMoneyText: styled.span`
+    ${typo.s10w400}
+    color: #504F4F
+  `,
+  MoneySection: styled.div`
+    display: flex;
+    span {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  `,
+  Money: styled.span`
+    ${typo.s12w700}
+    color: #008395;
   `,
   // 3
   BtnGroup: styled.div`

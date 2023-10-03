@@ -37,8 +37,7 @@ const S = {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 13px 16px;
     min-height: 41px;
     background-color: var(--color-bg, #f6f8fc);
   `,

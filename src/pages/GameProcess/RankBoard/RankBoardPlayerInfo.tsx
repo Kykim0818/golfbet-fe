@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { typo } from "../../../styles/typo";
 
 type RankBoardPlayerInfoProps = {
   rank: number;
@@ -20,16 +21,20 @@ export const RankBoardPlayerInfo = ({
   return (
     <S.Wrapper>
       <S.RankIcon src={getRankIconPath(rank)} alt="rank_icon" />
-      <S.ProfileImg src={imgSrc} alt="profile_image" />
-      {isSelf && <S.SelfIcon />}
-      <S.Id>{id}</S.Id>
-      <S.Section>
-        <div>
-          <S.Score>{currentScore === 0 ? "-" : currentScore}</S.Score>
-          <S.ScoreUnit>타</S.ScoreUnit>
-        </div>
-        <S.Money>{currentMoney}</S.Money>
-      </S.Section>
+      <S.ProfileImgSection>
+        <S.ProfileImg src={imgSrc} alt="avatar" />
+      </S.ProfileImgSection>
+      <S.IdSection>
+        {isSelf && <div>나</div>}
+        <span>{id}</span>
+      </S.IdSection>
+      <S.MoreInfo>
+        <S.ScoreSection>
+          <span>{currentScore === 0 ? "-" : currentScore}</span>
+          <div>타</div>
+        </S.ScoreSection>
+        <S.Money>{currentMoney}원</S.Money>
+      </S.MoreInfo>
     </S.Wrapper>
   );
 };
@@ -53,18 +58,74 @@ function getRankIconPath(rank: number) {
 const S = {
   Wrapper: styled.div`
     display: flex;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #fff;
+    padding: 4px 20px 6px 12px;
+    min-height: 40px;
   `,
-  RankIcon: styled.img``,
+  RankIcon: styled.img`
+    margin-right: 12px;
+  `,
   SelfIcon: styled.img``,
+  ProfileImgSection: styled.div`
+    display: flex;
+    align-items: center;
+    min-width: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-height: 50px;
+
+    margin-right: 15px;
+  `,
   ProfileImg: styled.img``,
 
-  Id: styled.span``,
+  //
+  IdSection: styled.div`
+    display: flex;
+    flex-grow: 1;
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20px;
+      height: 20px;
+      background-color: #f8f9fd;
+      border-radius: 50%;
+      ${typo.s10w500}
+      color: #3181AE;
+    }
+    span {
+      margin-left: 5px;
+      ${typo.s14w700}
+    }
+  `,
 
-  Section: styled.section`
+  MoreInfo: styled.section`
     display: flex;
     flex-direction: column;
   `,
-  Score: styled.span``,
-  ScoreUnit: styled.span``,
-  Money: styled.span``,
+  ScoreSection: styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    div {
+      padding: 3px 5px;
+      border-radius: 10px;
+      background: #f8f9fd;
+      ${typo.s8w500}
+      color: #3181AE;
+    }
+
+    span {
+      ${typo.s16w700}
+      color: var(--color_main_darker, #003D45);
+    }
+  `,
+
+  Money: styled.span`
+    ${typo.s12w700}
+    color: var(--color-main-dark, #008395);
+  `,
 };
