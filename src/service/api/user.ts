@@ -18,7 +18,7 @@ export const getUser = (userId: string): Promise<User> =>
 //   "https://my-json-server.typicode.com/typicode/demo/posts"
 // );
 const mockUserInfo = {
-  id: "TEST",
+  id: "test",
   imgSrc: process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
   moneySum: 100000,
   fieldGameScore: 0,

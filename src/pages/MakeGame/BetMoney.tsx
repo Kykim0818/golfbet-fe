@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { isNumeric } from "../../utils/isNumeric";
 
 type BetMoneyProps = {
   value: number;
@@ -123,8 +124,3 @@ const getDisplayPlusMoney = (money: number) => {
     return preFix + Math.floor(divisionResult / 10) + "만" + postFix;
   }
 };
-
-// TODO: util
-function isNumeric(value: string) {
-  return !isNaN(parseFloat(value)) && isFinite(parseFloat(value));
-}

@@ -13,6 +13,8 @@ export const useAccount = () => {
   };
 
   const handleLogIn = (accessToken: string, refreshToken: string) => {
+    //TOOD 확인필요
+    localStorage.setItem("userId", "test");
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     navigate("/");

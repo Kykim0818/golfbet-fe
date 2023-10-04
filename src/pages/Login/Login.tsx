@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { LOGIN } from "../../service/login/constant";
@@ -9,7 +8,6 @@ export const REACT_APP_KAKAO_REDIRECT = "http://localhost:3000/login";
 export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
 }) => {
-  const navigate = useNavigate();
   // TODO: login handling 방식에 따라 다를듯
   const handleKakaoLogin = () => {
     alert("Kakao Login");

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { GameInfo } from "../MakeGame";
-import { getDisplayText } from "./getDisplayText";
+import { getDisplayRuleText } from "./getDisplayText";
 import { NearestType, SpecialBetRequirements } from "./type";
 
 type RuleProps = {
@@ -12,7 +12,7 @@ export const Rule = ({ rule }: RuleProps) => {
     <Styled.Wrapper>
       <Styled.Detail>
         <Styled.Label>핸디</Styled.Label>
-        <div>{getDisplayText("handiType", rule.handiType[0])}</div>
+        <div>{getDisplayRuleText("handiType", rule.handiType[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
@@ -24,7 +24,7 @@ export const Rule = ({ rule }: RuleProps) => {
       <Styled.Line />
       <Styled.Detail>
         <Styled.Label>땅</Styled.Label>
-        <div>{getDisplayText("ddang", rule.ddang[0])}</div>
+        <div>{getDisplayRuleText("ddang", rule.ddang[0])}</div>
       </Styled.Detail>
       <Styled.Line />
       <Styled.Detail>
@@ -66,11 +66,11 @@ const getSpecialBetRequirementsDiplay = (
   values: SpecialBetRequirements["value"][]
 ) => {
   return values
-    .map((value) => getDisplayText("specialBetRequirements", value))
+    .map((value) => getDisplayRuleText("specialBetRequirements", value))
     .join(",");
 };
 
 const getDisplayNearest = (value: NearestType["value"], amount: number) => {
-  if (value === "ingame") return getDisplayText("nearestType", value);
+  if (value === "ingame") return getDisplayRuleText("nearestType", value);
   return amount;
 };
