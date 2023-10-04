@@ -12,7 +12,6 @@ import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
 import HandicapSetup from "./pages/GameRoom/HandicapSetup";
 import WaitRoom from "./pages/GameRoom/WaitRoom";
-import { LoginRedirect } from "./pages/Login/LoginRedirect";
 import MakeGame from "./pages/MakeGame";
 import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
 import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
@@ -36,7 +35,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginRedirect />,
+    element: <App />,
     errorElement: <ErrorPage />,
   },
   {

@@ -1,6 +1,10 @@
 export const API_URL = {
+  // center
   GET_ALL_GOLF_CENTER: `/v1/centers/all`,
-  START_KAKAO: "/v1/auth/kakao/login",
+  // AUTH
+  START_KAKAO: "/v1/auth/kakao/signup",
+  SIGN_UP: "v1/auth/signup",
+  CHECK_DUPLICATE: "v1/auth/user/duplication",
   // TODO
   GET_GAME_ROOM_INFO: "",
 };

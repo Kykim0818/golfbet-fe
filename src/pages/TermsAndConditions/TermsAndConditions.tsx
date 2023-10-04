@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
@@ -14,6 +14,11 @@ export type Agreements = {
 
 export const TermsAndConditions = () => {
   const navigate = useNavigate();
+  // 혹시 모를 앞으로 가기 예외 처리
+  useEffect(() => {
+    if (localStorage.getItem("tmpUserInfo") === null) navigate(-1);
+  }, [navigate]);
+
   // 서비스 이용약관
   // 개인정보 수집 및 이용 동의
   // E-mail 및 SMS 광고성 정보 수신 동의(선택)
@@ -48,7 +53,10 @@ export const TermsAndConditions = () => {
 
   return (
     <PageStyle.Wrapper>
-      <TitleAsset visibleBack handleBack={() => navigate(-1)} />
+      <TitleAsset
+        visibleBack
+        handleBack={() => navigate("/", { replace: true })}
+      />
       <S.Body>
         <Checkbox
           label="전체 동의"

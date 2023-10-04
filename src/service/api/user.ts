@@ -1,4 +1,4 @@
-import { postData } from ".";
+import { getData, postData } from ".";
 import { REACT_APP_KAKAO_REDIRECT } from "../../pages/Login/Login";
 import { testAsync } from "../../utils/test-promise";
 import { API_URL } from "./constant";
@@ -38,9 +38,25 @@ export async function requestLogout(
   return testAsync(() => testResult, 100).then((res) => res as boolean);
 }
 
+type API_START_KAKAO_RES = {
+  accessToken: string;
+  refreshToken: string;
+  newMemberYn: boolean;
+  userInfo: SignUpUserInfoType;
+};
+
+export type SignUpUserInfoType = {
+  platformId: string;
+  profile: string;
+  email: string;
+  gender: string;
+  signupPlatform: string;
+  nickname: string;
+};
+
 export async function apiStartKakao(authCode: string) {
   try {
-    const response = await postData(
+    const response = await postData<API_START_KAKAO_RES>(
       API_URL.START_KAKAO,
       {
         code: authCode,
@@ -48,7 +64,39 @@ export async function apiStartKakao(authCode: string) {
       },
       { timeout: 2000 }
     );
-    console.log(response);
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function apiSignUp() {}
+
+export async function apiCheckDuplicate(
+  type: "email" | "nickname",
+  value: string
+) {
+  try {
+    if (type === "email") {
+      const response = await getData<{ duplicateYn: boolean }>(
+        API_URL.CHECK_DUPLICATE,
+        {
+          params: { email: value },
+          timeout: 2000,
+        }
+      );
+      return response.data;
+    }
+    if (type === "nickname") {
+      const response = await getData<{ duplicateYn: boolean }>(
+        API_URL.CHECK_DUPLICATE,
+        {
+          params: { nickname: value },
+          timeout: 2000,
+        }
+      );
+      return response.data;
+    }
   } catch (e) {
     console.log(e);
   }
