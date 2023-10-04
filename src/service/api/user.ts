@@ -70,7 +70,27 @@ export async function apiStartKakao(authCode: string) {
   }
 }
 
-export async function apiSignUp() {}
+type ApiSignUpParams = {
+  platformId: number;
+  gender: "male" | "female";
+  email: string;
+  nickname: string;
+  phoneNumber: string;
+  termsOfServiceAgreement: boolean;
+  privacyUsageAgreement: boolean;
+  marketingConsent: boolean;
+};
+
+export async function apiSignUp(params: ApiSignUpParams) {
+  try {
+    const response = await postData<any>(API_URL.SIGN_UP, params, {
+      timeout: 2000,
+    });
+    console.log(response.statusCode);
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 export async function apiCheckDuplicate(
   type: "email" | "nickname",

@@ -6,7 +6,7 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import TitleAsset from "../../components/TitleAsset";
 import ToggleGroup from "../../components/ToggleGroup";
-import { apiCheckDuplicate } from "../../service/api/user";
+import { apiCheckDuplicate, apiSignUp } from "../../service/api/user";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { Agreements } from "../TermsAndConditions/TermsAndConditions";
@@ -168,6 +168,16 @@ export const NewUserInfo = () => {
 
   const handleRequestJoin = () => {
     // TODO 해당정보로 가입 요청
+    apiSignUp({
+      platformId: tmpUserInfo.platformId,
+      email: userEmail,
+      nickname: nickname,
+      gender: gender,
+      phoneNumber: phoneNumber,
+      termsOfServiceAgreement: state.serviceAvailable,
+      privacyUsageAgreement: state.personalInfo,
+      marketingConsent: state.marketingOption,
+    });
   };
 
   return (
@@ -242,6 +252,7 @@ export const NewUserInfo = () => {
       <S.Body></S.Body>
       <PageStyle.Footer>
         <Button
+          onClick={handleRequestJoin}
           disabled={
             !(userEmailHelp.status && nicknameHelp.status && phoneNumber !== "")
           }
