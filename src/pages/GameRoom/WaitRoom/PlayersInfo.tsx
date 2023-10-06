@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { typo } from "../../../styles/typo";
 
 export type PlayersInfoUI = {
@@ -21,10 +21,10 @@ export const PlayersInfo = ({
   gameMaxPlayer,
   isHandicapPre,
 }: Props) => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
 
   const handleNavigateHandiCapPage = () => {
-    navigate("handicap_setup");
+    movePage("handicap_setup");
   };
 
   return (

@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import SegmentCell from "../../../components/SegmentCell";
 import Stepper from "../../../components/Stepper";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
 import Rule from "../Rule";
 import { GameRule } from "../Rule/type";
 
 export const Setup = () => {
-  const navigate = useNavigate();
+  const { goHome, movePage } = usePageRoute();
   const { gameInfo } = useGameInfo();
 
   const [, setRenderFlag] = useState(false);
@@ -33,15 +33,11 @@ export const Setup = () => {
 
   //
   const handleOpenChangeGameRule = () => {
-    navigate("rule_change");
+    movePage("rule_change");
   };
   return (
     <>
-      <TitleAsset
-        title="게임 만들기"
-        visibleBack
-        handleBack={() => navigate("/", { replace: true })}
-      />
+      <TitleAsset title="게임 만들기" visibleBack handleBack={() => goHome()} />
       <Styled.Body>
         {/* ////// 게임분류  */}
         <div>
@@ -61,7 +57,7 @@ export const Setup = () => {
           <Styled.GolfCourse>
             <div
               className="golfCenter__input"
-              onClick={() => navigate("select_golf_center")}
+              onClick={() => movePage("select_golf_center")}
             >
               <StyledInput
                 readOnly
@@ -147,7 +143,7 @@ export const Setup = () => {
       <Styled.Footer>
         <Button
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
-          onClick={() => navigate("setup_check")}
+          onClick={() => movePage("setup_check")}
         >
           다음
         </Button>

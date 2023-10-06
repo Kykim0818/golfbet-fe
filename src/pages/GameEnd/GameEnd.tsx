@@ -1,18 +1,18 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
-import { PageStyle } from "../../styles/page";
-import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
-import { testGameRoomInfo } from "../GameProcess/GameProcess";
-import { getUserId } from "../../utils/getUserId";
-import { typo } from "../../styles/typo";
 import ScoreBoard from "../../components/domain/ScoreBoard";
+import { usePageRoute } from "../../hooks/usePageRoute";
+import { PageStyle } from "../../styles/page";
+import { typo } from "../../styles/typo";
+import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
+import { testGameRoomInfo } from "../GameProcess/GameProcess";
 import RankBoard from "../GameProcess/RankBoard";
-import { useNavigate } from "react-router-dom";
+import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
 
 export const GameEnd = () => {
-  const navigate = useNavigate();
+  const { goHome } = usePageRoute();
   const gameRoomInfo = testGameRoomInfo.gameRoomInfo;
   const players = gameRoomInfo.players;
   const userId = getUserId();
@@ -60,7 +60,7 @@ export const GameEnd = () => {
         </S.Mid>
       </S.Body>
       <PageStyle.Footer>
-        <Button onClick={() => navigate("/")}>확인</Button>
+        <Button onClick={() => goHome()}>확인</Button>
       </PageStyle.Footer>
     </PageStyle.Wrapper>
   );

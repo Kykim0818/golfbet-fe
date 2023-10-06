@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import { useModal } from "../../hooks/useModal";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { User, getUser, requestLogout } from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   /**
    * TODO
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
@@ -39,12 +39,14 @@ export const Home = (props: { handleLogout: () => void }) => {
         <HomeImageButton
           label="게임 생성하기"
           imgSrc={process.env.PUBLIC_URL + "/assets/images/make_game_img.png"}
-          onClick={() => navigate("/make_game")}
+          onClick={() => {
+            movePage("/make_game");
+          }}
         />
         <HomeImageButton
           label="게임 참여하기"
           imgSrc={process.env.PUBLIC_URL + "/assets/images/enter_game_img.png"}
-          onClick={() => navigate("/enter_game")}
+          onClick={() => movePage("/enter_game")}
         />
       </Styled.S3>
       {/* </Suspense> */}

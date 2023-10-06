@@ -5,8 +5,10 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import App from "./App";
+import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
+import GameEnd from "./pages/GameEnd";
 import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
 import HandicapSetup from "./pages/GameRoom/HandicapSetup";
@@ -24,7 +26,6 @@ import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import GameEnd from "./pages/GameEnd";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -115,7 +116,11 @@ const queryClient = new QueryClient({
 });
 
 export const history = createBrowserHistory();
-
+history.listen((listener) => {
+  if (listener.action === "POP") {
+    decreaseBackToHomePageCount();
+  }
+});
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

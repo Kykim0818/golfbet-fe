@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { useGameInfo } from "../MakeGame";
 
 export const MakeGolfCenter = () => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const { tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } = useGameInfo();
 
   const [centerName, setCenterName] = useState(tmpGolfCourseInfoForAdd.name);
@@ -34,7 +34,7 @@ export const MakeGolfCenter = () => {
     tmpGolfCourseInfoForAdd.region = region;
     tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
     tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
-    navigate("../make_golf_center_detail");
+    movePage("../make_golf_center_detail");
   };
 
   return (
@@ -42,7 +42,7 @@ export const MakeGolfCenter = () => {
       <TitleAsset
         title="골프장 추가"
         visibleBack
-        handleBack={() => navigate("../select_golf_center", { replace: true })}
+        handleBack={() => movePage("../select_golf_center", { replace: true })}
       />
       <Styled.Body>
         <div>

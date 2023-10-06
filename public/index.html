@@ -71,6 +71,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // 이곳에 이벤트 리스너 또는 초기화 코드를 작성하세요.
+        localStorage.setItem("backToHomePageCount", 0);
         document.documentElement.addEventListener(
           "touchstart",
           function (event) {

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import styled, { CSSProp } from "styled-components";
 import { history } from "../..";
+import { decreaseBackToHomePageCount } from "../../hooks/usePageRoute";
 
 type BottomSheetModalProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export const BottomSheetModal = ({
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
+        decreaseBackToHomePageCount();
         closeModalByUI();
       }
     });

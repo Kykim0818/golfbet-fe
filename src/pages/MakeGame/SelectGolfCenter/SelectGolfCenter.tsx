@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { useGameInfo } from "../MakeGame";
 import { CenterList } from "./CenterList";
 import { useSelectGolfCenter } from "./useSelectGolfCenter";
@@ -12,7 +12,7 @@ import { useSelectGolfCenter } from "./useSelectGolfCenter";
 const NO_SEARCH_INPUT = "";
 
 export const SelectGolfCenter = () => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
   const [inputFocus, setInputFocus] = useState(false);
@@ -43,14 +43,14 @@ export const SelectGolfCenter = () => {
     }
 
     gameInfo.golfCenter = currentSelectCenter.current;
-    navigate("/make_game");
+    movePage("/make_game");
   };
   return (
     <Styled.Wrapper>
       <TitleAsset
         title="골프장 선택"
         visibleClose
-        handleClose={() => navigate("/make_game", { replace: true })}
+        handleClose={() => movePage("/make_game", { replace: true })}
       />
       <Styled.Body>
         <Styled.InputSection>
@@ -69,7 +69,7 @@ export const SelectGolfCenter = () => {
         </Styled.InputSection>
         <Styled.AddButtonSection>
           <Button
-            onClick={() => navigate("../make_golf_center")}
+            onClick={() => movePage("../make_golf_center")}
             style={{ width: "fit-content" }}
             variants="outlined"
           >

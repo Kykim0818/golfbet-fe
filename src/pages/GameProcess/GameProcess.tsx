@@ -4,6 +4,8 @@ import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
 import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 import { useModal } from "../../hooks/useModal";
+import { usePageRoute } from "../../hooks/usePageRoute";
+import { typo } from "../../styles/typo";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
@@ -13,8 +15,6 @@ import { GameRoomUser } from "../GameRoom/GameRoom";
 import { GameInfo } from "../MakeGame/MakeGame";
 import GameBoard from "./GameBoard";
 import RankBoard from "./RankBoard";
-import { typo } from "../../styles/typo";
-import { useNavigate } from "react-router-dom";
 
 export const testGameRoomInfo: {
   gameRoomInfo: {
@@ -96,7 +96,7 @@ export const GameProcess = () => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
   const gameEndModal = useModal();
 
-  const navigate = useNavigate();
+  const { moveBack } = usePageRoute();
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
   const name = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter.name;
@@ -117,7 +117,7 @@ export const GameProcess = () => {
   return (
     <S.Wrapper>
       <TitleAsset
-        handleBack={() => navigate(-1)}
+        handleBack={() => moveBack()}
         visibleBack
         title={testGameRoomInfo.gameRoomInfo.gameInfo.gameId}
       />

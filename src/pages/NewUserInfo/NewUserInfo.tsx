@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { history } from "../..";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import TitleAsset from "../../components/TitleAsset";
 import ToggleGroup from "../../components/ToggleGroup";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { Agreements } from "../TermsAndConditions/TermsAndConditions";
 
 export const NewUserInfo = () => {
-  const navigate = useNavigate();
+  const { moveBack } = usePageRoute();
   const { state }: { state: Agreements } = useLocation();
   if (state === null) history.go(-1);
 
@@ -41,11 +42,7 @@ export const NewUserInfo = () => {
 
   return (
     <PageStyle.Wrapper>
-      <TitleAsset
-        title="회원 정보"
-        visibleBack
-        handleBack={() => navigate(-1)}
-      />
+      <TitleAsset title="회원 정보" visibleBack handleBack={() => moveBack()} />
       <S.Body>
         <S.InfoSection>
           <S.InputWrapper>
