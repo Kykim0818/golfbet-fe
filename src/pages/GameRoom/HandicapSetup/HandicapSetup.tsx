@@ -1,18 +1,18 @@
 import { ChangeEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { getUserId } from "../../../utils/getUserId";
 import { isNumeric } from "../../../utils/isNumeric";
 import { useGameRoomInfo } from "../GameRoom";
 
 export const HandicapSetup = () => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const { gameId, gameRoomInfo } = useGameRoomInfo();
   const handleBackBtn = () => {
-    navigate(`/game_room/${gameId}`, { replace: true });
+    movePage(`/game_room/${gameId}`, { replace: true });
   };
   const handleAddHandiCapBtn = () => {
     // 추가

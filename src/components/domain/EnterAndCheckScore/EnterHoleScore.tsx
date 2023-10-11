@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import styled, { css } from "styled-components";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
-import Button from "../../Button";
 import { typo } from "../../../styles/typo";
 import { getDisplayEnterScore } from "../../../utils/display";
-import { useNavigate } from "react-router-dom";
+import Button from "../../Button";
 
 type EnterHoleScoreProps = {
   handleNext: () => void;
@@ -20,7 +20,7 @@ export const EnterHoleScore = ({
   par,
 }: EnterHoleScoreProps) => {
   // 예외 : par 나 holecount 없을 경우, 닫기
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const inputScores = useMemo(() => {
     if (par) {
       const scores = [];
@@ -38,7 +38,7 @@ export const EnterHoleScore = ({
     handleNext();
 
     setTimeout(() => {
-      navigate("/game_end");
+      movePage("/game_end");
     }, 100);
   };
 

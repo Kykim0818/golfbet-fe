@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { history } from "..";
+import { increaseBackToHomePageCount, usePageRoute } from "./usePageRoute";
 
 export const useModal = () => {
   const [open, setOpen] = useState(false);
-
+  const { moveBack } = usePageRoute();
   useEffect(() => {
     if (open) {
+      increaseBackToHomePageCount();
       window.history.pushState(null, "", window.location.href);
       // window.addEventListener("popstate", preventGoBack);
     }
@@ -16,7 +17,7 @@ export const useModal = () => {
   };
 
   const closeModal = () => {
-    history.back();
+    moveBack();
     setOpen(false);
   };
 

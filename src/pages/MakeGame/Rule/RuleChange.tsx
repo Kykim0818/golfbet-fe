@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import ToggleGroup from "../../../components/ToggleGroup";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
 import { useGameInfo } from "../MakeGame";
@@ -18,7 +18,7 @@ import {
 } from "./type";
 
 export const RuleChange = () => {
-  const navigate = useNavigate();
+  const { movePage, moveBack } = usePageRoute();
   const { gameInfo } = useGameInfo();
 
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
@@ -49,7 +49,7 @@ export const RuleChange = () => {
     <Styled.Wrapper>
       <TitleAsset
         title="게임 규칙"
-        handleBack={() => navigate("/make_game", { replace: true })}
+        handleBack={() => movePage("/make_game", { replace: true })}
         visibleBack
       />
       <Styled.Body>
@@ -86,7 +86,7 @@ export const RuleChange = () => {
           onClick={() => {
             // TODO: 뒤로가기
             gameInfo.gameRule = currentRule;
-            navigate(-1);
+            moveBack();
           }}
         >
           수정하기

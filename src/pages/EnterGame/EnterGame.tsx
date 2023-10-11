@@ -1,10 +1,9 @@
 import QrReader from "react-qr-reader";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { usePageRoute } from "../../hooks/usePageRoute";
 
 export const EnterGame = () => {
-  const navigate = useNavigate();
-
+  const { moveBack } = usePageRoute();
   const handleError = (err: any) => {
     console.log(err);
   };
@@ -17,7 +16,7 @@ export const EnterGame = () => {
   };
 
   const handleBtnClick = () => {
-    navigate(-1);
+    moveBack();
   };
 
   return (
