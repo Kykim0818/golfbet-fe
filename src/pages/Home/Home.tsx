@@ -19,7 +19,6 @@ export const Home = (props: { handleLogout: () => void }) => {
   const { isLoading, error, data } = useQuery(["userInfo"], () =>
     getUser("test")
   );
-
   const handleLogout = async () => {
     const ret = await requestLogout("test", "");
     if (ret) {

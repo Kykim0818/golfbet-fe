@@ -11,6 +11,7 @@ import { apiCheckDuplicate, apiSignUp } from "../../service/api/user";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { Agreements } from "../TermsAndConditions/TermsAndConditions";
+import { handleLogin } from "../../service/login/login";
 
 type UserInputHelpUI = {
   status: boolean;
@@ -102,7 +103,7 @@ export const NewUserInfo = () => {
   };
   const handleFocusOutEmail = () => {
     // email 중복검사
-    if (userEmail !== "") {
+    if (userEmail !== "" && validEmailCheck(userEmail)) {
       apiCheckDuplicate("email", userEmail).then((res) => {
         if (res?.duplicateYn === false) {
           setUserEmailHelp({
@@ -134,7 +135,7 @@ export const NewUserInfo = () => {
   };
 
   const handleFocusOutNickname = () => {
-    if (nickname !== "") {
+    if (nickname !== "" && validNicknameCheck(nickname)) {
       // 닉네임 중복검사
       apiCheckDuplicate("nickname", nickname).then((res) => {
         if (res?.duplicateYn === false) {
@@ -167,9 +168,9 @@ export const NewUserInfo = () => {
     setPhoneNumber(e.target.value);
   };
 
-  const handleRequestJoin = () => {
+  const handleRequestJoin = async () => {
     // TODO 해당정보로 가입 요청
-    apiSignUp({
+    const res = await apiSignUp({
       platformId: tmpUserInfo.platformId,
       email: userEmail,
       nickname: nickname,
@@ -179,6 +180,10 @@ export const NewUserInfo = () => {
       privacyUsageAgreement: state.personalInfo,
       marketingConsent: state.marketingOption,
     });
+    //
+    if (res) {
+      handleLogin(res.data.refreshToken, res.data.accessToken);
+    }
   };
 
   return (

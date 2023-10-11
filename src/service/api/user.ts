@@ -12,6 +12,16 @@ export type User = {
   status: null | any;
 };
 
+type BasicUserInfo = {
+  nickName: string;
+  profileImgSrc: string;
+  screenScore: number;
+  screenTotalMoneyChange: number;
+  fieldScore: number;
+  fieldTotalMoenyChange: number;
+  currentGameId: string;
+};
+
 export const getUser = (userId: string): Promise<User> =>
   testAsync(() => mockUserInfo, 100).then((res) => res as User);
 // const ret = await axios.get<User>(
@@ -87,6 +97,7 @@ export async function apiSignUp(params: ApiSignUpParams) {
       timeout: 2000,
     });
     console.log(response.statusCode);
+    return response;
   } catch (e) {
     console.log(e);
   }

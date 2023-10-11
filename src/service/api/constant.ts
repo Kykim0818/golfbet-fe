@@ -1,4 +1,6 @@
 export const API_URL = {
+  // AUTH
+  GET_ACCESS_TOKEN: "/v1/auth/refresh",
   // center
   GET_ALL_GOLF_CENTER: `/v1/centers/all`,
   // AUTH

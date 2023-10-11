@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserHistory } from "history";
 import React from "react";
+import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -121,6 +122,7 @@ const queryClient = new QueryClient({
 });
 
 export const history = createBrowserHistory();
+
 history.listen((listener) => {
   if (listener.action === "POP") {
     decreaseBackToHomePageCount();
@@ -131,12 +133,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </CookiesProvider>
   </React.StrictMode>
 );
 
