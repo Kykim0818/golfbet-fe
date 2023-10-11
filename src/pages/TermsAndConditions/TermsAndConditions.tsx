@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Checkbox from "../../components/CheckBox";
 import TitleAsset from "../../components/TitleAsset";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 
 export type Agreements = {
@@ -13,11 +13,11 @@ export type Agreements = {
 };
 
 export const TermsAndConditions = () => {
-  const navigate = useNavigate();
+  const { movePage, moveBack } = usePageRoute();
   // 혹시 모를 앞으로 가기 예외 처리
   useEffect(() => {
-    if (localStorage.getItem("tmpUserInfo") === null) navigate(-1);
-  }, [navigate]);
+    if (localStorage.getItem("tmpUserInfo") === null) moveBack();
+  }, [moveBack]);
 
   // 서비스 이용약관
   // 개인정보 수집 및 이용 동의
@@ -42,7 +42,7 @@ export const TermsAndConditions = () => {
   };
 
   const handleNewUserInfoPage = () => {
-    navigate("/new_user_info", {
+    movePage("/new_user_info", {
       state: {
         serviceAvailable: serviceAvailableCheck,
         personalInfo: personalInfoCheck,
@@ -53,10 +53,7 @@ export const TermsAndConditions = () => {
 
   return (
     <PageStyle.Wrapper>
-      <TitleAsset
-        visibleBack
-        handleBack={() => navigate("/", { replace: true })}
-      />
+      <TitleAsset visibleBack handleBack={() => moveBack()} />
       <S.Body>
         <Checkbox
           label="전체 동의"

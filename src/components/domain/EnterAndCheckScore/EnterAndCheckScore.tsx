@@ -1,10 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { history } from "../../..";
 import { GameRoomInfo } from "../../../pages/GameRoom/GameRoom";
-import { CheckHoleScore } from "./CheckHoleScore";
-import { EnterHoleScore } from "./EnterHoleScore";
 import { typo } from "../../../styles/typo";
+import { EnterHoleScore } from "./EnterHoleScore";
 
 type EnterAndCheckScoreProps = {
   handleCloseSheet: () => void;
@@ -23,13 +21,6 @@ export const EnterAndCheckScore = ({
 }: EnterAndCheckScoreProps) => {
   const [status, setStatus] = useState<EnterAndCheckScoreStatus>("Enter");
   // 예외 : par 나 holecount 없을 경우, 닫기
-  const handleNext = () => {
-    setStatus("Check");
-  };
-  const handleBack = () => {
-    history.back();
-    setStatus("Enter");
-  };
 
   return (
     <S.Wrapper>

@@ -1,14 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { getUserId } from "../../../utils/getUserId";
 import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 
 export const WaitRoom = () => {
-  const navigate = useNavigate();
+  const { movePage, moveBack } = usePageRoute();
   const { gameId, gameRoomInfo } = useGameRoomInfo();
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
     return {
@@ -25,14 +25,14 @@ export const WaitRoom = () => {
 
   const handleGameStart = () => {
     //
-    navigate(`/process_game/${gameId}`);
+    movePage(`/process_game/${gameId}`);
   };
 
   return (
     <>
       <GameTitleAsset
         visibleBack
-        handleBack={() => navigate(-1)}
+        handleBack={() => moveBack()}
         title={gameId}
       />
       <S.Body>

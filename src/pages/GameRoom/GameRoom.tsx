@@ -1,11 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import {
-  Outlet,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from "react-router-dom";
+import { Outlet, useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
 import { apiGetGameRoom } from "../../service/api/gameRoom";
@@ -50,7 +45,6 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
-  const navigate = useNavigate();
   const params = useParams();
   //
   const gameId = params.gameId;
@@ -70,9 +64,8 @@ export const GameRoom = () => {
     //
     if (gameId === undefined && gameInfo.current === undefined) {
       console.log("gameInfo is undefined");
-      // navigate("/");
     }
-  }, [navigate, gameId]);
+  }, [gameId]);
 
   // 3 웹 소켓 연결
   if (data?.data === undefined) return <div>Loading...</div>;

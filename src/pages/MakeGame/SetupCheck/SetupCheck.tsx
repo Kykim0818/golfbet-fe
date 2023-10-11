@@ -1,14 +1,14 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { deepClone } from "../../../utils/deepClone";
 import { FixedGolfCenter } from "../FixedGolfCenter";
 import { useGameInfo } from "../MakeGame";
 import { ParDetail } from "./ParDetail";
 
 export const SetupCheck = () => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const { gameInfo } = useGameInfo();
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
@@ -33,7 +33,7 @@ export const SetupCheck = () => {
 
     // TODO : 방생성 요청후(post)방번호 return;
     const gameId = "1";
-    navigate(`/game_room/${gameId}`);
+    movePage(`/game_room/${gameId}`);
     // websocket 연결
     // game_room/:gameId
   };
@@ -43,7 +43,7 @@ export const SetupCheck = () => {
       <TitleAsset
         title="게임 만들기"
         visibleBack
-        handleBack={() => navigate("/make_game", { replace: true })}
+        handleBack={() => movePage("/make_game", { replace: true })}
       />
       <Styled.Body>
         <FixedGolfCenter

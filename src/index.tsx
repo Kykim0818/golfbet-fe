@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import App from "./App";
+import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
 import GameEnd from "./pages/GameEnd";
@@ -120,7 +121,11 @@ const queryClient = new QueryClient({
 });
 
 export const history = createBrowserHistory();
-
+history.listen((listener) => {
+  if (listener.action === "POP") {
+    decreaseBackToHomePageCount();
+  }
+});
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

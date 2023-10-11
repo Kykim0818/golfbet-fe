@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 import { FixedGolfCenter } from "../FixedGolfCenter";
 import { useGameInfo } from "../MakeGame";
 import { ParDetail } from "../SetupCheck/ParDetail";
@@ -11,7 +11,7 @@ import { ParDetail } from "../SetupCheck/ParDetail";
 const GOLF_COURSE_COUNT = 9;
 
 export const MakeGolfCenterDetail = () => {
-  const navigate = useNavigate();
+  const { movePage } = usePageRoute();
   const { gameInfo, tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } =
     useGameInfo();
   const frontNineCourseDetail = useRef(
@@ -36,7 +36,7 @@ export const MakeGolfCenterDetail = () => {
         pars: backNineCourseDetail.current,
       },
     };
-    navigate("/make_game");
+    movePage("/make_game");
   };
 
   return (
@@ -44,7 +44,7 @@ export const MakeGolfCenterDetail = () => {
       <TitleAsset
         title="골프장 상세"
         visibleBack
-        handleBack={() => navigate("../make_golf_center", { replace: true })}
+        handleBack={() => movePage("../make_golf_center", { replace: true })}
       />
       <Styled.Body>
         <FixedGolfCenter

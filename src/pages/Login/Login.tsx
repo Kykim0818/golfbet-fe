@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { LOGIN } from "../../service/login/constant";
 
 const REACT_APP_KAKAO_API = "kakao_api_key";
@@ -9,9 +10,12 @@ export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
 }) => {
   // TODO: login handling 방식에 따라 다를듯
+  const { movePage } = usePageRoute();
+
   const handleKakaoLogin = () => {
     alert("Kakao Login");
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`;
+    movePage("terms_and_conditions");
   };
   //
   const handleTestLogin = () => {

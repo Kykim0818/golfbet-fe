@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { history } from "../..";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import TitleAsset from "../../components/TitleAsset";
 import ToggleGroup from "../../components/ToggleGroup";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { apiCheckDuplicate, apiSignUp } from "../../service/api/user";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
@@ -22,7 +23,7 @@ const INVALID_NICKNAME =
 const INVALID_PHONE_NUMBER = "휴대폰번호가 유효하지 않습니다.";
 
 export const NewUserInfo = () => {
-  const navigate = useNavigate();
+  const { moveBack } = usePageRoute();
   const { state }: { state: Agreements } = useLocation();
   let tmpUserInfo: any = localStorage.getItem("tmpUserInfo");
   if (state === null || tmpUserInfo === null) history.go(-1);
@@ -182,11 +183,7 @@ export const NewUserInfo = () => {
 
   return (
     <PageStyle.Wrapper>
-      <TitleAsset
-        title="회원 정보"
-        visibleBack
-        handleBack={() => navigate("/terms_and_conditions", { replace: true })}
-      />
+      <TitleAsset title="회원 정보" visibleBack handleBack={() => moveBack()} />
       <S.Body>
         <S.InfoSection>
           <S.InputWrapper>
