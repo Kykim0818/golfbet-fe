@@ -1,5 +1,4 @@
 import { NavigateOptions, useNavigate } from "react-router";
-import { history } from "..";
 
 export const usePageRoute = () => {
   const navigate = useNavigate();
@@ -17,11 +16,11 @@ export const usePageRoute = () => {
   };
   const moveBack = () => {
     // 자동으로 index.tsx 에서 decrease 해줌
-    history.back();
+    navigate(-1);
   };
 
   const goHome = () => {
-    history.go(-1 * getBackToHomePageCount());
+    navigate(-1 * getBackToHomePageCount());
     initBackToHomePageCount();
   };
 

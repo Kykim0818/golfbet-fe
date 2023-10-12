@@ -1,22 +1,23 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { history } from "../..";
+import { decreaseBackToHomePageCount } from "../../hooks/usePageRoute";
 
 interface Props {
   children: React.ReactNode;
-  closeModal: () => void;
+  closeModalByUI: () => void;
 }
 
-export const Modal = ({ children, closeModal }: Props) => {
+export const Modal = ({ children, closeModalByUI }: Props) => {
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
-        history.back();
-        closeModal();
+        decreaseBackToHomePageCount();
+        closeModalByUI();
       }
     });
     return event;
-  }, [closeModal]);
+  }, [closeModalByUI]);
 
   return (
     <S.Background>

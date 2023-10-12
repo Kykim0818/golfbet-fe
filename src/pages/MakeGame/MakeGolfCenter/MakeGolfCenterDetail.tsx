@@ -11,7 +11,7 @@ import { ParDetail } from "../SetupCheck/ParDetail";
 const GOLF_COURSE_COUNT = 9;
 
 export const MakeGolfCenterDetail = () => {
-  const { movePage } = usePageRoute();
+  const { movePage, moveBack } = usePageRoute();
   const { gameInfo, tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } =
     useGameInfo();
   const frontNineCourseDetail = useRef(
@@ -44,7 +44,8 @@ export const MakeGolfCenterDetail = () => {
       <TitleAsset
         title="골프장 상세"
         visibleBack
-        handleBack={() => movePage("../make_golf_center", { replace: true })}
+        // handleBack={() => movePage("../make_golf_center", { replace: true })}
+        handleBack={moveBack}
       />
       <Styled.Body>
         <FixedGolfCenter
