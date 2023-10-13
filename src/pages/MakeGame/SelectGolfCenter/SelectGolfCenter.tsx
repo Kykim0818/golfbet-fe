@@ -12,7 +12,7 @@ import { useSelectGolfCenter } from "./useSelectGolfCenter";
 const NO_SEARCH_INPUT = "";
 
 export const SelectGolfCenter = () => {
-  const { movePage } = usePageRoute();
+  const { movePage, moveBack } = usePageRoute();
   const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
   const [inputFocus, setInputFocus] = useState(false);
@@ -50,7 +50,8 @@ export const SelectGolfCenter = () => {
       <TitleAsset
         title="골프장 선택"
         visibleClose
-        handleClose={() => movePage("/make_game", { replace: true })}
+        // handleClose={() => movePage("/make_game", { replace: true })}
+        handleClose={moveBack}
       />
       <Styled.Body>
         <Styled.InputSection>

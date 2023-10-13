@@ -35,9 +35,10 @@ export const Setup = () => {
   const handleOpenChangeGameRule = () => {
     movePage("rule_change");
   };
+
   return (
     <>
-      <TitleAsset title="게임 만들기" visibleBack handleBack={() => goHome()} />
+      <TitleAsset title="게임 만들기" visibleBack handleBack={goHome} />
       <Styled.Body>
         {/* ////// 게임분류  */}
         <div>
