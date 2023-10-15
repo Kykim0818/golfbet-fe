@@ -2,9 +2,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserHistory } from "history";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import App from "./App";
 import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
@@ -21,17 +21,20 @@ import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCe
 import Setup from "./pages/MakeGame/Setup";
 import SetupCheck from "./pages/MakeGame/SetupCheck";
 import NewUserInfo from "./pages/NewUserInfo";
+import Start from "./pages/Start/Start";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
+import App from "./App";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Start />,
     errorElement: <ErrorPage />,
   },
   {
@@ -126,12 +129,16 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <App>
+            <RouterProvider router={router} />
+          </App>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </Provider>
   </React.StrictMode>
 );
 
