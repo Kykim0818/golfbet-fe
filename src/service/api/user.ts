@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getData, postData } from ".";
 import { REACT_APP_KAKAO_REDIRECT } from "../../pages/Login/Login";
 import { testAsync } from "../../utils/test-promise";
@@ -12,28 +13,52 @@ export type User = {
   status: null | any;
 };
 
-type BasicUserInfo = {
-  nickName: string;
+export type BasicUserInfo = {
+  nickname: string;
   profileImgSrc: string;
   screenScore: number;
   screenTotalMoneyChange: number;
   fieldScore: number;
-  fieldTotalMoenyChange: number;
+  fieldTotalMoneyChange: number;
   currentGameId: string;
 };
 
-export const getUser = (userId: string): Promise<User> =>
-  testAsync(() => mockUserInfo, 100).then((res) => res as User);
+export const getUser = async () => {
+  try {
+    console.log(axios.defaults.headers.common["Authorization"]);
+    const response = await getData<{ userInfo: BasicUserInfo }>(
+      API_URL.GET_USER_INFO,
+      {
+        headers: {
+          Authorization: axios.defaults.headers.common["Authorization"],
+        },
+        timeout: 2000,
+      },
+      { token: true }
+    );
+    console.log(response);
+    if (response.statusCode === 404 || response.statusCode === 500)
+      throw new Error();
+    return response.data;
+  } catch (e) {
+    // 응답실패
+    // alert 적으면 계속 query 실행됨
+    console.log(e);
+    return { userInfo: mockUserInfo };
+  }
+};
+// testAsync(() => mockUserInfo, 100).then((res) => res as User);
 // const ret = await axios.get<User>(
 //   "https://my-json-server.typicode.com/typicode/demo/posts"
 // );
-const mockUserInfo = {
-  id: "test",
-  imgSrc: process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
-  moneySum: 100000,
-  fieldGameScore: 0,
-  screenGameScore: 30,
-  status: null,
+const mockUserInfo: BasicUserInfo = {
+  nickname: "TEST",
+  profileImgSrc: process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
+  screenScore: 99,
+  screenTotalMoneyChange: 9999,
+  fieldScore: 99,
+  fieldTotalMoneyChange: 9999,
+  currentGameId: "",
 };
 
 // TODO : db 에서 토큰 검증
@@ -72,7 +97,11 @@ export async function apiStartKakao(authCode: string) {
         code: authCode,
         redirectUrl: REACT_APP_KAKAO_REDIRECT,
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
+      {
+        token: false,
+        external: true,
+      }
     );
     return response.data;
   } catch (e) {

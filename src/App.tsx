@@ -9,7 +9,6 @@ import { handleLogin } from "./service/login/login";
 function App() {
   const { movePage } = usePageRoute();
   const code = new URL(window.location.href).searchParams.get("code");
-  console.log(code);
   useEffect(() => {
     localStorage.removeItem("tmpUserInfo");
   }, []);
