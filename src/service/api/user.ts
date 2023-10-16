@@ -113,6 +113,7 @@ type ApiSignUpParams = {
   platformId: number;
   gender: "male" | "female";
   email: string;
+  profile: string;
   nickname: string;
   phoneNumber: string;
   termsOfServiceAgreement: boolean;

@@ -8,10 +8,10 @@ import TitleAsset from "../../components/TitleAsset";
 import ToggleGroup from "../../components/ToggleGroup";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { apiCheckDuplicate, apiSignUp } from "../../service/api/user";
+import { handleLogin } from "../../service/login/login";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { Agreements } from "../TermsAndConditions/TermsAndConditions";
-import { handleLogin } from "../../service/login/login";
 
 type UserInputHelpUI = {
   status: boolean;
@@ -173,6 +173,7 @@ export const NewUserInfo = () => {
     const res = await apiSignUp({
       platformId: tmpUserInfo.platformId,
       email: userEmail,
+      profile: tmpUserInfo.profile,
       nickname: nickname,
       gender: gender,
       phoneNumber: phoneNumber,
