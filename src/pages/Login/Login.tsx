@@ -6,9 +6,8 @@ import { LOGIN } from "../../service/login/constant";
 import { setCookie } from "../../utils/cookie";
 
 const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
-export const REACT_APP_KAKAO_REDIRECT = process.env.REACT_KAKAO_REDIRECT_API
-  ? `${process.env.REACT_KAKAO_REDIRECT_API}/login`
-  : "http://localhost:3000/login";
+export const REACT_APP_KAKAO_REDIRECT =
+  process.env.REACT_APP_KAKAO_REDIRECT_API + "login";
 
 export const Login = (props: {
   handleLogin: (accessToken: string, refreshToken: string) => void;
