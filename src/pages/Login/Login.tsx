@@ -5,7 +5,7 @@ import { usePageRoute } from "../../hooks/usePageRoute";
 import { LOGIN } from "../../service/login/constant";
 import { setCookie } from "../../utils/cookie";
 
-const REACT_APP_KAKAO_API = "kako_api_key";
+const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
 export const REACT_APP_KAKAO_REDIRECT = "http://localhost:3000/login";
 
 export const Login = (props: {

@@ -1,17 +1,17 @@
 import axios, { Axios, AxiosRequestConfig } from "axios";
-import { getCookie } from "../../utils/cookie";
 import { APIResponse } from "./type";
+import { apiGetAccessToken } from "./user";
 
 const client: Axios = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   // CORS 요청 허용 TODO
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 const externalClient: Axios = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   // CORS 요청 허용 TODO
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 // TODO: get
@@ -60,10 +60,18 @@ export const postData = async <T>(
 // TODO : util
 export const requestAccessToken = async () => {
   // refresh로 access 갱신
-
-  if (getCookie("refreshToken")) {
-    console.log("accessToken is undefined,need request");
-    axios.defaults.headers.common["Authorization"] = "TEST";
+  const ret = await apiGetAccessToken();
+  if (ret?.accessToken) {
+    axios.defaults.headers.common["Authorization"] = ret?.accessToken;
+    if (ret.newRefreshToken) {
+      console.log("refreshToken", ret.newRefreshToken);
+      // setCookie("refreshToken", ret.newRefreshToken, {
+      //   path: "/",
+      //   httpOnly: true,
+      //   // 2주
+      //   maxAge: 1209600,
+      // });
+    }
     return true;
   }
   return false;

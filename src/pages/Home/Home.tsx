@@ -5,14 +5,8 @@ import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import {
-  BasicUserInfo,
-  User,
-  getUser,
-  requestLogout,
-} from "../../service/api/user";
+import { BasicUserInfo, getUser, requestLogout } from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
-import { typo } from "../../styles/typo";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
@@ -148,6 +142,12 @@ const Styled = {
     gap: 8px;
     margin-top: 62px;
     margin-bottom: 31px;
+
+    img {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+    }
   `,
 
   UserName: styled.div`

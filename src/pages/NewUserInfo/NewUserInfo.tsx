@@ -24,7 +24,7 @@ const INVALID_NICKNAME =
 const INVALID_PHONE_NUMBER = "휴대폰번호가 유효하지 않습니다.";
 
 export const NewUserInfo = () => {
-  const { moveBack } = usePageRoute();
+  const { moveBack, goHome } = usePageRoute();
   const { state }: { state: Agreements } = useLocation();
   let tmpUserInfo: any = localStorage.getItem("tmpUserInfo");
   if (state === null || tmpUserInfo === null) history.go(-1);
@@ -183,7 +183,14 @@ export const NewUserInfo = () => {
     });
     //
     if (res) {
-      handleLogin(res.data.refreshToken, res.data.accessToken);
+      const ret = handleLogin(res.data.refreshToken, res.data.accessToken);
+      if (ret) {
+        console.log(ret);
+        goHome();
+      }
+    } else {
+      // TODO 처리 필요
+      console.log("회원가입에 실패했습니다. 잠시후 다시 시도해주세요");
     }
   };
 

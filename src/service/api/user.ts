@@ -97,11 +97,7 @@ export async function apiStartKakao(authCode: string) {
         code: authCode,
         redirectUrl: REACT_APP_KAKAO_REDIRECT,
       },
-      { timeout: 2000 },
-      {
-        token: false,
-        external: true,
-      }
+      { timeout: 2000 }
     );
     return response.data;
   } catch (e) {
@@ -128,6 +124,26 @@ export async function apiSignUp(params: ApiSignUpParams) {
     });
     console.log(response.statusCode);
     return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function apiGetAccessToken() {
+  try {
+    const response = await postData<{
+      accessToken: string;
+      newRefreshToken?: string;
+    }>(
+      API_URL.GET_ACCESS_TOKEN,
+      undefined,
+      {
+        timeout: 2000,
+      },
+      { token: false, external: true }
+    );
+    console.log(response);
+    return response.data;
   } catch (e) {
     console.log(e);
   }
