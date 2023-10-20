@@ -25,7 +25,6 @@ export type BasicUserInfo = {
 
 export const getUser = async () => {
   try {
-    console.log(axios.defaults.headers.common["Authorization"]);
     const response = await getData<{ userInfo: BasicUserInfo }>(
       API_URL.GET_USER_INFO,
       {
@@ -133,7 +132,6 @@ export async function apiGetAccessToken() {
   try {
     const response = await postData<{
       accessToken: string;
-      newRefreshToken?: string;
     }>(
       API_URL.GET_ACCESS_TOKEN,
       undefined,
@@ -142,7 +140,7 @@ export async function apiGetAccessToken() {
       },
       { token: false, external: true }
     );
-    console.log(response);
+    console.log("apiGetAccessTokenResponse", response);
     return response.data;
   } catch (e) {
     console.log(e);

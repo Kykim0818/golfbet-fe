@@ -31,7 +31,7 @@ function App() {
           movePage("/terms_and_conditions", { replace: true });
         } else {
           // 가입된 유저
-          handleLogin(response?.refreshToken, response?.accessToken);
+          handleLogin(response?.accessToken);
           movePage("/", { replace: true });
         }
       }
@@ -47,10 +47,10 @@ function App() {
    *  안된 상태면 -> login
    *  useAccount 전역 필요해보임
    */
-  const { isLogined, handleLogIn, handleLogout } = useAccount();
+  const { isLogined, handleLogout } = useAccount();
   console.log("isLogined", isLogined);
   if (isLogined) return <Home handleLogout={handleLogout} />;
-  return <Login handleLogin={handleLogIn} />;
+  return <Login />;
 }
 
 export default App;

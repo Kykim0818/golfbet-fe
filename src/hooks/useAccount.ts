@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requestAccessToken } from "../service/api";
-import { removeCookie } from "../utils/cookie";
 import { usePageRoute } from "./usePageRoute";
 
 export const useAccount = () => {
@@ -14,18 +13,6 @@ export const useAccount = () => {
     // 토큰 제거
     axios.defaults.headers.common["Authorization"] = undefined;
     // TODO: cookie 제거도 안됨
-    removeCookie("refreshToken");
-
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    movePage("/", { replace: true });
-  };
-
-  const handleLogIn = (accessToken: string, refreshToken: string) => {
-    //TOOD 확인필요
-    localStorage.setItem("userId", "test");
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
     movePage("/", { replace: true });
   };
 
@@ -44,7 +31,6 @@ export const useAccount = () => {
   return {
     isLogined,
     handleLogout,
-    handleLogIn,
   };
 };
 

@@ -21,11 +21,17 @@ export const getData = async <T>(
   authOpitons?: { token: boolean; external?: boolean }
 ): Promise<APIResponse<T>> => {
   try {
+    // token 필요 api 처리
     if (authOpitons?.token) {
+      if (axios.defaults.headers.common["Authorization"] === undefined) {
+        await requestAccessToken();
+      }
     }
     let requestClient =
       authOpitons?.external === true ? externalClient : client;
     const response = await requestClient.get<APIResponse<T>>(url, config);
+    // TODO access 만료 또는 유효 토큰 아닐 경우 처리 필요
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -63,15 +69,6 @@ export const requestAccessToken = async () => {
   const ret = await apiGetAccessToken();
   if (ret?.accessToken) {
     axios.defaults.headers.common["Authorization"] = ret?.accessToken;
-    if (ret.newRefreshToken) {
-      console.log("refreshToken", ret.newRefreshToken);
-      // setCookie("refreshToken", ret.newRefreshToken, {
-      //   path: "/",
-      //   httpOnly: true,
-      //   // 2주
-      //   maxAge: 1209600,
-      // });
-    }
     return true;
   }
   return false;

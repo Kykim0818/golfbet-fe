@@ -183,7 +183,7 @@ export const NewUserInfo = () => {
     });
     //
     if (res) {
-      const ret = handleLogin(res.data.refreshToken, res.data.accessToken);
+      const ret = handleLogin(res.data.accessToken);
       if (ret) {
         console.log(ret);
         goHome();

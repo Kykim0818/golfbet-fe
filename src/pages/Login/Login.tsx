@@ -2,16 +2,13 @@ import axios from "axios";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { LOGIN } from "../../service/login/constant";
 import { setCookie } from "../../utils/cookie";
 
 const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
 export const REACT_APP_KAKAO_REDIRECT =
   process.env.REACT_APP_KAKAO_REDIRECT_API + "login";
 
-export const Login = (props: {
-  handleLogin: (accessToken: string, refreshToken: string) => void;
-}) => {
+export const Login = (props: {}) => {
   // TODO: login handling 방식에 따라 다를듯
   const { movePage } = usePageRoute();
 
@@ -24,10 +21,6 @@ export const Login = (props: {
     // TODO: Login 검증 request 필요
     axios.defaults.headers.common["Authorization"] = "TEST";
     setCookie("refreshToken", "TEST");
-    props.handleLogin(
-      LOGIN.TEST_INFO.accessToken,
-      LOGIN.TEST_INFO.refreshToken
-    );
     movePage("/", { replace: true });
   };
 
