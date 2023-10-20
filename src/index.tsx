@@ -3,9 +3,9 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import App from "./App";
 import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
@@ -22,9 +22,11 @@ import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCe
 import Setup from "./pages/MakeGame/Setup";
 import SetupCheck from "./pages/MakeGame/SetupCheck";
 import NewUserInfo from "./pages/NewUserInfo";
+import Start from "./pages/Start/Start";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
 
@@ -32,12 +34,12 @@ import { theme } from "./styles/theme";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Start />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <App />,
+    element: <Start />,
     errorElement: <ErrorPage />,
   },
   {
@@ -134,12 +136,14 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CookiesProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </Provider>
     </CookiesProvider>
   </React.StrictMode>
 );

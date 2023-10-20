@@ -7,7 +7,7 @@ import { usePageRoute } from "../../../hooks/usePageRoute";
 import { useGameInfo } from "../MakeGame";
 
 export const MakeGolfCenter = () => {
-  const { movePage } = usePageRoute();
+  const { movePage, moveBack } = usePageRoute();
   const { tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } = useGameInfo();
 
   const [centerName, setCenterName] = useState(tmpGolfCourseInfoForAdd.name);
@@ -42,7 +42,8 @@ export const MakeGolfCenter = () => {
       <TitleAsset
         title="골프장 추가"
         visibleBack
-        handleBack={() => movePage("../select_golf_center", { replace: true })}
+        // handleBack={() => movePage("../select_golf_center", { replace: true })}
+        handleBack={moveBack}
       />
       <Styled.Body>
         <div>

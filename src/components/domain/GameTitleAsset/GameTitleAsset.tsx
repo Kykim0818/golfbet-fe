@@ -17,7 +17,6 @@ export const GameTitleAsset = ({
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_back.svg"}
           alt="back"
-          onClick={handleBack}
         />
       </S.BackButton>
       <div>{title}</div>
