@@ -28,7 +28,7 @@ export const Start = () => {
             signupPlatform: response.userInfo.signupPlatform ?? "",
           };
           localStorage.setItem("tmpUserInfo", JSON.stringify(tmpUserInfo));
-          movePage("/terms_and_conditions", { replace: true });
+          movePage("/terms_and_conditions");
         } else {
           // 가입된 유저
           handleLogin(response?.accessToken);
