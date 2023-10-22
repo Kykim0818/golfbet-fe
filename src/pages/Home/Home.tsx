@@ -5,8 +5,14 @@ import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { BasicUserInfo, getUser, requestLogout } from "../../service/api/user";
+import {
+  BasicUserInfo,
+  apiLogout,
+  getUser,
+  requestLogout,
+} from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
+import axios from "axios";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
@@ -18,12 +24,14 @@ export const Home = (props: { handleLogout: () => void }) => {
    */
   const { isLoading, error, data } = useQuery(["userInfo"], () => getUser());
   const handleLogout = async () => {
-    const ret = await requestLogout("test", "");
-    if (ret) {
-      props.handleLogout();
-    } else {
-      alert("logout error retry it");
-    }
+    await apiLogout();
+    axios.defaults.headers.common["Authorization"] = undefined;
+    movePage("/", { replace: true });
+    // if (ret) {
+    //   props.handleLogout();
+    // } else {
+    //   alert("logout error retry it");
+    // }
   };
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;

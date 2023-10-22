@@ -8,6 +8,7 @@ export const API_URL = {
   // AUTH
   START_KAKAO: "/v1/auth/kakao/signup",
   SIGN_UP: "v1/auth/signup",
+  LOGOUT: "v1/auth/refresh/logout",
   CHECK_DUPLICATE: "v1/auth/user/duplication",
   // TODO
   GET_GAME_ROOM_INFO: "",

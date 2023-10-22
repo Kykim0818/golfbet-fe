@@ -147,6 +147,20 @@ export async function apiGetAccessToken() {
   }
 }
 
+export async function apiLogout() {
+  try {
+    const response = await postData(API_URL.LOGOUT, undefined, {
+      headers: {
+        Authorization: axios.defaults.headers.common["Authorization"],
+      },
+      timeout: 2000,
+    });
+    console.log(response);
+  } catch (e) {
+    console.log("error", e);
+  }
+}
+
 export async function apiCheckDuplicate(
   type: "email" | "nickname",
   value: string
