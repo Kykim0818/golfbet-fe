@@ -5,8 +5,14 @@ import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { User, getUser, requestLogout } from "../../service/api/user";
+import {
+  BasicUserInfo,
+  apiLogout,
+  getUser,
+  requestLogout,
+} from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
+import axios from "axios";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
@@ -16,17 +22,16 @@ export const Home = (props: { handleLogout: () => void }) => {
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
    * - 가져와서 해당정보로 화면에 그려주기
    */
-  const { isLoading, error, data } = useQuery(["userInfo"], () =>
-    getUser("test")
-  );
-
+  const { isLoading, error, data } = useQuery(["userInfo"], () => getUser());
   const handleLogout = async () => {
-    const ret = await requestLogout("test", "");
-    if (ret) {
-      props.handleLogout();
-    } else {
-      alert("logout error retry it");
-    }
+    await apiLogout();
+    axios.defaults.headers.common["Authorization"] = undefined;
+    movePage("/", { replace: true });
+    // if (ret) {
+    //   props.handleLogout();
+    // } else {
+    //   alert("logout error retry it");
+    // }
   };
 
   if (isLoading || data === undefined) return <div>Loading ....</div>;
@@ -34,7 +39,7 @@ export const Home = (props: { handleLogout: () => void }) => {
   return (
     <Styled.Wrapper>
       <Styled.Top>GOLF BET</Styled.Top>
-      <UserInfoSection user={data} />
+      <UserInfoSection user={data.userInfo} />
       <Styled.S3>
         <HomeImageButton
           label="게임 생성하기"
@@ -75,29 +80,39 @@ export const Home = (props: { handleLogout: () => void }) => {
   );
 };
 
-const UserInfoSection = ({ user }: { user: User }) => {
+const UserInfoSection = ({ user }: { user: BasicUserInfo }) => {
   return (
     <React.Fragment>
       <Styled.S1>
-        <img src={user.imgSrc} alt="no images" />
-        <Styled.UserName>{user.id}님</Styled.UserName>
+        <img src={user.profileImgSrc} alt="no images" />
+        <Styled.UserName>{user.nickname}님</Styled.UserName>
       </Styled.S1>
       <Styled.S2>
         <Styled.S2Info1>
           <Styled.S2Info1Text>필드</Styled.S2Info1Text>
-          {user.fieldGameScore === 0 ? (
+          {user.fieldScore === 0 ? (
             <Styled.S2InfoZeroCount />
           ) : (
-            <Styled.S2InfoNumber>{user.fieldGameScore}</Styled.S2InfoNumber>
+            <Styled.S2InfoNumberSection>
+              <Styled.S2InfoNumber>{user.fieldScore}</Styled.S2InfoNumber>
+              <Styled.S2InfoTotalMoenyChange>
+                {user.fieldTotalMoneyChange}원
+              </Styled.S2InfoTotalMoenyChange>
+            </Styled.S2InfoNumberSection>
           )}
         </Styled.S2Info1>
         <Styled.S2Line />
         <Styled.S2Info1>
           <Styled.S2Info1Text>스크린</Styled.S2Info1Text>
-          {user.screenGameScore === 0 ? (
+          {user.screenScore === 0 ? (
             <Styled.S2InfoZeroCount />
           ) : (
-            <Styled.S2InfoNumber>{user.screenGameScore}</Styled.S2InfoNumber>
+            <Styled.S2InfoNumberSection>
+              <Styled.S2InfoNumber>{user.screenScore}</Styled.S2InfoNumber>
+              <Styled.S2InfoTotalMoenyChange>
+                {user.screenTotalMoneyChange}원
+              </Styled.S2InfoTotalMoenyChange>
+            </Styled.S2InfoNumberSection>
           )}
         </Styled.S2Info1>
       </Styled.S2>
@@ -135,6 +150,12 @@ const Styled = {
     gap: 8px;
     margin-top: 62px;
     margin-bottom: 31px;
+
+    img {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+    }
   `,
 
   UserName: styled.div`
@@ -194,14 +215,27 @@ const Styled = {
     margin-bottom: 16.5px;
     margin-top: 16.5px;
   `,
+  S2InfoNumberSection: styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  `,
   S2InfoNumber: styled.div`
+    display: flex;
+    justify-content: center;
     color: var(--color-main);
     height: 36px;
     font-weight: 700;
     font-size: 25px;
     line-height: 36px;
   `,
-
+  S2InfoTotalMoenyChange: styled.span`
+    color: var(--color-main-darker);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  `,
   S3: styled.div`
     display: flex;
     gap: 20px;

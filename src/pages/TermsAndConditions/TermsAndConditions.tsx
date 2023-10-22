@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Checkbox from "../../components/CheckBox";
@@ -14,6 +14,11 @@ export type Agreements = {
 
 export const TermsAndConditions = () => {
   const { movePage, moveBack } = usePageRoute();
+  // 혹시 모를 앞으로 가기 예외 처리
+  useEffect(() => {
+    if (localStorage.getItem("tmpUserInfo") === null) moveBack();
+  }, [moveBack]);
+
   // 서비스 이용약관
   // 개인정보 수집 및 이용 동의
   // E-mail 및 SMS 광고성 정보 수신 동의(선택)

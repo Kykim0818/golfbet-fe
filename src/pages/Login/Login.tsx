@@ -1,24 +1,27 @@
+import axios from "axios";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { LOGIN } from "../../service/login/constant";
+import { setCookie } from "../../utils/cookie";
 
-export const Login = (props: {
-  handleLogin: (accessToken: string, refreshToken: string) => void;
-}) => {
-  const { movePage } = usePageRoute();
+const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
+export const REACT_APP_KAKAO_REDIRECT =
+  process.env.REACT_APP_KAKAO_REDIRECT_API + "login";
+
+export const Login = (props: {}) => {
   // TODO: login handling 방식에 따라 다를듯
+  const { movePage } = usePageRoute();
+
   const handleKakaoLogin = () => {
     alert("Kakao Login");
-    movePage("terms_and_conditions");
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`;
   };
   //
   const handleTestLogin = () => {
     // TODO: Login 검증 request 필요
-    props.handleLogin(
-      LOGIN.TEST_INFO.accessToken,
-      LOGIN.TEST_INFO.refreshToken
-    );
+    axios.defaults.headers.common["Authorization"] = "TEST";
+    setCookie("refreshToken", "TEST");
+    movePage("/", { replace: true });
   };
 
   return (

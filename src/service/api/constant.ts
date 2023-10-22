@@ -1,5 +1,15 @@
 export const API_URL = {
+  // AUTH
+  GET_ACCESS_TOKEN: "/v1/auth/refresh",
+  // user
+  GET_USER_INFO: "/v1/auth/user",
+  // center
   GET_ALL_GOLF_CENTER: `/v1/centers/all`,
+  // AUTH
+  START_KAKAO: "/v1/auth/kakao/signup",
+  SIGN_UP: "v1/auth/signup",
+  LOGOUT: "v1/auth/refresh/logout",
+  CHECK_DUPLICATE: "v1/auth/user/duplication",
   // TODO
   GET_GAME_ROOM_INFO: "",
 };

@@ -9,7 +9,7 @@ export const usePageRoute = () => {
   };
 
   const movePage = (to: string, options?: NavigateOptions) => {
-    if (options === undefined || options?.replace === false) {
+    if (options?.replace === undefined || options?.replace === false) {
       increaseBackToHomePageCount();
     }
     navigate(to, options);
