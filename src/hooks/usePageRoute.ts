@@ -20,7 +20,15 @@ export const usePageRoute = () => {
   };
 
   const goHome = () => {
-    navigate(-1 * getBackToHomePageCount());
+    const backToHomePageCount = getBackToHomePageCount();
+    if (backToHomePageCount <= 0) {
+      const currentUrlArr = window.location.href.split("/");
+      if (currentUrlArr[currentUrlArr.length - 1] !== "") {
+        navigate("/", { replace: true });
+      }
+      return;
+    }
+    navigate(-1 * backToHomePageCount);
     initBackToHomePageCount();
   };
 

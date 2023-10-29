@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { typo } from "../../styles/typo";
 
 type TitleAssetProps = {
   title?: string;
@@ -23,7 +24,7 @@ export const TitleAsset = ({
           alt="back"
         />
       </S.BackButton>
-      <div>{title}</div>
+      <S.Title>{title}</S.Title>
       <S.CloseButton onClick={handleClose} visible={visibleClose}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
@@ -40,18 +41,14 @@ const S = {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    padding-left: 20px;
-    padding-right: 20px;
-    min-height: 41px;
+    padding: 13px 20px;
     background-color: var(--color-bg, #f6f8fc);
   `,
   Title: styled.div`
     // TODO : typo
-    color: #484848;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 22px;
+    ${typo.s16w400}
+    color: #29363D;
+    line-height: 30px;
   `,
   BackButton: styled.button<{ visible: boolean }>`
     display: flex;
