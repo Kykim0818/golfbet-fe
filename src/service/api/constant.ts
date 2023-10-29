@@ -3,6 +3,7 @@ export const API_URL = {
   GET_ACCESS_TOKEN: "/v1/auth/refresh",
   // user
   GET_USER_INFO: "/v1/auth/user",
+  GET_USER_GAME_HISTORY: "TODO",
   // center
   GET_ALL_GOLF_CENTER: `/v1/centers/all`,
   // AUTH

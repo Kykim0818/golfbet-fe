@@ -17,7 +17,7 @@ import { ActiveGameNotifier } from "./ActiveGameNotifier";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
-  const { movePage } = usePageRoute();
+  const { movePage, goHome } = usePageRoute();
   /**
    * TODO
    * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
@@ -42,7 +42,7 @@ export const Home = (props: { handleLogout: () => void }) => {
       <Styled.Top>GOLF BET</Styled.Top>
       <UserInfoSection user={data.userInfo} />
       <Styled.S3>
-        {data.userInfo.currentGameId !== "" ? (
+        {data.userInfo.currentGameId !== undefined ? (
           <ActiveGameNotifier currentGameId={data.userInfo.currentGameId} />
         ) : (
           <>
@@ -69,12 +69,12 @@ export const Home = (props: { handleLogout: () => void }) => {
       </Styled.S3>
       {/* </Suspense> */}
       <Styled.Footer>
-        <Styled.FooterC1 onClick={handleLogout}>
+        <Styled.FooterC1 onClick={goHome}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_home.svg"}
           />
         </Styled.FooterC1>
-        <Styled.FooterB>
+        <Styled.FooterB onClick={() => movePage("/score_history")}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_score.svg"}
             alt="no icons"
