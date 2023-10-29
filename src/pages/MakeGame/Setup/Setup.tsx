@@ -117,7 +117,7 @@ export const Setup = () => {
           <Styled.RuleHeader>
             <h5>게임규칙</h5>
             <img
-              src={process.env.PUBLIC_URL + "/assets/svg/c_edit_rule.svg"}
+              src={process.env.PUBLIC_URL + "/assets/svg/ic_edit_rule.svg"}
               alt="edit rule"
               onClick={handleOpenChangeGameRule}
             />

@@ -13,6 +13,7 @@ import {
 } from "../../service/api/user";
 import { HomeImageButton } from "./HomeImageButton";
 import axios from "axios";
+import { ActiveGameNotifier } from "./ActiveGameNotifier";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
@@ -41,22 +42,38 @@ export const Home = (props: { handleLogout: () => void }) => {
       <Styled.Top>GOLF BET</Styled.Top>
       <UserInfoSection user={data.userInfo} />
       <Styled.S3>
-        <HomeImageButton
-          label="게임 생성하기"
-          imgSrc={process.env.PUBLIC_URL + "/assets/images/make_game_img.png"}
-          onClick={() => {
-            movePage("/make_game");
-          }}
-        />
-        <HomeImageButton
-          label="게임 참여하기"
-          imgSrc={process.env.PUBLIC_URL + "/assets/images/enter_game_img.png"}
-          onClick={() => movePage("/enter_game")}
-        />
+        {data.userInfo.currentGameId !== "" ? (
+          <ActiveGameNotifier currentGameId={data.userInfo.currentGameId} />
+        ) : (
+          <>
+            <HomeImageButton
+              label="게임 생성하기"
+              imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_make_game.svg"}
+              onClick={() => {
+                movePage("/make_game");
+              }}
+            />
+            <HomeImageButton
+              label="게임 참여하기"
+              imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_enter_game.svg"}
+              onClick={() => movePage("/enter_game")}
+            >
+              <Styled.EnterGameQrIcon
+                src={
+                  process.env.PUBLIC_URL + "/assets/svg/ic_enter_game_qr.svg"
+                }
+              />
+            </HomeImageButton>
+          </>
+        )}
       </Styled.S3>
       {/* </Suspense> */}
       <Styled.Footer>
-        <Styled.FooterC1 onClick={handleLogout}>Logout</Styled.FooterC1>
+        <Styled.FooterC1 onClick={handleLogout}>
+          <img
+            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_home.svg"}
+          />
+        </Styled.FooterC1>
         <Styled.FooterB>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_score.svg"}
@@ -85,7 +102,13 @@ const UserInfoSection = ({ user }: { user: BasicUserInfo }) => {
     <React.Fragment>
       <Styled.S1>
         <img src={user.profileImgSrc} alt="no images" />
-        <Styled.UserName>{user.nickname}님</Styled.UserName>
+        <Styled.UserNameSection>
+          <Styled.UserName>{user.nickname}님</Styled.UserName>
+          <img
+            src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"}
+            alt="go profile"
+          />
+        </Styled.UserNameSection>
       </Styled.S1>
       <Styled.S2>
         <Styled.S2Info1>
@@ -166,6 +189,16 @@ const Styled = {
     line-height: 25px;
     color: var(--color-main-darker);
   `,
+  UserNameSection: styled.div`
+    display: flex;
+    gap: 7px;
+    align-items: center;
+
+    img {
+      width: 8px;
+      height: 16px;
+    }
+  `,
 
   C1: styled.div`
     width: 85px;
@@ -238,8 +271,14 @@ const Styled = {
   `,
   S3: styled.div`
     display: flex;
+    width: 100%;
     gap: 20px;
     margin-top: 19px;
+  `,
+  EnterGameQrIcon: styled.img`
+    position: absolute;
+    top: 15px;
+    right: 15px;
   `,
   S3Btn: styled.div`
     width: 155px;
@@ -257,7 +296,7 @@ const Styled = {
     position: fixed;
     bottom: 0;
 
-    background-color: #f5f9fa;
+    background-color: #ffffff;
     border-radius: 46px 46px 0px 0px;
   `,
   FooterC1: styled.div`
@@ -269,11 +308,6 @@ const Styled = {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    width: 76px;
-    height: 76px;
-    border-radius: 50%;
-    background-color: #1dbd93;
   `,
   FooterB: styled.div`
     display: flex;
