@@ -13,8 +13,9 @@ export const Login = (props: {}) => {
   const { movePage } = usePageRoute();
 
   const handleKakaoLogin = () => {
-    alert("Kakao Login");
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`;
+    window.location.replace(
+      `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`
+    );
   };
   //
   const handleTestLogin = () => {
@@ -26,13 +27,19 @@ export const Login = (props: {}) => {
 
   return (
     <Styled.Wrapper>
+      <Styled.AppName>GOLF BET</Styled.AppName>
       <Styled.Img
-        src={process.env.PUBLIC_URL + "/assets/images/login_img.png"}
+        src={process.env.PUBLIC_URL + "/assets/svg/login.svg"}
         alt="no images"
       />
-      <Styled.AppName>GOLF BET</Styled.AppName>
       <Styled.BtnGroup>
-        <button onClick={handleKakaoLogin}>Kakao login</button>
+        <Styled.KakaoLoginBtn onClick={handleKakaoLogin}>
+          <img
+            src={process.env.PUBLIC_URL + "/assets/svg/ic_kakao_logo.svg"}
+            alt="logo"
+          />
+          카카오로 시작하기
+        </Styled.KakaoLoginBtn>
         <Button onClick={handleTestLogin}>Test login</Button>
       </Styled.BtnGroup>
     </Styled.Wrapper>
@@ -49,12 +56,10 @@ const Styled = {
     flex-direction: column;
     padding: 0px 20px;
     // TODO : color
-    background-color: #f8fafb;
+    background-color: #effaff;
   `,
   Img: styled.img`
-    width: 209px;
-    height: 272px;
-    margin-top: 102px;
+    margin-top: 41px;
     margin-bottom: 36px;
   `,
   AppName: styled.div`
@@ -63,7 +68,6 @@ const Styled = {
     font-weight: 700;
     line-height: 40.85px;
     color: var(--color-main-dark, #006977);
-    margin-bottom: 60px;
   `,
   BtnGroup: styled.div`
     display: flex;
@@ -71,7 +75,21 @@ const Styled = {
     gap: 15px;
 
     button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 320px;
+      min-height: 46px;
     }
+  `,
+  KakaoLoginBtn: styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    background-color: #fde333;
+    border-radius: 15px;
+    padding: 12px 0px;
   `,
 };
