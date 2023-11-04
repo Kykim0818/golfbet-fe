@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { GameHistory } from "../../../service/api/gameScore";
 import { typo } from "../../../styles/typo";
+import { getDisplayCenterTypeText } from "../../../utils/display";
 
 type Props = GameHistory;
 
@@ -20,7 +21,7 @@ export const GameSummary = ({
       <S.TitleColumn>
         <S.Txt1>{date}</S.Txt1>
         <div style={{ display: "flex", gap: "10px" }}>
-          <S.Chip>{gameType}</S.Chip>
+          <S.Chip>{getDisplayCenterTypeText(gameType)}</S.Chip>
           <S.Txt2>{centerName}</S.Txt2>
         </div>
       </S.TitleColumn>

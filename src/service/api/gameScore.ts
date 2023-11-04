@@ -28,7 +28,7 @@ export async function apiGetUserGameHistories() {
 export type GameHistory = {
   gameId: string;
   date: string;
-  gameType: string;
+  gameType: "field" | "screen";
   centerName: string;
   players: number;
   score: number;
