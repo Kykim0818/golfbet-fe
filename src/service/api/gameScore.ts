@@ -28,7 +28,7 @@ export async function apiGetUserGameHistories() {
 export type GameHistory = {
   gameId: string;
   date: string;
-  gameType: string;
+  gameType: "field" | "screen";
   centerName: string;
   players: number;
   score: number;
@@ -39,7 +39,7 @@ const testGameEmptyHistories: GameHistory[] = [];
 const testGameHistories: GameHistory[] = [
   {
     gameId: "test",
-    date: "2023/03/08",
+    date: "2023-11-05",
     gameType: "field",
     centerName: "이천 실크밸리GC",
     players: 4,
@@ -48,7 +48,7 @@ const testGameHistories: GameHistory[] = [
   },
   {
     gameId: "test1",
-    date: "2023/03/07",
+    date: "2023-03-07",
     gameType: "field",
     centerName: "이천 실크밸리GC",
     players: 4,

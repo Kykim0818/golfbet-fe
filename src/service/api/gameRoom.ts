@@ -1,7 +1,8 @@
 //  리스트 조회
 
 import { getData } from ".";
-import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { GameRoomInfo, GameRoomUser } from "../../pages/GameRoom/GameRoom";
+import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
 
@@ -10,15 +11,18 @@ import { APIResponse } from "./type";
 export async function apiGetGameRoom(gameId: string) {
   try {
     // 응답성공
-    const response = await getData<{ gameRoomInfo: any }>(
-      API_URL.GET_GAME_ROOM_INFO,
-      {
-        timeout: 2000,
-        params: {
-          gameId,
-        },
-      }
-    );
+    const response = await getData<{
+      gameRoomInfo: {
+        gameInfo: GameInfo;
+        roomMakerId: string;
+        players: GameRoomUser[];
+      };
+    }>(API_URL.GET_GAME_ROOM_INFO, {
+      timeout: 2000,
+      params: {
+        gameId,
+      },
+    });
     if (response.statusCode === 404 || response.statusCode === 500)
       throw new Error();
     return response;
@@ -37,10 +41,11 @@ const testGameRoomInfo: {
 } = {
   gameRoomInfo: {
     gameInfo: {
-      gameId: "",
+      gameId: "test",
       gameType: "field",
+      startDate: "2023-11-05",
       golfCenter: {
-        name: "",
+        name: "이천 실크밸리GC",
         region: "",
         frontNineCourse: {
           name: "",
@@ -59,8 +64,8 @@ const testGameRoomInfo: {
         ddang: ["last"],
         nearestType: ["specified"],
       },
-      betAmountPerStroke: 0,
-      bettingLimit: 0,
+      betAmountPerStroke: 1000,
+      bettingLimit: 50000,
     },
     roomMakerId: "test",
     players: [

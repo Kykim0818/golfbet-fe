@@ -1,10 +1,16 @@
 import styled from "styled-components";
 import { GameHistory } from "../../../service/api/gameScore";
 import { typo } from "../../../styles/typo";
+import {
+  getDisplayCenterTypeText,
+  getDisplayDate,
+} from "../../../utils/display";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 
 type Props = GameHistory;
 
 export const GameSummary = ({
+  gameId,
   date,
   gameType,
   centerName,
@@ -12,15 +18,16 @@ export const GameSummary = ({
   score,
   totalMoneyChange,
 }: Props) => {
+  const { movePage } = usePageRoute();
   return (
-    <S.Wrapper>
+    <S.Wrapper onClick={() => movePage(`/score_history/${gameId}`)}>
       <S.BlueMarker
         src={process.env.PUBLIC_URL + "/assets/svg/ic_blue_marker.svg"}
       />
       <S.TitleColumn>
-        <S.Txt1>{date}</S.Txt1>
+        <S.Txt1>{getDisplayDate(date)}</S.Txt1>
         <div style={{ display: "flex", gap: "10px" }}>
-          <S.Chip>{gameType}</S.Chip>
+          <S.Chip>{getDisplayCenterTypeText(gameType)}</S.Chip>
           <S.Txt2>{centerName}</S.Txt2>
         </div>
       </S.TitleColumn>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { typo } from "../../../styles/typo";
+import { getDisplayMoney } from "../../../utils/display";
 
 type RankBoardPlayerInfoProps = {
   rank: number;
@@ -33,7 +34,7 @@ export const RankBoardPlayerInfo = ({
           <span>{currentScore === 0 ? "-" : currentScore}</span>
           <div>타</div>
         </S.ScoreSection>
-        <S.Money>{currentMoney}원</S.Money>
+        <S.Money>{getDisplayMoney(currentMoney)}원</S.Money>
       </S.MoreInfo>
     </S.Wrapper>
   );

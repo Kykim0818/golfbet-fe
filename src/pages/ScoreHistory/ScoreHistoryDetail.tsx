@@ -1,30 +1,49 @@
 import styled from "styled-components";
-import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
-import ScoreBoard from "../../components/domain/ScoreBoard";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
+import RankBoard from "../GameProcess/RankBoard";
 import { typo } from "../../styles/typo";
+import ScoreBoard from "../../components/domain/ScoreBoard";
+import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
+import { apiGetGameRoom } from "../../service/api/gameRoom";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
-import { testGameRoomInfo } from "../GameProcess/GameProcess";
-import RankBoard from "../GameProcess/RankBoard";
-import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
+import { getDisplayDate } from "../../utils/display";
+import { ScoreHistroyRankBoard } from "./ScoreHistoryRankBoard";
 
-export const GameEnd = () => {
-  const { goHome } = usePageRoute();
-  const gameRoomInfo = testGameRoomInfo.gameRoomInfo;
-  const players = gameRoomInfo.players;
+export const ScoreHistoryDetail = () => {
+  const { moveBack } = usePageRoute();
+  // gameId Url 파싱, 게임정보 가져오기 쿼리 후 데이터 입력,
+  const params = useParams();
+  const gameId = params.gameId;
   const userId = getUserId();
-  const rank = players.findIndex((player) => player.userId === userId) + 1;
-  //
-  const me = players[rank - 1];
+  const { data } = useQuery(
+    [UNIQUE_QUERY_KEY.GET_GAME_ROOM_INFO],
+    () => apiGetGameRoom(gameId ?? ""),
+    {
+      retry: 0,
+    }
+  );
+  if (data === undefined) return <div>Loading ....</div>;
+  const gameRoomInfo = data?.data.gameRoomInfo;
+  const rank =
+    gameRoomInfo.players.findIndex((player) => player.userId === userId) + 1;
+  const me = gameRoomInfo.players[rank - 1];
   // 본인 점수 픽
   const scores = divideFrontAndBackScores(me.holeScores);
+
   return (
     <PageStyle.Wrapper>
-      <TitleAsset title="게임종료" />
+      <TitleAsset visibleBack handleBack={moveBack} title="상세정보" />
       <S.Body>
+        <S.DateSection>
+          <S.GameId>{gameRoomInfo.gameInfo.gameId}</S.GameId>
+          <S.Date>{getDisplayDate(gameRoomInfo.gameInfo.startDate)}</S.Date>
+        </S.DateSection>
         <GameRoomInfo
           centerType={gameRoomInfo?.gameInfo.gameType}
           name={gameRoomInfo?.gameInfo.golfCenter.name}
@@ -47,7 +66,7 @@ export const GameEnd = () => {
             holeScores={scores.frontNineScores}
           />
           <ScoreBoard
-            pars={gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars}
+            pars={gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars}
             holeScores={scores.backNineScores}
           />
         </S.ScoreBoardWrapper>
@@ -56,12 +75,15 @@ export const GameEnd = () => {
           <span>플레이어 스코어</span>
         </S.TitleSection>
         <S.Mid>
-          <RankBoard players={players} />
+          <ScoreHistroyRankBoard
+            players={gameRoomInfo.players}
+            frontNinePars={
+              gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars
+            }
+            backNinePars={gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars}
+          />
         </S.Mid>
       </S.Body>
-      <PageStyle.Footer>
-        <Button onClick={() => goHome()}>확인</Button>
-      </PageStyle.Footer>
     </PageStyle.Wrapper>
   );
 };
@@ -71,9 +93,30 @@ const S = {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-
     padding: 12px 15px 0px 15px;
+    overflow: auto;
   `,
+
+  DateSection: styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  `,
+  GameId: styled.span`
+    color: var(--color-grey-800, "#3C4043");
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  `,
+  Date: styled.span`
+    ${typo.s16w700};
+    color: var(--color-main-darker, #003d45);
+  `,
+
   TitleSection: styled.div`
     display: flex;
     justify-content: space-between;
@@ -98,6 +141,7 @@ const S = {
       line-height: normal;
     }
   `,
+
   ScoreBoardWrapper: styled.div`
     margin-bottom: 22px;
     display: flex;
