@@ -14,6 +14,7 @@ import {
 import { HomeImageButton } from "./HomeImageButton";
 import axios from "axios";
 import { ActiveGameNotifier } from "./ActiveGameNotifier";
+import { getDisplayMoney } from "../../utils/display";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const { open, openModal, closeModalByUI, closeModal } = useModal();
@@ -34,7 +35,6 @@ export const Home = (props: { handleLogout: () => void }) => {
     //   alert("logout error retry it");
     // }
   };
-
   if (isLoading || data === undefined) return <div>Loading ....</div>;
   if (error) return <div>error</div>;
   return (
@@ -119,7 +119,7 @@ const UserInfoSection = ({ user }: { user: BasicUserInfo }) => {
             <Styled.S2InfoNumberSection>
               <Styled.S2InfoNumber>{user.fieldScore}</Styled.S2InfoNumber>
               <Styled.S2InfoTotalMoenyChange>
-                {user.fieldTotalMoneyChange}원
+                {getDisplayMoney(user.fieldTotalMoneyChange)}원
               </Styled.S2InfoTotalMoenyChange>
             </Styled.S2InfoNumberSection>
           )}
@@ -133,7 +133,7 @@ const UserInfoSection = ({ user }: { user: BasicUserInfo }) => {
             <Styled.S2InfoNumberSection>
               <Styled.S2InfoNumber>{user.screenScore}</Styled.S2InfoNumber>
               <Styled.S2InfoTotalMoenyChange>
-                {user.screenTotalMoneyChange}원
+                {getDisplayMoney(user.screenTotalMoneyChange)}원
               </Styled.S2InfoTotalMoenyChange>
             </Styled.S2InfoNumberSection>
           )}

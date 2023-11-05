@@ -31,6 +31,7 @@ import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
 import App from "./App";
 import { ScoreHistory } from "./pages/ScoreHistory/ScoreHistory";
+import { ScoreHistoryDetail } from "./pages/ScoreHistory/ScoreHistoryDetail";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
   {
     path: "/score_history",
     element: <ScoreHistory />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/score_history/:gameId",
+    element: <ScoreHistoryDetail />,
     errorElement: <ErrorPage />,
   },
   {

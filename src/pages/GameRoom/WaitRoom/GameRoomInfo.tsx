@@ -5,6 +5,7 @@ import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
+  getDisplayMoney,
 } from "../../../utils/display";
 import { typo } from "../../../styles/typo";
 
@@ -49,14 +50,14 @@ export const GameRoomInfo = ({
           <S.BetMoneyInfo>
             <S.BetMoneyText>1타당</S.BetMoneyText>
             <S.MoneySection>
-              <S.Money>{betAmountPerStroke}</S.Money>
+              <S.Money>{getDisplayMoney(betAmountPerStroke)}</S.Money>
               <span>원</span>
             </S.MoneySection>
           </S.BetMoneyInfo>
           <S.BetMoneyInfo>
             <S.BetMoneyText>게임 준비금</S.BetMoneyText>
             <S.MoneySection>
-              <S.Money>{bettingLimit}</S.Money>
+              <S.Money>{getDisplayMoney(bettingLimit)}</S.Money>
               <span>원</span>
             </S.MoneySection>
           </S.BetMoneyInfo>

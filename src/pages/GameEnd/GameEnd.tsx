@@ -47,7 +47,7 @@ export const GameEnd = () => {
             holeScores={scores.frontNineScores}
           />
           <ScoreBoard
-            pars={gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars}
+            pars={gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars}
             holeScores={scores.backNineScores}
           />
         </S.ScoreBoardWrapper>
