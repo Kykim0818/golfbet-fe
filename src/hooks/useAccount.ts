@@ -2,14 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { requestAccessToken } from "../service/api";
 import { usePageRoute } from "./usePageRoute";
+import { apiLogout } from "../service/api/user";
 
 export const useAccount = () => {
   const [isLogined, setIsLogined] = useState(false);
   // TODO: 분리해도될지 고민 필요
   const { movePage } = usePageRoute();
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // TODO : logout API
-
+    await apiLogout();
     // 토큰 제거
     axios.defaults.headers.common["Authorization"] = undefined;
     // TODO: cookie 제거도 안됨
