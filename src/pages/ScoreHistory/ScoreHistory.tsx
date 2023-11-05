@@ -8,7 +8,7 @@ import { typo } from "../../styles/typo";
 import GameSummary from "../../components/domain/GameSummary";
 
 export const ScoreHistory = () => {
-  const { goHome } = usePageRoute();
+  const { goHome, movePage } = usePageRoute();
   const { isLoading, error, data } = useQuery(["userGameHistory"], () =>
     apiGetUserGameHistories()
   );
@@ -50,11 +50,7 @@ export const ScoreHistory = () => {
             alt="no icons"
           />
         </S.FooterB>
-        <S.FooterB
-          onClick={() => {
-            console.log("//");
-          }}
-        >
+        <S.FooterB onClick={() => movePage("/setting")}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
             alt="no icons"

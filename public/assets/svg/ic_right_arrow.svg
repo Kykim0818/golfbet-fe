@@ -1,3 +1,5 @@
-<svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Vector" d="M0.500001 1.30762L6.5 7.42075L0.5 13.3076" stroke="#003D45" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon">
+<path id="Vector (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M6.4885 3.58309C6.16617 3.91161 6.17119 4.43922 6.49971 4.76154L11.7381 9.90116L6.4886 15.2496C6.16622 15.5781 6.17114 16.1057 6.49961 16.4281C6.82807 16.7505 7.35568 16.7456 7.67807 16.4171L13.5114 10.4738C13.6662 10.316 13.752 10.1032 13.75 9.88219C13.7479 9.66116 13.6581 9.45002 13.5003 9.29521L7.66695 3.57187C7.33844 3.24955 6.81082 3.25457 6.4885 3.58309Z" fill="#3C4043"/>
+</g>
 </svg>

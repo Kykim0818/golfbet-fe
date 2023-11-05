@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from "react";
 import styled, { CSSProp, css } from "styled-components";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variants?: "primary" | "outlined" | "custom";
+  variants?: "primary" | "outlined" | "info" | "custom";
   size?: "small" | "medium";
 }
 
@@ -48,6 +48,17 @@ const VARAIANTS = {
     &:disabled {
       background-color: #b0e6ed;
       color: rgba(255, 255, 255, 0.63);
+    }
+  `,
+  info: css`
+    border: none;
+    background-color: var(--color-main-light-hover, #d9f3f6);
+    color: var(--color-main);
+    border-radius: 15px;
+
+    &:disabled {
+      background-color: #e6e6e6;
+      color: #fefefe;
     }
   `,
   outlined: css`

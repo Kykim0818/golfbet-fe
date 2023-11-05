@@ -80,7 +80,7 @@ export const Home = (props: { handleLogout: () => void }) => {
             alt="no icons"
           />
         </Styled.FooterB>
-        <Styled.FooterB onClick={openModal}>
+        <Styled.FooterB onClick={() => movePage("/setting")}>
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
             alt="no icons"
@@ -107,6 +107,7 @@ const UserInfoSection = ({ user }: { user: BasicUserInfo }) => {
           <img
             src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"}
             alt="go profile"
+            style={{ width: "20px", height: "20px", marginRight: "-14px" }}
           />
         </Styled.UserNameSection>
       </Styled.S1>
@@ -191,7 +192,6 @@ const Styled = {
   `,
   UserNameSection: styled.div`
     display: flex;
-    gap: 7px;
     align-items: center;
 
     img {
