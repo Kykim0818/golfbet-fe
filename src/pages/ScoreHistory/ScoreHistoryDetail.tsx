@@ -128,6 +128,7 @@ const S = {
     }
     div {
       display: flex;
+      min-width: 47px;
       padding: 5px 10px;
       justify-content: center;
       align-items: center;
