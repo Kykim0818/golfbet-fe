@@ -13,4 +13,7 @@ export const color = css`
   --color-main-darker: #003d45;
   --color-dark-hover: #006977;
   --color-alert: #f00;
+  --color-grey-800: #3c4043;
+
+  //
 `;
