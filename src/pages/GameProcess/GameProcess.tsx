@@ -27,6 +27,7 @@ export const testGameRoomInfo: {
     gameInfo: {
       gameId: "FIELD2023050701",
       gameType: "field",
+      startDate: "2023-11-04",
       golfCenter: {
         name: "이천 실크밸리GG",
         region: "",

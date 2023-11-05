@@ -25,6 +25,7 @@ export const initialContextState: ContextStateType = {
   gameInfo: {
     gameId: "",
     gameType: "field",
+    startDate: "2023-11-04",
     golfCenter: {
       name: "",
       region: "",
@@ -139,6 +140,7 @@ export interface GameInfo {
   gameId?: string;
   createUser?: string;
   gameType: "field" | "screen";
+  startDate: string;
   golfCenter: {
     name: string;
     region: string;
