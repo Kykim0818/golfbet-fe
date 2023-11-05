@@ -27,6 +27,7 @@ export const ScoreHistroyRankBoard = ({
   const handleClickRankPlayer = (playerIndex: number) => {
     if (selectUser === playerIndex) {
       setSelectUser(NOT_FOLD_PLAYER);
+      return;
     }
     setSelectUser(playerIndex);
   };
