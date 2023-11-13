@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import App from "./App";
 import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
@@ -21,7 +22,11 @@ import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
 import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
 import SetupCheck from "./pages/MakeGame/SetupCheck";
+import ManageAccount from "./pages/ManageAccount";
 import NewUserInfo from "./pages/NewUserInfo";
+import { ScoreHistory } from "./pages/ScoreHistory/ScoreHistory";
+import { ScoreHistoryDetail } from "./pages/ScoreHistory/ScoreHistoryDetail";
+import Setting from "./pages/Setting";
 import Start from "./pages/Start/Start";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import reportWebVitals from "./reportWebVitals";
@@ -29,11 +34,6 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import App from "./App";
-import { ScoreHistory } from "./pages/ScoreHistory/ScoreHistory";
-import { ScoreHistoryDetail } from "./pages/ScoreHistory/ScoreHistoryDetail";
-import Setting from "./pages/Setting";
-import ManageAccount from "./pages/ManageAccount";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -166,7 +166,9 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <RouterProvider router={router} />
+            <App>
+              <RouterProvider router={router} />
+            </App>
           </ThemeProvider>
         </QueryClientProvider>
       </Provider>
