@@ -4,7 +4,7 @@ import React from "react";
 import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import App from "./App";
 import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
@@ -38,106 +38,115 @@ import { theme } from "./styles/theme";
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Start />,
-    errorElement: <ErrorPage />,
-  },
+    element: (
+      <App>
+        <Outlet />
+      </App>
+    ),
+    children: [
+      {
+        path: "/",
+        element: <Start />,
+        errorElement: <ErrorPage />,
+      },
 
-  {
-    path: "/login",
-    element: <Start />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/terms_and_conditions",
-    element: <TermsAndConditions />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/new_user_info",
-    element: <NewUserInfo />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/score_history",
-    element: <ScoreHistory />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/score_history/:gameId",
-    element: <ScoreHistoryDetail />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/setting",
-    element: <Setting />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/setting/account",
-    element: <ManageAccount />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/enter_game",
-    element: <EnterGame />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/process_game/:gameId",
-    element: <GameProcess />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/game_room/:gameId",
-    element: <GameRoom />,
-    children: [
       {
-        path: "",
-        element: <WaitRoom />,
+        path: "/login",
+        element: <Start />,
+        errorElement: <ErrorPage />,
       },
       {
-        path: "handicap_setup",
-        element: <HandicapSetup />,
+        path: "/terms_and_conditions",
+        element: <TermsAndConditions />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/new_user_info",
+        element: <NewUserInfo />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/score_history",
+        element: <ScoreHistory />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/score_history/:gameId",
+        element: <ScoreHistoryDetail />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/setting",
+        element: <Setting />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/setting/account",
+        element: <ManageAccount />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/enter_game",
+        element: <EnterGame />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/process_game/:gameId",
+        element: <GameProcess />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/game_room/:gameId",
+        element: <GameRoom />,
+        children: [
+          {
+            path: "",
+            element: <WaitRoom />,
+          },
+          {
+            path: "handicap_setup",
+            element: <HandicapSetup />,
+          },
+        ],
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/make_game",
+        element: <MakeGame />,
+        children: [
+          {
+            path: "",
+            element: <Setup />,
+          },
+          {
+            path: "setup_check",
+            element: <SetupCheck />,
+          },
+          {
+            path: "select_golf_center",
+            element: <SelectGolfCenter />,
+          },
+          {
+            path: "make_golf_center",
+            element: <MakeGolfCenter />,
+          },
+          {
+            path: "make_golf_center_detail",
+            element: <MakeGolfCenterDetail />,
+          },
+          {
+            path: "rule_change",
+            element: <RuleChange />,
+          },
+        ],
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/game_end",
+        element: <GameEnd />,
+        errorElement: <ErrorPage />,
       },
     ],
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/make_game",
-    element: <MakeGame />,
-    children: [
-      {
-        path: "",
-        element: <Setup />,
-      },
-      {
-        path: "setup_check",
-        element: <SetupCheck />,
-      },
-      {
-        path: "select_golf_center",
-        element: <SelectGolfCenter />,
-      },
-      {
-        path: "make_golf_center",
-        element: <MakeGolfCenter />,
-      },
-      {
-        path: "make_golf_center_detail",
-        element: <MakeGolfCenterDetail />,
-      },
-      {
-        path: "rule_change",
-        element: <RuleChange />,
-      },
-    ],
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/game_end",
-    element: <GameEnd />,
-    errorElement: <ErrorPage />,
   },
 ]);
 
@@ -166,9 +175,7 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <App>
-              <RouterProvider router={router} />
-            </App>
+            <RouterProvider router={router} />
           </ThemeProvider>
         </QueryClientProvider>
       </Provider>
