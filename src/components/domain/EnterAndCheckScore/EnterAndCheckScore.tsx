@@ -5,7 +5,7 @@ import { typo } from "../../../styles/typo";
 import { EnterHoleScore } from "./EnterHoleScore";
 
 type EnterAndCheckScoreProps = {
-  handleCloseSheet: () => void;
+  handleCloseSheet: (result: boolean) => void;
   gameRoomInfo: GameRoomInfo;
   holeCount: number;
   par: number;
@@ -21,13 +21,12 @@ export const EnterAndCheckScore = ({
 }: EnterAndCheckScoreProps) => {
   const [status, setStatus] = useState<EnterAndCheckScoreStatus>("Enter");
   // 예외 : par 나 holecount 없을 경우, 닫기
-
   return (
     <S.Wrapper>
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
-          onClick={handleCloseSheet}
+          onClick={() => handleCloseSheet(true)}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
           alt="close"
         />
@@ -36,7 +35,7 @@ export const EnterAndCheckScore = ({
         {holeCount}H | 파{par}
       </S.HoleInfo>
       <EnterHoleScore
-        handleNext={handleCloseSheet}
+        handleNext={() => handleCloseSheet(true)}
         players={gameRoomInfo.players}
         holeCount={holeCount}
         par={par}

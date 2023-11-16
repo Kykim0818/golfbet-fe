@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import BottomSheetModal from "../../components/BottomSheetModal";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
-import EnterAndCheckScore from "../../components/domain/EnterAndCheckScore";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { typo } from "../../styles/typo";
@@ -94,9 +92,7 @@ type GameProcessProps = {};
 
 export const GameProcess = () => {
   // # bottom sheet
-  const { open, openModal, closeModalByUI, closeModal } = useModal();
-  const gameEndModal = useModal();
-
+  const { openModal } = useModal();
   const { moveBack } = usePageRoute();
   // # web socket game info
   const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
@@ -177,21 +173,21 @@ export const GameProcess = () => {
         </S.Mid>
       </div>
       <S.Footer>
-        <Button onClick={openModal}>+스코어 입력하기</Button>
-      </S.Footer>
-      {open && (
-        <BottomSheetModal
-          closeModalByUI={closeModalByUI}
-          sheetStyle={{ backgroundColor: `#F8FAFB` }}
+        <Button
+          onClick={() => {
+            openModal({
+              id: "ENTER_AND_CHECK_SCORE",
+              args: {
+                gameRoomInfo: testGameRoomInfo.gameRoomInfo,
+                holeCount: currentHole,
+                par: currentPar,
+              },
+            });
+          }}
         >
-          <EnterAndCheckScore
-            handleCloseSheet={closeModal}
-            gameRoomInfo={testGameRoomInfo.gameRoomInfo}
-            holeCount={currentHole}
-            par={currentPar}
-          />
-        </BottomSheetModal>
-      )}
+          +스코어 입력하기
+        </Button>
+      </S.Footer>
     </S.Wrapper>
   );
 };
