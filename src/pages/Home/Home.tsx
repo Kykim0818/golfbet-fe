@@ -1,23 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
-import BottomSheetModal from "../../components/BottomSheetModal";
-import Button from "../../components/Button";
-import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import {
-  BasicUserInfo,
-  apiLogout,
-  getUser,
-  requestLogout,
-} from "../../service/api/user";
-import { HomeImageButton } from "./HomeImageButton";
-import axios from "axios";
-import { ActiveGameNotifier } from "./ActiveGameNotifier";
+import { BasicUserInfo, apiLogout, getUser } from "../../service/api/user";
 import { getDisplayMoney } from "../../utils/display";
+import { ActiveGameNotifier } from "./ActiveGameNotifier";
+import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
-  const { open, openModal, closeModalByUI, closeModal } = useModal();
   const { movePage, goHome } = usePageRoute();
   /**
    * TODO
@@ -87,12 +78,6 @@ export const Home = (props: { handleLogout: () => void }) => {
           />
         </Styled.FooterB>
       </Styled.Footer>
-      {open && (
-        <BottomSheetModal closeModalByUI={closeModalByUI}>
-          <div>Hello World</div>
-          <Button onClick={closeModal}>닫기</Button>
-        </BottomSheetModal>
-      )}
     </Styled.Wrapper>
   );
 };

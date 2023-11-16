@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { deepClone } from "../../../utils/deepClone";
 import { getUserId } from "../../../utils/getUserId";
 import { GameRoomUser } from "../../GameRoom/GameRoom";
 import { RankBoardPlayerInfo } from "./RankBoardPlayerInfo";
@@ -9,7 +10,7 @@ type RankBoardProps = {
 
 export const RankBoard = ({ players }: RankBoardProps) => {
   // # 점수 별로 소팅
-  const sortedPlayerByScore = players.sort(
+  const sortedPlayerByScore = deepClone(players).sort(
     (playerA, playerB) => playerA.currentScore - playerB.currentScore
   );
   const userId = getUserId();
