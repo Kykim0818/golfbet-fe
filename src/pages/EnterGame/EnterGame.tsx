@@ -1,5 +1,6 @@
 import QrReader from "react-qr-reader";
 import styled from "styled-components";
+import TitleAsset from "../../components/TitleAsset";
 import { usePageRoute } from "../../hooks/usePageRoute";
 
 export const EnterGame = () => {
@@ -15,39 +16,37 @@ export const EnterGame = () => {
     }
   };
 
-  const handleBtnClick = () => {
-    moveBack();
-  };
-
   return (
-    <S.Wrapper>
-      <S.Title>게임 참여하기</S.Title>
-      <S.Camera>
-        <QrReader
-          className="qr__reader"
-          delay={500}
-          style={{
-            height: 329,
-            width: 272,
-            borderRadius: "34px",
-          }}
-          onError={handleError}
-          onScan={handleScan}
-        />
-        <S.QRArea
-          src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_camera.svg"}
-          alt=""
-        />
-        <S.CloseBtn
+    <>
+      <S.TitleAsset title="게임 참여하기" visibleClose handleClose={moveBack} />
+      <S.Wrapper>
+        <S.Camera>
+          <QrReader
+            className="qr__reader"
+            delay={500}
+            style={{
+              height: 329,
+              width: 272,
+              borderRadius: "34px",
+            }}
+            onError={handleError}
+            onScan={handleScan}
+          />
+          <S.QRArea
+            src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_camera.svg"}
+            alt=""
+          />
+          {/* <S.CloseBtn
           src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_close.svg"}
           onClick={handleBtnClick}
           alt="closeBtn"
-        />
-      </S.Camera>
-      <S.Desc>
-        게임방 QR 코드를 화면에 비추면 게임방으로 참여할 수 있습니다.
-      </S.Desc>
-    </S.Wrapper>
+        /> */}
+        </S.Camera>
+        <S.Desc>
+          게임방 QR 코드를 화면에 비추면 게임방으로 참여할 수 있습니다.
+        </S.Desc>
+      </S.Wrapper>
+    </>
   );
 };
 
@@ -127,5 +126,13 @@ const S = {
     background: #e6f7f9;
     //
     margin-top: 58.4px;
+
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  `,
+  TitleAsset: styled(TitleAsset)`
+    background-color: #fff;
   `,
 };
