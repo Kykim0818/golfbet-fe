@@ -1,34 +1,35 @@
-import { useEffect, useState } from "react";
-import { increaseBackToHomePageCount, usePageRoute } from "./usePageRoute";
+import { useEffect } from "react";
+import { ModalParam } from "../components/modals/type";
+import { actionModal } from "../store/modal/modalSlice";
+import { useAppDispatch, useAppSelector } from "./redux";
+import { increaseBackToHomePageCount } from "./usePageRoute";
 
 export const useModal = () => {
-  const [open, setOpen] = useState(false);
-  const { moveBack } = usePageRoute();
+  // const [open, setOpen] = useState(false);
+  const modalStatus = useAppSelector((state) => state.modal.status);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    if (open) {
+    if (modalStatus) {
       increaseBackToHomePageCount();
       window.history.pushState(null, "", window.location.href);
       // window.addEventListener("popstate", preventGoBack);
     }
-  }, [open]);
+  }, [modalStatus]);
 
-  const openModal = () => {
-    setOpen(true);
-  };
+  const openModal = <T>(modalParam: ModalParam) =>
+    new Promise<T>((resolve) => {
+      const handleClose = (result: T) => {
+        close();
+        resolve(result);
+      };
+      dispatch(actionModal.setModalStatus({ ...modalParam, handleClose }));
+    });
 
-  const closeModal = () => {
-    moveBack();
-    setOpen(false);
-  };
-
-  const closeModalByUI = () => {
-    setOpen(false);
-  };
+  function close() {
+    dispatch(actionModal.setModalStatus(null));
+  }
 
   return {
-    open,
     openModal,
-    closeModal,
-    closeModalByUI,
   };
 };
