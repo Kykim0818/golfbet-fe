@@ -1,19 +1,35 @@
 import QrReader from "react-qr-reader";
 import styled from "styled-components";
 import TitleAsset from "../../components/TitleAsset";
+import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
+import { apiCanEnterGameRoom } from "../../service/api/gameRoom";
 
 export const EnterGame = () => {
-  const { moveBack } = usePageRoute();
-  const handleError = (err: any) => {
-    console.log(err);
+  const { moveBack, movePage } = usePageRoute();
+  const { openModal } = useModal();
+  const handleFailEnterGame = () => {
+    openModal({
+      id: "ALERT",
+      args: {
+        title: "게임방 입장 실패",
+        msg: "게임방 입장에 실패했습니다.\n다시 시도해주세요.",
+        okBtnLabel: "확인",
+      },
+    });
   };
 
-  const handleScan = (result: any) => {
-    if (result) {
-      // TODO: 유효성 체크후 방이동
-      alert(result);
+  const handleError = (err: any) => {
+    console.log(err);
+    handleFailEnterGame();
+  };
+
+  const handleScan = async (gameId: string) => {
+    const canEnterRoom = await apiCanEnterGameRoom(gameId);
+    if (canEnterRoom.data) {
+      movePage(`/game_room/${gameId}`);
     }
+    handleFailEnterGame();
   };
 
   return (
@@ -30,7 +46,10 @@ export const EnterGame = () => {
               borderRadius: "34px",
             }}
             onError={handleError}
-            onScan={handleScan}
+            onScan={(data) => {
+              if (data === null) handleFailEnterGame();
+              else handleScan(data);
+            }}
           />
           <S.QRArea
             src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_camera.svg"}
@@ -93,19 +112,6 @@ const S = {
     left: 20.5px;
     bottom: 47.37px;
   `,
-  // Btn: styled.div`
-  //   width: 50px;
-  //   height: 50px;
-  //   position: absolute;
-  //   bottom: -25px;
-  //   left: calc(50% - 25px);
-  //   background-color: var(--color-main);
-
-  //   //
-  //   &:hover {
-  //     cursor: pointer;
-  //   }
-  // `,
 
   CloseBtn: styled.img`
     position: absolute;
