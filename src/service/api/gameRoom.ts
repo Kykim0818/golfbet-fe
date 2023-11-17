@@ -6,6 +6,28 @@ import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
 
+export async function apiCanEnterGameRoom(gameId: string) {
+  try {
+    const repsonse = await getData<boolean>(
+      API_URL.CAN_ENTER_GAME_ROOM,
+      {
+        timeout: 2000,
+        params: { gameId },
+      },
+      { requireToken: true }
+    );
+    return repsonse;
+  } catch (e) {
+    const errResponse: APIResponse<boolean> = {
+      data: false,
+      error: String(e),
+      message: "apiCanEnterGameRoom error",
+      statusCode: 0,
+    };
+    return errResponse;
+  }
+}
+
 //  api 주소로 request 요청 후 실패시, 콘솔출력후 , 빈 배열 전달
 // TODO type 확인
 export async function apiGetGameRoom(gameId: string) {

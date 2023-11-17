@@ -7,6 +7,7 @@ type TitleAssetProps = {
   handleBack?: (args?: unknown) => unknown;
   visibleClose?: boolean;
   handleClose?: (args?: unknown) => unknown;
+  className?: string;
 };
 
 export const TitleAsset = ({
@@ -15,9 +16,10 @@ export const TitleAsset = ({
   handleBack,
   visibleClose = false,
   handleClose,
+  className,
 }: TitleAssetProps) => {
   return (
-    <S.Wrapper>
+    <S.Wrapper className={className}>
       <S.BackButton onClick={handleBack} visible={visibleBack}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_back.svg"}

@@ -18,11 +18,11 @@ const externalClient: Axios = axios.create({
 export const getData = async <T>(
   url: string,
   config?: AxiosRequestConfig,
-  authOpitons?: { token: boolean; external?: boolean }
+  authOpitons?: { requireToken: boolean; external?: boolean }
 ): Promise<APIResponse<T>> => {
   try {
     // token 필요 api 처리
-    if (authOpitons?.token) {
+    if (authOpitons?.requireToken) {
       if (axios.defaults.headers.common["Authorization"] === undefined) {
         await requestAccessToken();
       }

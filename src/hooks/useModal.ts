@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { ModalParam } from "../components/modals/type";
 import { actionModal } from "../store/modal/modalSlice";
 import { useAppDispatch, useAppSelector } from "./redux";
-import { increaseBackToHomePageCount } from "./usePageRoute";
+import { increaseBackToHomePageCount, usePageRoute } from "./usePageRoute";
 
 export const useModal = () => {
+  const { moveBack } = usePageRoute();
   // const [open, setOpen] = useState(false);
   const modalStatus = useAppSelector((state) => state.modal.status);
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ export const useModal = () => {
     });
 
   function close() {
+    moveBack();
     dispatch(actionModal.setModalStatus(null));
   }
 
