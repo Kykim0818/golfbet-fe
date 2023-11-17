@@ -33,7 +33,7 @@ export const getUser = async () => {
         },
         timeout: 2000,
       },
-      { token: true }
+      { requireToken: true }
     );
     console.log(response);
     if (response.statusCode === 404 || response.statusCode === 500)
