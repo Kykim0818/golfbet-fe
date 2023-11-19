@@ -4,22 +4,40 @@ import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { useAccount } from "../../hooks/useAccount";
+import { useModal } from "../../hooks/useModal";
 
 export const ManageAccount = () => {
   const { moveBack } = usePageRoute();
   const { handleLogout } = useAccount();
+  const { openModal } = useModal();
+
+  const handleLogoutClick = async () => {
+    const modalRes = await openModal({
+      id: "ALERT",
+      args: {
+        title: "로그아웃",
+        msg: "계정이 로그아웃 되었습니다.",
+        okBtnLabel: "확인",
+      },
+    });
+    if (modalRes) handleLogout();
+    return;
+  };
+
   return (
     <PageStyle.Wrapper>
       <TitleAsset visibleBack handleBack={moveBack} title="계정 관리" />
       <S.Body>
-        <S.Menu onClick={handleLogout}>
+        <S.Menu onClick={handleLogoutClick}>
           <S.NameSection>
             <img
+              alt="logout"
               src={process.env.PUBLIC_URL + "/assets/svg/ic_setting_logout.svg"}
             />
             <span>로그아웃</span>
           </S.NameSection>
           <img
+            alt="right arrow"
             src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"}
           />
         </S.Menu>
@@ -30,6 +48,7 @@ export const ManageAccount = () => {
             <S.MenuWrapper>
               <S.NameSection>
                 <img
+                  alt="withdraw"
                   src={
                     process.env.PUBLIC_URL +
                     "/assets/svg/ic_setting_withdraw.svg"
@@ -38,6 +57,7 @@ export const ManageAccount = () => {
                 <span>회원 탈퇴</span>
               </S.NameSection>
               <img
+                alt="right arrow"
                 src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"}
               />
             </S.MenuWrapper>
