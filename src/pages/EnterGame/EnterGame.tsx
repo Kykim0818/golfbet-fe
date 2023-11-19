@@ -47,8 +47,7 @@ export const EnterGame = () => {
             }}
             onError={handleError}
             onScan={(data) => {
-              if (data === null) handleFailEnterGame();
-              else handleScan(data);
+              if (data) handleScan(data);
             }}
           />
           <S.QRArea
