@@ -1,27 +1,38 @@
 import styled from "styled-components";
 import TitleAsset from "../../components/TitleAsset";
+import { useAccount } from "../../hooks/useAccount";
+import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
-import { useAccount } from "../../hooks/useAccount";
-import { useModal } from "../../hooks/useModal";
 
 export const ManageAccount = () => {
-  const { moveBack } = usePageRoute();
+  const { moveBack, goHome } = usePageRoute();
   const { handleLogout } = useAccount();
   const { openModal } = useModal();
 
   const handleLogoutClick = async () => {
-    const modalRes = await openModal({
+    const res = await handleLogout();
+    if (res) {
+      const modalRes = await openModal({
+        id: "ALERT",
+        args: {
+          title: "로그아웃",
+          msg: "계정이 로그아웃 되었습니다.",
+          okBtnLabel: "확인",
+        },
+      });
+      if (modalRes) goHome();
+      return;
+    }
+    openModal({
       id: "ALERT",
       args: {
         title: "로그아웃",
-        msg: "계정이 로그아웃 되었습니다.",
+        msg: "로그아웃에 실패 했습니다.\n네트워크 상태를 확인하고 다시 시도해주세요",
         okBtnLabel: "확인",
       },
     });
-    if (modalRes) handleLogout();
-    return;
   };
 
   return (

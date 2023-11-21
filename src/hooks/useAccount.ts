@@ -7,13 +7,15 @@ import { usePageRoute } from "./usePageRoute";
 export const useAccount = () => {
   const [isLogined, setIsLogined] = useState(false);
   // TODO: 분리해도될지 고민 필요
-  const { goHome } = usePageRoute();
   const handleLogout = async () => {
     // TODO : logout API
-    await apiLogout();
-    // 토큰 제거
-    axios.defaults.headers.common["Authorization"] = undefined;
-    goHome();
+    const res = await apiLogout();
+    if (res) {
+      // 토큰 제거
+      axios.defaults.headers.common["Authorization"] = undefined;
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
