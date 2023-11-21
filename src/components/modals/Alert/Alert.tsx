@@ -56,11 +56,15 @@ const S = {
     line-height: 20px; /* 125% */
   `,
   ContentTxt: styled.div`
+    text-align: center;
     color: var(--color-grey-700, #5f6368);
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
     line-height: 20px; /* 200% */
+    max-width: 288px;
+    padding: 0px 24px;
+    white-space: pre;
   `,
   ModalBtn: styled(Button)`
     padding: 4px 12px;
