@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "./redux";
 import { increaseBackToHomePageCount, usePageRoute } from "./usePageRoute";
 
 export const useModal = () => {
+  // const navigate = useNavigate();
   const { moveBack } = usePageRoute();
   // const [open, setOpen] = useState(false);
   const modalStatus = useAppSelector((state) => state.modal.status);
@@ -12,6 +13,7 @@ export const useModal = () => {
   useEffect(() => {
     if (modalStatus) {
       increaseBackToHomePageCount();
+      window.history.pushState(null, "", window.location.href);
       window.history.pushState(null, "", window.location.href);
       // window.addEventListener("popstate", preventGoBack);
     }
@@ -21,7 +23,10 @@ export const useModal = () => {
     new Promise<T>((resolve) => {
       const handleClose = (result: T) => {
         close();
-        resolve(result);
+        // ISSUE: 게임방 이동시, 모달때 패딩 페이지 넣은게 뒤로가는 것보다 게임방 이동이 먼저 일어나서, 시간을 줌
+        setTimeout(() => {
+          resolve(result);
+        }, 100);
       };
       dispatch(actionModal.setModalStatus({ ...modalParam, handleClose }));
     });
