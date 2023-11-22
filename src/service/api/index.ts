@@ -39,12 +39,11 @@ export const getData = async <T>(
   }
 };
 
-// TODO: post
 export const postData = async <T>(
   url: string,
   data?: any,
   config?: AxiosRequestConfig,
-  authOpitons?: { token: boolean; external?: boolean }
+  authOpitons?: { requireToken: boolean; external?: boolean }
 ): Promise<APIResponse<T>> => {
   try {
     let requestClient =

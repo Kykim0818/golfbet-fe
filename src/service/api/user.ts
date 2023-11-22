@@ -137,7 +137,7 @@ export async function apiGetAccessToken() {
       {
         timeout: 2000,
       },
-      { token: false, external: true }
+      { requireToken: false, external: true }
     );
     console.log("apiGetAccessTokenResponse", response);
     return response.data;
