@@ -14,7 +14,6 @@ export const useModal = () => {
     if (modalStatus) {
       increaseBackToHomePageCount();
       window.history.pushState(null, "", window.location.href);
-      window.history.pushState(null, "", window.location.href);
       // window.addEventListener("popstate", preventGoBack);
     }
   }, [modalStatus]);

@@ -32,11 +32,20 @@ export const usePageRoute = () => {
     initBackToHomePageCount();
   };
 
+  // TODO: 페이지 이동전, 앱 초기 홈을 깔기 위한 방식, 추가 조치가 필요함
+  const movePageWithHome = (to: string, options?: NavigateOptions) => {
+    setTimeout(() => {
+      movePage(to, options);
+    }, 100);
+    goHome();
+  };
+
   return {
     preventBack,
     movePage,
     moveBack,
     goHome,
+    movePageWithHome,
   };
 };
 

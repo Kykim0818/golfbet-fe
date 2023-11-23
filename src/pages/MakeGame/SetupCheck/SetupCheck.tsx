@@ -11,7 +11,7 @@ import { ParDetail } from "./ParDetail";
 
 export const SetupCheck = () => {
   const { openModal } = useModal();
-  const { movePage } = usePageRoute();
+  const { movePage, movePageWithHome } = usePageRoute();
   const { gameInfo } = useGameInfo();
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
@@ -45,10 +45,10 @@ export const SetupCheck = () => {
         },
       });
       if (modalRes) {
-        movePage(`/game_room/test`);
+        movePageWithHome(`/game_room/test`);
       }
     } else {
-      movePage(`/game_room/${gameId}`);
+      movePageWithHome(`/game_room/test`);
     }
   };
 
