@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import LoadingContainer from "./components/LoadingContainer";
 import ModalContainer from "./components/ModalContainer";
 
 const App = (props: { children: ReactNode }) => {
@@ -7,6 +8,7 @@ const App = (props: { children: ReactNode }) => {
     <>
       {props.children}
       <ModalContainer />
+      <LoadingContainer />
     </>
   );
 };
