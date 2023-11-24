@@ -15,7 +15,7 @@ export const API_URL = {
   GET_GAME_ROOM_INFO: "",
   CAN_ENTER_GAME_ROOM: "v1/canentergame",
   MAKE_GAME: "v1/make/game",
-};
+} as const;
 
 export const UNIQUE_QUERY_KEY = {
   GET_ALL_GOLF_CENTER: "getAllGolfCenter",

@@ -1,21 +1,31 @@
 import styled, { css } from "styled-components";
-import { PageStyle } from "../../styles/page";
-import { usePageRoute } from "../../hooks/usePageRoute";
-import TitleAsset from "../../components/TitleAsset";
-import { typo } from "../../styles/typo";
 import Button from "../../components/Button";
+import TitleAsset from "../../components/TitleAsset";
+import { useAppSelector } from "../../hooks/redux";
+import { usePageRoute } from "../../hooks/usePageRoute";
+import { PageStyle } from "../../styles/page";
+import { typo } from "../../styles/typo";
 
 export const Setting = () => {
+  const userInfo = useAppSelector((state) => state.users.userInfo);
   const { goHome, movePage } = usePageRoute();
+
+  // TODO: userId가 없어졌을때 로직 추가 필요
+  if (!userInfo.userId) goHome();
   return (
     <PageStyle.Wrapper>
       <TitleAsset title="설정" />
       <S.Body>
         <S.ProfileSection>
           <S.UserImg
-            src={process.env.PUBLIC_URL + "/assets/images/profile_test_img.png"}
+            src={userInfo.profileImgSrc}
+            onError={(e) => {
+              (e.target as any).src =
+                process.env.PUBLIC_URL + "/assets/images/profile_test_img.png";
+            }}
+            alt="profile image"
           />
-          <S.UserNickname>Test님</S.UserNickname>
+          <S.UserNickname>{userInfo.nickname}님</S.UserNickname>
           <Button
             variants="info"
             style={{ width: "fit-content", padding: "6px 25px" }}

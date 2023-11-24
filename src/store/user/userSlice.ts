@@ -2,13 +2,22 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 // Define a type for the slice state
+export type UserSliceInfo = {
+  userId: string;
+  nickname: string;
+  profileImgSrc: string;
+};
 export interface UserState {
-  userInfo: number;
+  userInfo: UserSliceInfo;
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-  userInfo: 0,
+  userInfo: {
+    userId: "",
+    nickname: "",
+    profileImgSrc: "",
+  },
 };
 
 export const userSlice = createSlice({
@@ -16,8 +25,11 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    resetUserInfo: (state) => {
+      state.userInfo = initialState.userInfo;
+    },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    setUser: (state, action: PayloadAction<any>) => {
+    setUser: (state, action: PayloadAction<UserSliceInfo>) => {
       state.userInfo = action.payload;
     },
   },

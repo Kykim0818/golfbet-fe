@@ -4,16 +4,8 @@ import { REACT_APP_KAKAO_REDIRECT } from "../../pages/Login/Login";
 import { testAsync } from "../../utils/test-promise";
 import { API_URL } from "./constant";
 
-export type User = {
-  id: string;
-  imgSrc: string;
-  moneySum: number;
-  fieldGameScore: number;
-  screenGameScore: number;
-  status: null | any;
-};
-
 export type BasicUserInfo = {
+  userId: string;
   nickname: string;
   profileImgSrc: string;
   screenScore: number;
@@ -51,6 +43,7 @@ export const getUser = async () => {
 //   "https://my-json-server.typicode.com/typicode/demo/posts"
 // );
 const mockUserInfo: BasicUserInfo = {
+  userId: "test",
   nickname: "TEST",
   profileImgSrc: process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
   screenScore: 99,
