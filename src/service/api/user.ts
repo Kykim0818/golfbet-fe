@@ -154,9 +154,13 @@ export async function apiLogout() {
       },
       timeout: 2000,
     });
-    console.log(response);
+    if (response.statusCode === 200) {
+      return true;
+    }
+    throw Error();
   } catch (e) {
     console.log("error", e);
+    return false;
   }
 }
 
