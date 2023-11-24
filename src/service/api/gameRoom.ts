@@ -1,6 +1,6 @@
 //  리스트 조회
 
-import { getData } from ".";
+import { getData, postData } from ".";
 import { GameRoomInfo, GameRoomUser } from "../../pages/GameRoom/GameRoom";
 import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
@@ -133,3 +133,22 @@ const testGameRoomInfo: {
     ],
   },
 };
+
+export async function apiMakeGame(gameInfo: GameInfo) {
+  try {
+    const response = await postData<{ gameId: string }>(
+      API_URL.MAKE_GAME,
+      gameInfo,
+      { timeout: 2000 },
+      { requireToken: true }
+    );
+    if (response.statusCode === 200) {
+      return response.data.gameId;
+    } else {
+      return "";
+    }
+  } catch (e) {
+    console.log(e);
+    return "";
+  }
+}

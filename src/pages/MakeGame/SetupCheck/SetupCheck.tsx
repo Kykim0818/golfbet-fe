@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { apiMakeGame } from "../../../service/api/gameRoom";
 import { deepClone } from "../../../utils/deepClone";
 import { FixedGolfCenter } from "../FixedGolfCenter";
 import { useGameInfo } from "../MakeGame";
 import { ParDetail } from "./ParDetail";
 
 export const SetupCheck = () => {
-  const { movePage } = usePageRoute();
+  const { openModal } = useModal();
+  const { movePage, movePageWithHome } = usePageRoute();
   const { gameInfo } = useGameInfo();
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
@@ -24,18 +27,29 @@ export const SetupCheck = () => {
     }
   };
 
-  const handleMakeGameRoom = () => {
+  const handleMakeGameRoom = async () => {
     // TODO : 게임 생성 요청시에,
     // 방을 만드는 골프장이, 사용자 추가 거나 , 기존 골프장을 수정한 형태면, DB에 다른방식으로 post를 날려야함
     const tmpRet = deepClone(gameInfo);
     tmpRet.golfCenter = modifedGameCenterInfo;
     console.log("make game Info ", tmpRet);
-
-    // TODO : 방생성 요청후(post)방번호 return;
-    const gameId = "1";
-    movePage(`/game_room/${gameId}`);
-    // websocket 연결
-    // game_room/:gameId
+    const gameId = await apiMakeGame(tmpRet);
+    // TODO: 테스트용 나중엔 실패했을 때랑 예외 처리
+    if (gameId === "") {
+      const modalRes = await openModal({
+        id: "ALERT",
+        args: {
+          title: "게임 방 생성",
+          msg: "게임 방 생성에 실패 했습니다.\n 잠시 후 다시 시도해주세요",
+          okBtnLabel: "확인",
+        },
+      });
+      if (modalRes) {
+        movePageWithHome(`/game_room/test`);
+      }
+    } else {
+      movePageWithHome(`/game_room/test`);
+    }
   };
 
   return (
