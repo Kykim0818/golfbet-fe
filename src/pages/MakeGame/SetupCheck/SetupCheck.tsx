@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
+import { useLoading } from "../../../hooks/useLoading";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { apiMakeGame } from "../../../service/api/gameRoom";
@@ -12,6 +13,7 @@ import { ParDetail } from "./ParDetail";
 export const SetupCheck = () => {
   const { openModal } = useModal();
   const { movePage, movePageWithHome } = usePageRoute();
+  const { onLoading } = useLoading();
   const { gameInfo } = useGameInfo();
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
@@ -45,9 +47,11 @@ export const SetupCheck = () => {
         },
       });
       if (modalRes) {
+        onLoading(2);
         movePageWithHome(`/game_room/test`);
       }
     } else {
+      onLoading(2);
       movePageWithHome(`/game_room/test`);
     }
   };

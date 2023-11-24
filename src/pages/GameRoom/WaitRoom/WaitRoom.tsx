@@ -2,12 +2,13 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { getUserId } from "../../../utils/getUserId";
 import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
+import { useAppSelector } from "../../../hooks/redux";
 
 export const WaitRoom = () => {
+  const userInfo = useAppSelector((state) => state.users.userInfo);
   const { movePage, moveBack } = usePageRoute();
   const { gameId, gameRoomInfo } = useGameRoomInfo();
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
@@ -20,8 +21,7 @@ export const WaitRoom = () => {
       readyState: player.readyState,
     };
   });
-  // TODO userId 가져오는 부분 구현 확인 필요
-  const isRoomMaker = getUserId() === gameRoomInfo.roomMakerId;
+  const isRoomMaker = userInfo.userId === gameRoomInfo.roomMakerId;
 
   const handleGameStart = () => {
     //
