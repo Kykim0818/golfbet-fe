@@ -1,22 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requestAccessToken } from "../service/api";
-import { apiLogout } from "../service/api/user";
-import { usePageRoute } from "./usePageRoute";
+import { apiLogout, getUser } from "../service/api/user";
+import { actionUser } from "../store/user/userSlice";
+import { useAppDispatch } from "./redux";
 
 export const useAccount = () => {
+  const dispatch = useAppDispatch();
   const [isLogined, setIsLogined] = useState(false);
-  // TODO: 분리해도될지 고민 필요
-  const handleLogout = async () => {
-    // TODO : logout API
-    const res = await apiLogout();
-    if (res) {
-      // 토큰 제거
-      axios.defaults.headers.common["Authorization"] = undefined;
-      return true;
-    }
-    return false;
-  };
 
   useEffect(() => {
     console.log("useAcoount useEffect trigger check");
@@ -30,9 +21,38 @@ export const useAccount = () => {
     });
   });
 
+  // TODO: 분리해도될지 고민 필요
+  const handleLogout = async () => {
+    const res = await apiLogout();
+    if (res) {
+      // 토큰 제거
+      axios.defaults.headers.common["Authorization"] = undefined;
+      dispatch(actionUser.resetUserInfo());
+      return true;
+    }
+    return false;
+  };
+
+  const reloadUserInfo = async () => {
+    try {
+      const { userInfo } = await getUser();
+      dispatch(
+        actionUser.setUser({
+          userId: userInfo.userId,
+          nickname: userInfo.nickname,
+          profileImgSrc: userInfo.profileImgSrc,
+        })
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
   return {
     isLogined,
     handleLogout,
+    reloadUserInfo,
   };
 };
 

@@ -1,34 +1,35 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
+import { useAppDispatch } from "../../hooks/redux";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { BasicUserInfo, apiLogout, getUser } from "../../service/api/user";
+import { BasicUserInfo, getUser } from "../../service/api/user";
+import { actionUser } from "../../store/user/userSlice";
 import { getDisplayMoney } from "../../utils/display";
 import { ActiveGameNotifier } from "./ActiveGameNotifier";
 import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
+  const dispatch = useAppDispatch();
   const { movePage, goHome } = usePageRoute();
-  /**
-   * TODO
-   * - 진입과 동시에 로그인된 유저의 정보를 가져온다. feat axios
-   * - 가져와서 해당정보로 화면에 그려주기
-   */
   const { isLoading, error, data } = useQuery(["userInfo"], () => getUser());
-  const handleLogout = async () => {
-    await apiLogout();
-    axios.defaults.headers.common["Authorization"] = undefined;
-    movePage("/", { replace: true });
-    // if (ret) {
-    //   props.handleLogout();
-    // } else {
-    //   alert("logout error retry it");
-    // }
-  };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        actionUser.setUser({
+          userId: data.userInfo.userId,
+          nickname: data.userInfo.nickname,
+          profileImgSrc: data.userInfo.profileImgSrc,
+        })
+      );
+    }
+  }, [data, dispatch]);
+
   if (isLoading || data === undefined) return <Loading />;
   if (error) return <div>error</div>;
+
   return (
     <Styled.Wrapper>
       <Styled.Top>GOLF BET</Styled.Top>

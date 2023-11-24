@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import styled, { CSSProp, css } from "styled-components";
 import { history } from "../..";
-import { decreaseBackToHomePageCount } from "../../hooks/usePageRoute";
 import { ModalType } from "../modals/type";
 
 interface Props {
@@ -17,10 +16,10 @@ export const Modal = ({
   closeModalByUI,
   modalType = 0,
 }: Props) => {
+  // 뒤로가기
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP") {
-        decreaseBackToHomePageCount();
         closeModalByUI();
       }
     });
