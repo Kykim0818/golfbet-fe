@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 import styled from "styled-components";
+import Loading from "../../components/Loading";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { BasicUserInfo, apiLogout, getUser } from "../../service/api/user";
 import { getDisplayMoney } from "../../utils/display";
@@ -26,7 +27,7 @@ export const Home = (props: { handleLogout: () => void }) => {
     //   alert("logout error retry it");
     // }
   };
-  if (isLoading || data === undefined) return <div>Loading ....</div>;
+  if (isLoading || data === undefined) return <Loading />;
   if (error) return <div>error</div>;
   return (
     <Styled.Wrapper>

@@ -1,18 +1,18 @@
-import styled from "styled-components";
-import TitleAsset from "../../components/TitleAsset";
-import { usePageRoute } from "../../hooks/usePageRoute";
-import { PageStyle } from "../../styles/page";
-import RankBoard from "../GameProcess/RankBoard";
-import { typo } from "../../styles/typo";
-import ScoreBoard from "../../components/domain/ScoreBoard";
-import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import Loading from "../../components/Loading";
+import TitleAsset from "../../components/TitleAsset";
+import ScoreBoard from "../../components/domain/ScoreBoard";
+import { usePageRoute } from "../../hooks/usePageRoute";
 import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
 import { apiGetGameRoom } from "../../service/api/gameRoom";
+import { PageStyle } from "../../styles/page";
+import { typo } from "../../styles/typo";
+import { getDisplayDate } from "../../utils/display";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
-import { getDisplayDate } from "../../utils/display";
+import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
 import { ScoreHistroyRankBoard } from "./ScoreHistoryRankBoard";
 
 export const ScoreHistoryDetail = () => {
@@ -28,7 +28,7 @@ export const ScoreHistoryDetail = () => {
       retry: 0,
     }
   );
-  if (data === undefined) return <div>Loading ....</div>;
+  if (data === undefined) return <Loading />;
   const gameRoomInfo = data?.data.gameRoomInfo;
   const rank =
     gameRoomInfo.players.findIndex((player) => player.userId === userId) + 1;

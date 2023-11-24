@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import loadingSlice from "./loading/loadingSlice";
 import modalSlice from "./modal/modalSlice";
 import userSlice from "./user/userSlice";
 // ...
@@ -7,6 +8,7 @@ export const store = configureStore({
   reducer: {
     users: userSlice,
     modal: modalSlice,
+    loading: loadingSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
