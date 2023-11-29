@@ -46,7 +46,6 @@ export const WaitRoom = () => {
         <PlayersInfo
           players={playerInfos}
           gameMaxPlayer={gameRoomInfo.gameInfo.playerCount}
-          isHandicapPre={gameRoomInfo?.gameInfo.gameRule.handiType[0] === "pre"}
         />
       </S.Body>
       <S.Footer>
