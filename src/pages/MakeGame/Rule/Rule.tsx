@@ -5,9 +5,10 @@ import { NearestType, SpecialBetRequirements } from "./type";
 
 type RuleProps = {
   rule: GameInfo["gameRule"];
+  nearestAmount: number;
 };
 
-export const Rule = ({ rule }: RuleProps) => {
+export const Rule = ({ rule, nearestAmount }: RuleProps) => {
   return (
     <Styled.Wrapper>
       <Styled.Detail>
@@ -29,7 +30,7 @@ export const Rule = ({ rule }: RuleProps) => {
       <Styled.Line />
       <Styled.Detail>
         <Styled.Label>니어</Styled.Label>
-        <div>{getDisplayNearest(rule.nearestType[0], 0)}</div>
+        <div>{getDisplayNearest(rule.nearestType[0], nearestAmount)}</div>
       </Styled.Detail>
     </Styled.Wrapper>
   );

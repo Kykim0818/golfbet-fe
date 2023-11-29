@@ -23,7 +23,7 @@ type ContextActionType = {
 
 export const initialContextState: ContextStateType = {
   gameInfo: {
-    gameId: "",
+    gameId: "not started",
     gameType: "field",
     startDate: "not started",
     golfCenter: {
@@ -49,6 +49,7 @@ export const initialContextState: ContextStateType = {
       ddang: ["onlyLastPlace"],
       nearestType: ["separateAmount"],
     },
+    nearestAmount: 0,
     betAmountPerStroke: 0,
     bettingLimit: 0,
   },
@@ -165,6 +166,7 @@ export interface GameInfo {
   betType: "Stroke";
   playerCount: number;
   gameRule: GameRule;
+  nearestAmount: number;
   betAmountPerStroke: number;
   bettingLimit: number;
 }

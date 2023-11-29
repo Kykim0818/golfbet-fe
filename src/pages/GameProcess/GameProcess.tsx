@@ -49,6 +49,7 @@ export const testGameRoomInfo: {
         ddang: ["onlyLastPlace"],
         nearestType: ["separateAmount"],
       },
+      nearestAmount: 0,
       betAmountPerStroke: 1000,
       bettingLimit: 50000,
     },

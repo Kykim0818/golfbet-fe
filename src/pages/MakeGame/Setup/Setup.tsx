@@ -128,7 +128,10 @@ export const Setup = () => {
               onClick={handleOpenChangeGameRule}
             />
           </Styled.RuleHeader>
-          <Rule rule={gameInfo.gameRule} />
+          <Rule
+            rule={gameInfo.gameRule}
+            nearestAmount={gameInfo.nearestAmount}
+          />
         </div>
         {/* ////// 내기금액 TODO: css */}
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>

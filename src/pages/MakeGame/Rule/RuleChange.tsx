@@ -45,6 +45,10 @@ export const RuleChange = () => {
     setCurrentRule(changedRule);
   };
 
+  const handleChangeNearestAmount = (money: number) => {
+    gameInfo.nearestAmount = money;
+  };
+
   return (
     <Styled.Wrapper>
       <TitleAsset
@@ -77,6 +81,7 @@ export const RuleChange = () => {
               fixedText="1타당"
               placeHolder="금액을 입력해주세요"
               plusMoneyArr={[1000, 5000, 10000]}
+              onChange={handleChangeNearestAmount}
             />
           </div>
         )}
