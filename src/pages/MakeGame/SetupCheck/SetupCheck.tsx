@@ -36,6 +36,7 @@ export const SetupCheck = () => {
     tmpRet.golfCenter = modifedGameCenterInfo;
     console.log("make game Info ", tmpRet);
     const gameId = await apiMakeGame(tmpRet);
+    console.log("gameId", gameId);
     // TODO: 테스트용 나중엔 실패했을 때랑 예외 처리
     if (gameId === "") {
       const modalRes = await openModal({
@@ -46,13 +47,13 @@ export const SetupCheck = () => {
           okBtnLabel: "확인",
         },
       });
-      if (modalRes) {
-        onLoading(2);
-        movePageWithHome(`/game_room/test`);
-      }
+      // if (modalRes) {
+      //   onLoading(2);
+      //   movePageWithHome(`/game_room/test`);
+      // }
     } else {
       onLoading(2);
-      movePageWithHome(`/game_room/test`);
+      movePageWithHome(`/game_room/${gameId}`);
     }
   };
 

@@ -41,7 +41,7 @@ export const testGameRoomInfo: {
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
       },
-      betType: "Stroke",
+      betType: "stroke",
       playerCount: 4,
       gameRule: {
         handiType: ["backHandicap"],

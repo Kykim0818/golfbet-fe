@@ -41,7 +41,7 @@ export const initialContextState: ContextStateType = {
         pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
     },
-    betType: "Stroke",
+    betType: "stroke",
     playerCount: 4,
     gameRule: {
       handiType: ["backHandicap"],
@@ -163,7 +163,7 @@ export interface GameInfo {
       pars: number[];
     };
   };
-  betType: "Stroke";
+  betType: "stroke";
   playerCount: number;
   gameRule: GameRule;
   nearestAmount: number;
