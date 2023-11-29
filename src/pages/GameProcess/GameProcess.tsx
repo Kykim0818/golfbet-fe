@@ -27,13 +27,16 @@ export const testGameRoomInfo: {
       gameType: "field",
       startDate: "2023-11-04",
       golfCenter: {
+        id: "test",
         name: "이천 실크밸리GG",
         region: "",
         frontNineCourse: {
+          id: "test",
           name: "레이크",
           pars: [3, 3, 3, 5, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
+          id: "test",
           name: "벨리",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
@@ -41,10 +44,10 @@ export const testGameRoomInfo: {
       betType: "Stroke",
       playerCount: 4,
       gameRule: {
-        handiType: ["post"],
-        specialBetRequirements: ["buddy", "tripple", "threeOrMorePlayersTied"],
-        ddang: ["last"],
-        nearestType: ["specified"],
+        handiType: ["backHandicap"],
+        specialBetRequirements: ["buddy", "triple", "threeOrMoreTie"],
+        ddang: ["onlyLastPlace"],
+        nearestType: ["separateAmount"],
       },
       betAmountPerStroke: 1000,
       bettingLimit: 50000,

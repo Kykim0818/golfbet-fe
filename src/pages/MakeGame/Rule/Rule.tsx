@@ -71,6 +71,7 @@ const getSpecialBetRequirementsDiplay = (
 };
 
 const getDisplayNearest = (value: NearestType["value"], amount: number) => {
-  if (value === "ingame") return getDisplayRuleText("nearestType", value);
+  if (value === "includeInGame")
+    return getDisplayRuleText("nearestType", value);
   return amount;
 };
