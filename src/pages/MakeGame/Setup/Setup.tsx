@@ -30,7 +30,13 @@ export const Setup = () => {
     repaint();
     // console.log(gameInfo);
   };
-
+  //
+  const handleChangeBetAmountPerStroke = (money: number) => {
+    gameInfo.betAmountPerStroke = money;
+  };
+  const handleChangeBettingLimit = (money: number) => {
+    gameInfo.bettingLimit = money;
+  };
   //
   const handleOpenChangeGameRule = () => {
     movePage("rule_change");
@@ -122,7 +128,10 @@ export const Setup = () => {
               onClick={handleOpenChangeGameRule}
             />
           </Styled.RuleHeader>
-          <Rule rule={gameInfo.gameRule} />
+          <Rule
+            rule={gameInfo.gameRule}
+            nearestAmount={gameInfo.nearestAmount}
+          />
         </div>
         {/* ////// 내기금액 TODO: css */}
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -132,12 +141,14 @@ export const Setup = () => {
             fixedText="1타당"
             placeHolder="금액을 입력해주세요"
             plusMoneyArr={[1000, 5000, 10000]}
+            onChange={handleChangeBetAmountPerStroke}
           />
           <BetMoney
             value={gameInfo.bettingLimit}
             fixedText="한도 금액"
             placeHolder="금액을 입력해주세요"
             plusMoneyArr={[10000, 100000, 500000]}
+            onChange={handleChangeBettingLimit}
           />
         </div>
       </Styled.Body>
@@ -154,21 +165,21 @@ export const Setup = () => {
 };
 
 const getDisplayText = (value: string) => {
-  if (value === "Stroke") return "스트로크";
+  if (value === "stroke") return "스트로크";
 };
 
 const getDefaultSpecialBetRequirements = (
   playerCount: number
 ): GameRule["specialBetRequirements"] => {
   if (playerCount === 4) {
-    return ["buddy", "tripple", "threeOrMorePlayersTied"];
+    return ["buddy", "triple", "threeOrMoreTie"];
   }
   if (playerCount === 3) {
-    return ["buddy", "tripple", "twoOrMorePlayersTied"];
+    return ["buddy", "triple", "twoOrMoreTie"];
   }
 
   // 2
-  return ["buddy", "tripple"];
+  return ["buddy", "triple"];
 };
 
 const Styled = {

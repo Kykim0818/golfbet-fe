@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { usePageRoute } from "../../../hooks/usePageRoute";
 import { typo } from "../../../styles/typo";
 
 export type PlayersInfoUI = {
@@ -14,28 +13,12 @@ export type PlayersInfoUI = {
 type Props = {
   players: PlayersInfoUI[];
   gameMaxPlayer: number;
-  isHandicapPre: boolean;
 };
-export const PlayersInfo = ({
-  players,
-  gameMaxPlayer,
-  isHandicapPre,
-}: Props) => {
-  const { movePage } = usePageRoute();
-
-  const handleNavigateHandiCapPage = () => {
-    movePage("handicap_setup");
-  };
-
+export const PlayersInfo = ({ players, gameMaxPlayer }: Props) => {
   return (
     <S.Wrapper>
       <S.Header>
         <S.HeaderLeft>{`플레이어(${players.length}/${gameMaxPlayer})`}</S.HeaderLeft>
-        {isHandicapPre && (
-          <S.HeaderRight onClick={handleNavigateHandiCapPage}>
-            핸디캡 주기
-          </S.HeaderRight>
-        )}
       </S.Header>
       <S.Body>
         {players.map((player) => {

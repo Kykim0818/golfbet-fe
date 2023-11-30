@@ -5,17 +5,19 @@ const RULE = {
     SPECIAL_BET_REQUIREMENTS: "specialBetRequirements",
     DDANG: "ddang",
     NEAREST_TYPE: "nearestType",
+    NEAREST_AMOUNT: "nearestAmount",
   },
-  HANDI_TYPE_VALUES: ["none", "pre", "post"],
+  HANDI_TYPE_VALUES: ["none", "frontHandicap", "backHandicap"],
   SPECIAL_BET_REQUIREMENTS_VALUES: [
     "none",
     "buddy",
-    "tripple",
-    "twoOrMorePlayersTied",
-    "threeOrMorePlayersTied",
+    "triple",
+    "twoOrMoreTie",
+    "threeOrMoreTie",
   ],
-  DDANG_VALUES: ["none", "last"],
-  NEAREST_TYPE_VALUES: ["ingame", "specified"],
+  DDANG_VALUES: ["none", "onlyLastPlace"],
+  NEAREST_TYPE_VALUES: ["includeInGame", "separateAmount"],
+  NEAREST_AMOUNT: 0,
 } as const;
 
 type HandiValueType = (typeof RULE.HANDI_TYPE_VALUES)[number];
@@ -23,7 +25,6 @@ type SpecialBetRequirementsValueType =
   (typeof RULE.SPECIAL_BET_REQUIREMENTS_VALUES)[number];
 type DdangValueType = (typeof RULE.DDANG_VALUES)[number];
 type NearestTypeValueType = (typeof RULE.NEAREST_TYPE_VALUES)[number];
-
 // public
 export type HandiType = {
   ruleType: typeof RULE.TYPE.HANDI_TYPE;

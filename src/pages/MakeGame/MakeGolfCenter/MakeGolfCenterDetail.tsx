@@ -25,13 +25,16 @@ export const MakeGolfCenterDetail = () => {
     // TODO-Server : 저장전 서버에 데이터 전송후,
     // 성공 response 후에 그 값을 선택으로 지정
     gameInfo.golfCenter = {
+      id: "customUserCenterId",
       name: tmpGolfCourseInfoForAdd.name,
       region: tmpGolfCourseInfoForAdd.region,
       frontNineCourse: {
+        id: "customUserFrontCourseId",
         name: tmpGolfCourseInfoForAdd.frontNineCourse.name,
         pars: frontNineCourseDetail.current,
       },
       backNineCourse: {
+        id: "customUserBackCourseId",
         name: tmpGolfCourseInfoForAdd.backNineCourse.name,
         pars: backNineCourseDetail.current,
       },

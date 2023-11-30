@@ -23,15 +23,17 @@ export const CenterList = ({ centers, onChange }: Props) => {
     // 누르는 순간 default course로 세팅 되어야함
     if (targetCenter && targetCenter.courses.length > 0) {
       onChange({
+        id: targetCenter.id,
         name: targetCenter.name,
         region: targetCenter.region,
         frontNineCourse: {
+          id: targetCenter.courses[FIRST_COURSE_IDX].id,
           name: targetCenter.courses[FIRST_COURSE_IDX].name,
           pars: targetCenter.courses[FIRST_COURSE_IDX].pars,
         },
         backNineCourse: {
+          id: targetCenter.courses[SECOND_COURSE_IDX].id,
           name: targetCenter.courses[SECOND_COURSE_IDX].name,
-
           pars: targetCenter.courses[SECOND_COURSE_IDX].pars,
         },
       });
@@ -63,13 +65,16 @@ export const CenterList = ({ centers, onChange }: Props) => {
       }
 
       onChange({
+        id: selectCenterInfo.id,
         name: selectCenterInfo.name,
         region: selectCenterInfo.region,
         frontNineCourse: {
+          id: frontCourseInfo.id,
           name: frontCourseInfo.name,
           pars: frontCourseInfo.pars,
         },
         backNineCourse: {
+          id: backCourseInfo.id,
           name: backCourseInfo.name,
           pars: backCourseInfo.pars,
         },
