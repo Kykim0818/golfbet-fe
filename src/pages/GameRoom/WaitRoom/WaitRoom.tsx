@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
+import { useAppSelector } from "../../../hooks/redux";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
-import { useAppSelector } from "../../../hooks/redux";
 
 export const WaitRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const { movePage, moveBack } = usePageRoute();
-  const { gameId, gameRoomInfo } = useGameRoomInfo();
+  const { gameRoomInfo } = useGameRoomInfo();
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
     return {
       id: player.userId,
@@ -25,7 +25,7 @@ export const WaitRoom = () => {
 
   const handleGameStart = () => {
     //
-    movePage(`/process_game/${gameId}`);
+    movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
   };
 
   return (
@@ -33,7 +33,7 @@ export const WaitRoom = () => {
       <GameTitleAsset
         visibleBack
         handleBack={() => moveBack()}
-        title={gameId}
+        title={gameRoomInfo.gameInfo.gameId}
       />
       <S.Body>
         <GameRoomInfo

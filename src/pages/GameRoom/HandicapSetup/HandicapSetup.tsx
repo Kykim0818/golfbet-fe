@@ -10,9 +10,9 @@ import { useGameRoomInfo } from "../GameRoom";
 
 export const HandicapSetup = () => {
   const { movePage } = usePageRoute();
-  const { gameId, gameRoomInfo } = useGameRoomInfo();
+  const { gameRoomInfo } = useGameRoomInfo();
   const handleBackBtn = () => {
-    movePage(`/game_room/${gameId}`, { replace: true });
+    movePage(`/game_room/${gameRoomInfo.gameInfo.gameId}`, { replace: true });
   };
   const handleAddHandiCapBtn = () => {
     // 추가
