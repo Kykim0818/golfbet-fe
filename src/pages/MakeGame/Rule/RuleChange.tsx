@@ -45,6 +45,10 @@ export const RuleChange = () => {
     setCurrentRule(changedRule);
   };
 
+  const handleChangeNearestAmount = (money: number) => {
+    gameInfo.nearestAmount = money;
+  };
+
   return (
     <Styled.Wrapper>
       <TitleAsset
@@ -67,7 +71,7 @@ export const RuleChange = () => {
             </Styled.Option>
           );
         })}
-        {currentRule.nearestType[0] === "specified" && (
+        {currentRule.nearestType[0] === "separateAmount" && (
           <div
             style={{ display: "flex", flexDirection: "column", gap: "15px" }}
           >
@@ -77,6 +81,7 @@ export const RuleChange = () => {
               fixedText="1타당"
               placeHolder="금액을 입력해주세요"
               plusMoneyArr={[1000, 5000, 10000]}
+              onChange={handleChangeNearestAmount}
             />
           </div>
         )}
@@ -144,10 +149,10 @@ const getRule = (playerCount: number) => {
     // TODO: 4인이상 생길 경우 과반수 이상 규칙 추가 필요
     if (ruleInfo.optionType === "specialBetRequirements") {
       if (playerCount === 3) {
-        ruleInfo.options.push("twoOrMorePlayersTied");
+        ruleInfo.options.push("twoOrMoreTie");
       }
       if (playerCount === 4) {
-        ruleInfo.options.push("threeOrMorePlayersTied");
+        ruleInfo.options.push("threeOrMoreTie");
       }
     }
     //

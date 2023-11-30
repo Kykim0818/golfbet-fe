@@ -23,40 +23,47 @@ type ContextActionType = {
 
 export const initialContextState: ContextStateType = {
   gameInfo: {
-    gameId: "",
+    gameId: "not started",
     gameType: "field",
-    startDate: "2023-11-04",
+    startDate: "not started",
     golfCenter: {
+      id: "test",
       name: "",
       region: "",
       frontNineCourse: {
+        id: "test",
         name: "",
         pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
       backNineCourse: {
+        id: "test",
         name: "",
         pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
     },
-    betType: "Stroke",
+    betType: "stroke",
     playerCount: 4,
     gameRule: {
-      handiType: ["post"],
-      specialBetRequirements: ["buddy", "tripple", "threeOrMorePlayersTied"],
-      ddang: ["last"],
-      nearestType: ["specified"],
+      handiType: ["backHandicap"],
+      specialBetRequirements: ["buddy", "triple", "threeOrMoreTie"],
+      ddang: ["onlyLastPlace"],
+      nearestType: ["separateAmount"],
     },
+    nearestAmount: 0,
     betAmountPerStroke: 0,
     bettingLimit: 0,
   },
   tmpGolfCenterInfoForAdd: {
+    id: "test",
     name: "",
     region: "",
     frontNineCourse: {
+      id: "test",
       name: "",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
     backNineCourse: {
+      id: "test",
       name: "",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
@@ -142,20 +149,24 @@ export interface GameInfo {
   gameType: "field" | "screen";
   startDate: string;
   golfCenter: {
+    id: string;
     name: string;
     region: string;
     frontNineCourse: {
+      id: string;
       name: string;
       pars: number[];
     };
     backNineCourse: {
+      id: string;
       name: string;
       pars: number[];
     };
   };
-  betType: "Stroke";
+  betType: "stroke";
   playerCount: number;
   gameRule: GameRule;
+  nearestAmount: number;
   betAmountPerStroke: number;
   bettingLimit: number;
 }

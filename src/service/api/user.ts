@@ -141,13 +141,17 @@ export async function apiGetAccessToken() {
 
 export async function apiLogout() {
   try {
-    const response = await postData(API_URL.LOGOUT, undefined, {
-      headers: {
-        Authorization: axios.defaults.headers.common["Authorization"],
-      },
-      timeout: 2000,
-    });
-    if (response.statusCode === 200) {
+    const response = await postData<{ result: string }>(
+      API_URL.LOGOUT,
+      undefined,
+      {
+        headers: {
+          Authorization: axios.defaults.headers.common["Authorization"],
+        },
+        timeout: 2000,
+      }
+    );
+    if (response.data.result === "success") {
       return true;
     }
     throw Error();
