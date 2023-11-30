@@ -165,7 +165,7 @@ export const Setup = () => {
 };
 
 const getDisplayText = (value: string) => {
-  if (value === "Stroke") return "스트로크";
+  if (value === "stroke") return "스트로크";
 };
 
 const getDefaultSpecialBetRequirements = (
