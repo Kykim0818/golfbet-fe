@@ -154,7 +154,7 @@ export async function apiMakeGame(gameInfo: GameInfo) {
       },
       { requireToken: true }
     );
-    if (response.statusCode === 200) {
+    if (response.data) {
       return response.data.gameId;
     } else {
       return "";
@@ -167,11 +167,6 @@ export async function apiMakeGame(gameInfo: GameInfo) {
 
 function convertMakeGameParamType(gameInfo: GameInfo): GameInfoType {
   // api 수정시 같이 수정 임시 처리
-  const tmpSpecialBetRequirements =
-    gameInfo.gameRule.specialBetRequirements.map((require) => {
-      if (require === "triple") return "tripleBuddy";
-      return require;
-    });
   return {
     data: {
       gameType: gameInfo.gameType,
@@ -197,7 +192,7 @@ function convertMakeGameParamType(gameInfo: GameInfo): GameInfoType {
       },
       gameRule: {
         handicapType: gameInfo.gameRule.handiType[0],
-        doubleConditions: tmpSpecialBetRequirements,
+        doubleConditions: gameInfo.gameRule.specialBetRequirements,
         ddang: gameInfo.gameRule.ddang[0],
         nearest: {
           type: gameInfo.gameRule.nearestType[0],
