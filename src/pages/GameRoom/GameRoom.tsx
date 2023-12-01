@@ -11,6 +11,7 @@ type ContextType = ContextStateType & ContextActionType;
 type ContextStateType = {
   gameRoomInfo: GameRoomInfo;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
+  exitRoom: (gameId: string, userId: string) => void;
 };
 
 export type GameRoomInfo = {
@@ -45,7 +46,9 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
-  const { gameRoomInfo, joinRoom, connectState, onReady } = useSockets();
+  const { gameRoomInfo, joinRoom, connectState, onReady, exitRoom } =
+    useSockets();
+
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
   const gameId = params.gameId;
@@ -59,7 +62,7 @@ export const GameRoom = () => {
   if (gameRoomInfo === undefined) return <Loading />;
   return (
     <S.Wrapper>
-      <Outlet context={{ gameRoomInfo, onReady }} />
+      <Outlet context={{ gameRoomInfo, onReady, exitRoom }} />
     </S.Wrapper>
   );
 };

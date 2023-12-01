@@ -48,7 +48,7 @@ export function convertSocketDataToUiGameRoomInfo(
         currentScore: player.currentScore,
         holeScores: [player.holeScores],
         currentMoney: player.currentMoney,
-        readyState: player.readyState === "ready" ? true : false,
+        readyState: player.readyState === "true" ? true : false,
         handicaps: [],
       };
     }),

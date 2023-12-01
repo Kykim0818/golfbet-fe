@@ -10,7 +10,7 @@ import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 
 export const WaitRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { gameRoomInfo, onReady } = useGameRoomInfo();
+  const { gameRoomInfo, onReady, exitRoom } = useGameRoomInfo();
   const { movePage, moveBack } = usePageRoute();
 
   if (gameRoomInfo === undefined) return <Loading />;
@@ -35,15 +35,23 @@ export const WaitRoom = () => {
   };
 
   const handleOnReady = () => {
-    if (gameRoomInfo.gameInfo.gameId && me)
+    if (gameRoomInfo.gameInfo.gameId && me) {
       onReady(gameRoomInfo.gameInfo.gameId, userInfo.userId, !me.readyState);
+    }
   };
 
   return (
     <>
       <GameTitleAsset
         visibleBack
-        handleBack={() => moveBack()}
+        handleBack={() => {
+          if (gameRoomInfo.gameInfo.gameId) {
+            exitRoom(gameRoomInfo.gameInfo.gameId, userInfo.userId);
+            moveBack();
+            return;
+          }
+          console.log("gameRoomInfo is undefined");
+        }}
         title={gameRoomInfo.gameInfo.gameId}
       />
       <S.Body>

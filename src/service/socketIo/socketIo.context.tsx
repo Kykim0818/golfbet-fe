@@ -83,6 +83,7 @@ function SocketsProvider(props: any) {
         const convertedGameRoomInfo = convertSocketDataToUiGameRoomInfo(
           data.gameRoomInfo
         );
+        console.log(convertedGameRoomInfo);
         setGameRoomInfo(convertedGameRoomInfo);
       }
     });
@@ -118,6 +119,9 @@ function SocketsProvider(props: any) {
   }, []);
 
   const onReady = (gameId: string, userId: string, readyState: boolean) => {
+    console.log(
+      `socket onReady Test gameId : ${gameId} userId : ${userId} readyState : ${readyState}`
+    );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.SET_READY,
       data: {
@@ -129,6 +133,7 @@ function SocketsProvider(props: any) {
   };
 
   const exitRoom = (gameId: string, userId: string) => {
+    console.log(`socket exit Test gameId : ${gameId} userId : ${userId}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.EXIT_ROOM,
       data: {
