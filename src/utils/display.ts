@@ -1,11 +1,11 @@
 import { GameInfo } from "../pages/MakeGame/MakeGame";
 
 export const getDisplayBetTypeText = (value: string) => {
-  if (value === "Stroke") return "스트로크";
+  if (value === "stroke") return "스트로크";
 };
 
 export const getDisplayBetTypeIconText = (value: string) => {
-  if (value === "Stroke") return "S";
+  if (value === "stroke") return "S";
 };
 
 export const getDisplayCenterTypeText = (gameType: GameInfo["gameType"]) => {

@@ -96,11 +96,13 @@ const S = {
   PlayerImgSection: styled.div`
     display: flex;
     align-items: center;
-    min-width: 50px;
-    max-width: 50px;
-    max-height: 50px;
-    min-height: 50px;
-
+    img {
+      min-width: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      min-height: 50px;
+      border-radius: 50%;
+    }
     margin-right: 15px;
   `,
   NickNameSection: styled.div`
