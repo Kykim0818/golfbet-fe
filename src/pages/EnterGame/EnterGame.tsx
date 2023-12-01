@@ -1,11 +1,15 @@
+import { useState } from "react";
 import QrReader from "react-qr-reader";
 import styled from "styled-components";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 import TitleAsset from "../../components/TitleAsset";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { apiCanEnterGameRoom } from "../../service/api/gameRoom";
 
 export const EnterGame = () => {
+  const [tmpGameId, setTmpGameId] = useState("");
   const { moveBack, movePage } = usePageRoute();
   const { openModal } = useModal();
   const handleFailEnterGame = () => {
@@ -26,16 +30,26 @@ export const EnterGame = () => {
 
   const handleScan = async (gameId: string) => {
     const canEnterRoom = await apiCanEnterGameRoom(gameId);
-    if (canEnterRoom.data) {
+    if (canEnterRoom.data.partiAvailabilityYn) {
       movePage(`/game_room/${gameId}`);
+      return;
     }
     handleFailEnterGame();
+  };
+
+  const test = () => {
+    handleScan(tmpGameId);
   };
 
   return (
     <>
       <S.TitleAsset title="게임 참여하기" visibleClose handleClose={moveBack} />
       <S.Wrapper>
+        <Input
+          value={tmpGameId}
+          onChange={(e) => setTmpGameId(e.target.value)}
+        />
+        <Button onClick={test}>Game ID 입력해서 입장</Button>
         <S.Camera>
           <QrReader
             className="qr__reader"
