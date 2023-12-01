@@ -109,7 +109,7 @@ export type CenterInfo = {
 };
 
 export type CourseInfo = {
-  id: string;
+  id: number;
   name: string;
   // nameDetail: string;
   parsSum: number;

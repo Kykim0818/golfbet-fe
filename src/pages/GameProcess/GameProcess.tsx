@@ -31,12 +31,12 @@ export const testGameRoomInfo: {
         name: "이천 실크밸리GG",
         region: "",
         frontNineCourse: {
-          id: "test",
+          id: 0,
           name: "레이크",
           pars: [3, 3, 3, 5, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
-          id: "test",
+          id: 0,
           name: "벨리",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
