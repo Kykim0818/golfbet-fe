@@ -72,12 +72,12 @@ const testGameRoomInfo: {
         name: "이천 실크밸리GC",
         region: "",
         frontNineCourse: {
-          id: "testFrontCourseId",
+          id: 0,
           name: "",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
         backNineCourse: {
-          id: "testBackCourseId",
+          id: 0,
           name: "",
           pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
         },
@@ -172,7 +172,7 @@ function convertMakeGameParamType(gameInfo: GameInfo): GameInfoType {
       gameType: gameInfo.gameType,
       gameCenter: {
         centerId: gameInfo.golfCenter.id,
-        name: 0,
+        name: gameInfo.golfCenter.name,
         frontNineCourse: {
           courseId: gameInfo.golfCenter.frontNineCourse.id,
           courseName: gameInfo.golfCenter.frontNineCourse.name,
@@ -208,14 +208,14 @@ type GameInfoType = {
     gameType: string;
     gameCenter: {
       centerId: string;
-      name: number;
+      name: string;
       frontNineCourse: {
-        courseId: string;
+        courseId: number;
         courseName: string;
         coursePars: number[];
       };
       backNineCourse: {
-        courseId: string;
+        courseId: number;
         courseName: string;
         coursePars: number[];
       };

@@ -1,17 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Outlet, useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
-import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
-import { apiGetGameRoom } from "../../service/api/gameRoom";
+import { useAppSelector } from "../../hooks/redux";
+import { useSockets } from "../../service/socketIo/socketIo.context";
 import { GameInfo } from "../MakeGame/MakeGame";
 
 type ContextType = ContextStateType & ContextActionType;
 
 type ContextStateType = {
-  gameId: string;
   gameRoomInfo: GameRoomInfo;
+  onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
 export type GameRoomInfo = {
@@ -46,40 +45,21 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
+  const { gameRoomInfo, joinRoom, connectState, onReady } = useSockets();
+  const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
-  //
   const gameId = params.gameId;
-  // 1 게임 id를 받아와서 id 정보 조회
-  const { data } = useQuery(
-    [UNIQUE_QUERY_KEY.GET_GAME_ROOM_INFO],
-    () => apiGetGameRoom(gameId ?? ""),
-    {
-      retry: 0,
-    }
-  );
-  console.log("a", data);
-  const gameInfo = useRef<GameInfo>();
-
-  // 2 조회 실패시 홈화면으로 튕굼
   useEffect(() => {
-    //
-    if (gameId === undefined && gameInfo.current === undefined) {
-      console.log("gameInfo is undefined");
+    if (connectState && gameId && userInfo.userId) {
+      joinRoom(gameId, userInfo.userId);
     }
-  }, [gameId]);
+  }, [gameId, userInfo.userId, connectState, joinRoom]);
 
   // 3 웹 소켓 연결
-  if (data?.data === undefined) return <Loading />;
+  if (gameRoomInfo === undefined) return <Loading />;
   return (
     <S.Wrapper>
-      <Outlet
-        context={
-          {
-            gameId: params.gameId ?? "",
-            gameRoomInfo: data.data.gameRoomInfo,
-          } satisfies ContextType
-        }
-      />
+      <Outlet context={{ gameRoomInfo, onReady }} />
     </S.Wrapper>
   );
 };

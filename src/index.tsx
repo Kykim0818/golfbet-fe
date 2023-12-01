@@ -30,6 +30,7 @@ import Setting from "./pages/Setting";
 import Start from "./pages/Start/Start";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import reportWebVitals from "./reportWebVitals";
+import SocketsProvider from "./service/socketIo/socketIo.context";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
@@ -97,7 +98,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/game_room/:gameId",
-        element: <GameRoom />,
+        element: (
+          <SocketsProvider>
+            <GameRoom />
+          </SocketsProvider>
+        ),
         children: [
           {
             path: "",

@@ -44,8 +44,8 @@ export const CenterList = ({ centers, onChange }: Props) => {
   };
 
   const handleChangeCourse = (value: {
-    frontCourseId: string;
-    backCourseId: string;
+    frontCourseId: number;
+    backCourseId: number;
   }) => {
     if (selectCenterInfo) {
       const frontCourseInfo = findCourse(
@@ -151,6 +151,6 @@ function findCenter(centerId: string, centers: CenterInfo[]) {
   return centers.find((center) => center.id === centerId);
 }
 
-function findCourse(courseId: string, courses: CourseInfo[]) {
+function findCourse(courseId: number, courses: CourseInfo[]) {
   return courses.find((course) => course.id === courseId);
 }

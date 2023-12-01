@@ -31,12 +31,12 @@ export const initialContextState: ContextStateType = {
       name: "",
       region: "",
       frontNineCourse: {
-        id: "test",
+        id: 0,
         name: "",
         pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
       backNineCourse: {
-        id: "test",
+        id: 0,
         name: "",
         pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
       },
@@ -58,12 +58,12 @@ export const initialContextState: ContextStateType = {
     name: "",
     region: "",
     frontNineCourse: {
-      id: "test",
+      id: 0,
       name: "",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
     backNineCourse: {
-      id: "test",
+      id: 0,
       name: "",
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
@@ -153,12 +153,12 @@ export interface GameInfo {
     name: string;
     region: string;
     frontNineCourse: {
-      id: string;
+      id: number;
       name: string;
       pars: number[];
     };
     backNineCourse: {
-      id: string;
+      id: number;
       name: string;
       pars: number[];
     };

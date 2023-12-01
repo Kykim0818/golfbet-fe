@@ -29,12 +29,12 @@ export const MakeGolfCenterDetail = () => {
       name: tmpGolfCourseInfoForAdd.name,
       region: tmpGolfCourseInfoForAdd.region,
       frontNineCourse: {
-        id: "customUserFrontCourseId",
+        id: 0,
         name: tmpGolfCourseInfoForAdd.frontNineCourse.name,
         pars: frontNineCourseDetail.current,
       },
       backNineCourse: {
-        id: "customUserBackCourseId",
+        id: 0,
         name: tmpGolfCourseInfoForAdd.backNineCourse.name,
         pars: backNineCourseDetail.current,
       },

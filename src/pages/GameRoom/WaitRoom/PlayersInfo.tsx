@@ -11,10 +11,11 @@ export type PlayersInfoUI = {
 };
 
 type Props = {
+  userId: string;
   players: PlayersInfoUI[];
   gameMaxPlayer: number;
 };
-export const PlayersInfo = ({ players, gameMaxPlayer }: Props) => {
+export const PlayersInfo = ({ userId, players, gameMaxPlayer }: Props) => {
   return (
     <S.Wrapper>
       <S.Header>
@@ -28,8 +29,9 @@ export const PlayersInfo = ({ players, gameMaxPlayer }: Props) => {
                 <img src={player.imgSrc} alt="avatar" />
               </S.PlayerImgSection>
               <S.NickNameSection>
-                {localStorage.getItem("userId") === player.id && <div>나</div>}
+                {userId === player.id && <div>나</div>}
                 <span>{player.nickName}</span>
+                {player.readyState && <span>준비</span>}
               </S.NickNameSection>
               <S.MoreInfo>
                 <S.ScoreSection>
@@ -96,11 +98,13 @@ const S = {
   PlayerImgSection: styled.div`
     display: flex;
     align-items: center;
-    min-width: 50px;
-    max-width: 50px;
-    max-height: 50px;
-    min-height: 50px;
-
+    img {
+      min-width: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      min-height: 50px;
+      border-radius: 50%;
+    }
     margin-right: 15px;
   `,
   NickNameSection: styled.div`

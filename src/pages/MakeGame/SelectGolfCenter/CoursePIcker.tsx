@@ -1,13 +1,13 @@
 import { useRef } from "react";
+import styled from "styled-components";
 import ToggleGroup from "../../../components/ToggleGroup";
 import { CourseInfo } from "./SelectGolfCenter";
-import styled from "styled-components";
 
 type Props = {
   courses: CourseInfo[];
   onChange: (value: {
-    selectFrontCourseId: string;
-    selectBackCourseId: string;
+    selectFrontCourseId: number;
+    selectBackCourseId: number;
   }) => void;
 };
 
@@ -25,7 +25,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
   ) => {
     if (courseType === "front") {
       onChange({
-        selectFrontCourseId: toggleValue[0],
+        selectFrontCourseId: parseInt(toggleValue[0]),
         selectBackCourseId: currentBackNineCourse.current.id,
       });
       return;
@@ -34,7 +34,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
     if (courseType === "back") {
       onChange({
         selectFrontCourseId: currentFrontNineCourse.current.id,
-        selectBackCourseId: toggleValue[0],
+        selectBackCourseId: parseInt(toggleValue[0]),
       });
       return;
     }
@@ -47,7 +47,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
         <div>
           {currentFrontNineCourse.current ? (
             <ToggleGroup
-              selectedValues={[currentFrontNineCourse.current.id]}
+              selectedValues={[`${currentFrontNineCourse.current.id}`]}
               group={courseGroups}
               onChange={(value) => handleChangeToggle("front", value)}
             />
@@ -61,7 +61,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
         <span>후반 코스</span>
         <div>
           <ToggleGroup
-            selectedValues={[currentBackNineCourse.current.id]}
+            selectedValues={[`${currentBackNineCourse.current.id}`]}
             group={courseGroups}
             onChange={(value) => handleChangeToggle("back", value)}
           />
@@ -75,7 +75,7 @@ const makeToggleGroups = (courses: CourseInfo[]) => {
   return courses.map((course) => {
     return {
       label: course.name,
-      value: course.id,
+      value: `${course.id}`,
     };
   });
 };
