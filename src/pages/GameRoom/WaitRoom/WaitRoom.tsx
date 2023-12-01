@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
+import Loading from "../../../components/Loading";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { usePageRoute } from "../../../hooks/usePageRoute";
@@ -9,8 +10,10 @@ import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 
 export const WaitRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
+  const { gameRoomInfo, onReady } = useGameRoomInfo();
   const { movePage, moveBack } = usePageRoute();
-  const { gameRoomInfo } = useGameRoomInfo();
+
+  if (gameRoomInfo === undefined) return <Loading />;
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
     return {
       id: player.userId,
@@ -21,11 +24,19 @@ export const WaitRoom = () => {
       readyState: player.readyState,
     };
   });
+  const me = playerInfos.find(
+    (playerInfo) => playerInfo.id === userInfo.userId
+  );
   const isRoomMaker = userInfo.userId === gameRoomInfo.roomMakerId;
 
   const handleGameStart = () => {
     //
     movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
+  };
+
+  const handleOnReady = () => {
+    if (gameRoomInfo.gameInfo.gameId && me)
+      onReady(gameRoomInfo.gameInfo.gameId, userInfo.userId, !me.readyState);
   };
 
   return (
@@ -44,6 +55,7 @@ export const WaitRoom = () => {
           bettingLimit={gameRoomInfo?.gameInfo.bettingLimit}
         />
         <PlayersInfo
+          userId={userInfo.userId}
           players={playerInfos}
           gameMaxPlayer={gameRoomInfo.gameInfo.playerCount}
         />
@@ -53,7 +65,9 @@ export const WaitRoom = () => {
         {isRoomMaker ? (
           <Button onClick={handleGameStart}>시작하기</Button>
         ) : (
-          <Button variants="outlined">규칙 동의 후, 준비하기</Button>
+          <Button onClick={handleOnReady} variants="outlined">
+            규칙 동의 후, 준비하기
+          </Button>
         )}
       </S.Footer>
     </>

@@ -10,6 +10,7 @@ type ContextType = ContextStateType & ContextActionType;
 
 type ContextStateType = {
   gameRoomInfo: GameRoomInfo;
+  onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
 export type GameRoomInfo = {
@@ -44,20 +45,21 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
-  const { gameRoomInfo, joinRoom } = useSockets();
+  const { gameRoomInfo, joinRoom, connectState, onReady } = useSockets();
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
   const gameId = params.gameId;
-
   useEffect(() => {
-    if (gameId && userInfo.userId) joinRoom(gameId, userInfo.userId);
-  }, [gameId, userInfo.userId, joinRoom]);
+    if (connectState && gameId && userInfo.userId) {
+      joinRoom(gameId, userInfo.userId);
+    }
+  }, [gameId, userInfo.userId, connectState, joinRoom]);
 
   // 3 웹 소켓 연결
   if (gameRoomInfo === undefined) return <Loading />;
   return (
     <S.Wrapper>
-      <Outlet context={gameRoomInfo} />
+      <Outlet context={{ gameRoomInfo, onReady }} />
     </S.Wrapper>
   );
 };

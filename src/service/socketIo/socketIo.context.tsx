@@ -1,13 +1,21 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import io, { Socket } from "socket.io-client";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { SOCKET_URL } from "./config";
 import { EVENTS, TASK } from "./constant";
+import { convertSocketDataToUiGameRoomInfo } from "./util";
 
 interface Context {
   socket: Socket;
+  connectState: boolean;
   gameRoomInfo?: GameRoomInfo;
   joinRoom: (gameId: string, userId: string) => void;
   exitRoom: (gameId: string, userId: string) => void;
@@ -27,6 +35,7 @@ console.log("socket test", socket);
 
 const SocketContext = createContext<Context>({
   socket,
+  connectState: false,
   gameRoomInfo: undefined,
   joinRoom: () => {},
   exitRoom: () => {},
@@ -34,6 +43,7 @@ const SocketContext = createContext<Context>({
 });
 
 function SocketsProvider(props: any) {
+  const [connectState, setConnectState] = useState(false);
   const [gameRoomInfo, setGameRoomInfo] = useState<GameRoomInfo>();
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
@@ -50,8 +60,8 @@ function SocketsProvider(props: any) {
 
   useEffect(() => {
     // 기본 설정
-    socket.on(EVENTS.FROM_SERVER.CONNECTION, (value) => {
-      console.log("server connected", value);
+    socket.on(EVENTS.FROM_SERVER.CONNECTION, () => {
+      console.log("server connected");
     });
     socket.on(EVENTS.FROM_SERVER.DISCONNECT, (value) => {
       console.log("server disconnected", value);
@@ -62,10 +72,19 @@ function SocketsProvider(props: any) {
     socket.on(EVENTS.FROM_SERVER.CONNECTION_ERROR, (err) => {
       console.log(err.message); // prints the message associated with the error
     });
+    socket.on(EVENTS.FROM_SERVER.BROADCAST_CONNECT_MESSAGE, (value) => {
+      console.log(value); // prints the message associated with the error
+      setConnectState(true);
+    });
     // 게임방정보 업데이트
-    socket.on(EVENTS.FROM_SERVER.BROADCAST_MESSAGE, (data) => {
-      console.log(data);
-      setGameRoomInfo(data);
+    socket.on(EVENTS.FROM_SERVER.BROADCAST_ROOM_MESSAGE, (data) => {
+      if (data.gameRoomInfo === undefined) return;
+      if (data) {
+        const convertedGameRoomInfo = convertSocketDataToUiGameRoomInfo(
+          data.gameRoomInfo
+        );
+        setGameRoomInfo(convertedGameRoomInfo);
+      }
     });
   }, []);
 
@@ -85,7 +104,9 @@ function SocketsProvider(props: any) {
   }, [goHome, openModal]);
 
   //
-  const joinRoom = (gameId: string, userId: string) => {
+  const joinRoom = useCallback((gameId: string, userId: string) => {
+    console.log(`gameId : ${gameId}, userId : ${userId}`);
+    console.log("try JoinRoom");
     socket.emit(EVENTS.TO_SERVER.JOIN_ROOM, gameId);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.JOIN_ROOM,
@@ -94,7 +115,7 @@ function SocketsProvider(props: any) {
         userId,
       },
     });
-  };
+  }, []);
 
   const onReady = (gameId: string, userId: string, readyState: boolean) => {
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
@@ -131,6 +152,7 @@ function SocketsProvider(props: any) {
     <SocketContext.Provider
       value={{
         socket,
+        connectState,
         gameRoomInfo,
         joinRoom,
         exitRoom,
