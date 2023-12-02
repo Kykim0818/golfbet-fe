@@ -3,8 +3,7 @@ import LoadingContainer from "./components/LoadingContainer";
 import ModalContainer from "./components/ModalContainer";
 import { requestAccessToken } from "./service/api";
 import axios from "axios";
-import { usePageRoute } from "./hooks/usePageRoute";
-import { useAppSelector } from "./hooks/redux";
+
 const App = (props: { children: ReactNode }) => {
   // App 전체 실행 필요한 부분 처리
   useEffect(() => {
