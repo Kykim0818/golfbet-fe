@@ -15,6 +15,7 @@ export const RoomCenter = () => {
     gameRoomInfo: { gameInfo, roomMakerId },
     updateRoom,
   } = useGameRoomInfo1();
+  const isRoomMaker = userInfo.userId === roomMakerId;
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
   const handleModifyGameCenterInfo = (
@@ -60,6 +61,7 @@ export const RoomCenter = () => {
               {gameInfo.golfCenter.frontNineCourse.pars.map((par, index) => {
                 return (
                   <ParDetail
+                    disable={isRoomMaker === false}
                     key={index}
                     holeIndex={index + 1}
                     parCount={par}
@@ -79,6 +81,7 @@ export const RoomCenter = () => {
               {gameInfo.golfCenter.backNineCourse.pars.map((par, index) => {
                 return (
                   <ParDetail
+                    disable={isRoomMaker === false}
                     key={index}
                     holeIndex={index + 1}
                     parCount={par}
@@ -94,7 +97,7 @@ export const RoomCenter = () => {
       </Styled.Body>
 
       <Styled.Footer>
-        {userInfo.userId === roomMakerId && (
+        {isRoomMaker && (
           <Button onClick={handleUpdateRoomCenter}>수정 하기</Button>
         )}
       </Styled.Footer>
