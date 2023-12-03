@@ -13,7 +13,7 @@ export const API_URL = {
   CHECK_DUPLICATE: "v1/auth/user/duplication",
   // TODO
   GET_GAME_ROOM_INFO: "",
-  CAN_ENTER_GAME_ROOM: "v1/canentergame",
+  CAN_ENTER_GAME_ROOM: "v1/games/participants",
   MAKE_GAME: "v1/games/",
 } as const;
 

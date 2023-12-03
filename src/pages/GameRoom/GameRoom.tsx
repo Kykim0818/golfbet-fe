@@ -5,12 +5,15 @@ import Loading from "../../components/Loading";
 import { useAppSelector } from "../../hooks/redux";
 import { useSockets } from "../../service/socketIo/socketIo.context";
 import { GameInfo } from "../MakeGame/MakeGame";
+import { useModal } from "../../hooks/useModal";
+import { usePageRoute } from "../../hooks/usePageRoute";
 
 type ContextType = ContextStateType & ContextActionType;
 
 type ContextStateType = {
   gameRoomInfo: GameRoomInfo;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
+  exitRoom: (gameId: string, userId: string) => void;
 };
 
 export type GameRoomInfo = {
@@ -45,21 +48,47 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
-  const { gameRoomInfo, joinRoom, connectState, onReady } = useSockets();
+  const { goHome } = usePageRoute();
+  const { socket, gameRoomInfo, joinRoom, connectState, onReady, exitRoom } =
+    useSockets();
+  const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
   const gameId = params.gameId;
+
   useEffect(() => {
-    if (connectState && gameId && userInfo.userId) {
-      joinRoom(gameId, userInfo.userId);
+    if (connectState) {
+      if (gameId && userInfo.userId) {
+        joinRoom(gameId, userInfo.userId);
+      } else {
+        openModal({
+          id: "ALERT",
+          args: {
+            title: "연결 오류",
+            msg: "잠시 후에 다시 시도해주세요",
+            okBtnLabel: "확인",
+          },
+        }).then(() => goHome());
+      }
     }
   }, [gameId, userInfo.userId, connectState, joinRoom]);
 
+  useEffect(() => {
+    // ISSUE 나가기 처리 브라우저 닫기 관련 고민 필요
+    return () => {
+      if (gameId) {
+        exitRoom(gameId, userInfo.userId);
+        socket.disconnect();
+      }
+    };
+  }, []);
+
   // 3 웹 소켓 연결
-  if (gameRoomInfo === undefined) return <Loading />;
+  if (socket.connected === false || gameRoomInfo === undefined)
+    return <Loading />;
   return (
     <S.Wrapper>
-      <Outlet context={{ gameRoomInfo, onReady }} />
+      <Outlet context={{ gameRoomInfo, onReady, exitRoom }} />
     </S.Wrapper>
   );
 };

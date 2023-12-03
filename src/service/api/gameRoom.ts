@@ -7,20 +7,31 @@ import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
 
+type ApiCanEnterGameReturnType = {
+  participants: string[];
+  partiAvailabilityYn: boolean;
+};
 export async function apiCanEnterGameRoom(gameId: string) {
   try {
-    const repsonse = await getData<boolean>(
+    const repsonse = await getData<ApiCanEnterGameReturnType>(
       API_URL.CAN_ENTER_GAME_ROOM,
       {
+        headers: {
+          Authorization: axios.defaults.headers.common["Authorization"],
+        },
         timeout: 2000,
         params: { gameId },
       },
       { requireToken: true }
     );
+    console.log(repsonse);
     return repsonse;
   } catch (e) {
-    const errResponse: APIResponse<boolean> = {
-      data: false,
+    const errResponse: APIResponse<ApiCanEnterGameReturnType> = {
+      data: {
+        participants: [],
+        partiAvailabilityYn: false,
+      },
       error: String(e),
       message: "apiCanEnterGameRoom error",
       statusCode: 0,
