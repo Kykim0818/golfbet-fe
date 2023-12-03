@@ -29,7 +29,10 @@ export const EnterGame = () => {
   };
 
   const handleScan = async (gameId: string) => {
+    movePage(`/game_room/${gameId}`, { replace: true });
+    return;
     const canEnterRoom = await apiCanEnterGameRoom(gameId);
+    //TODO: REMOVE
     if (canEnterRoom.data.partiAvailabilityYn) {
       movePage(`/game_room/${gameId}`);
       return;
