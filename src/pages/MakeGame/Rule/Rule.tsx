@@ -74,5 +74,5 @@ const getSpecialBetRequirementsDiplay = (
 const getDisplayNearest = (value: NearestType["value"], amount: number) => {
   if (value === "includeInGame")
     return getDisplayRuleText("nearestType", value);
-  return amount;
+  return `별도지정(${amount})`;
 };

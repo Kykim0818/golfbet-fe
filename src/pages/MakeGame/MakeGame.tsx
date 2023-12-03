@@ -27,7 +27,7 @@ export const initialContextState: ContextStateType = {
     gameType: "field",
     startDate: "not started",
     golfCenter: {
-      id: "test",
+      id: "",
       name: "",
       region: "",
       frontNineCourse: {
@@ -54,7 +54,7 @@ export const initialContextState: ContextStateType = {
     bettingLimit: 0,
   },
   tmpGolfCenterInfoForAdd: {
-    id: "test",
+    id: "",
     name: "",
     region: "",
     frontNineCourse: {
