@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 
 type GameTitleAssetProps = {
   title?: string;
@@ -11,6 +12,7 @@ export const GameTitleAsset = ({
   visibleBack = false,
   handleBack,
 }: GameTitleAssetProps) => {
+  const { movePage } = usePageRoute();
   return (
     <S.Wrapper>
       <S.BackButton onClick={handleBack} visible={visibleBack}>
@@ -20,7 +22,7 @@ export const GameTitleAsset = ({
         />
       </S.BackButton>
       <div>{title}</div>
-      <S.QRButton>
+      <S.QRButton onClick={() => movePage("qr")}>
         <img
           src={process.env.PUBLIC_URL + "/assets/svg/ic_qr_image.svg"}
           alt="qr_image"
