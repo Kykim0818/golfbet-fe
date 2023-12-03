@@ -8,6 +8,7 @@ import {
   getDisplayMoney,
 } from "../../../utils/display";
 import { typo } from "../../../styles/typo";
+import { usePageRoute } from "../../../hooks/usePageRoute";
 
 type Props = {
   centerType: GameInfo["gameType"];
@@ -26,6 +27,7 @@ export const GameRoomInfo = ({
   bettingLimit,
   uiType = "waitRoom",
 }: Props) => {
+  const { movePage } = usePageRoute();
   return (
     <S.Wrapper>
       {/* 1 */}
@@ -70,10 +72,13 @@ export const GameRoomInfo = ({
             size="small"
             variants="custom"
             style={{ backgroundColor: "F5F5F5", color: "#004F59" }}
+            onClick={() => movePage("golf_center")}
           >
             골프장 정보
           </Button>
-          <Button size="small">규칙 보기</Button>
+          <Button size="small" onClick={() => movePage("rule")}>
+            규칙 보기
+          </Button>
         </S.BtnGroup>
       )}
     </S.Wrapper>

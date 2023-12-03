@@ -35,6 +35,9 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
+import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
+import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
+import { RoomCenter } from "./pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -105,8 +108,21 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "",
-            element: <WaitRoom />,
+            element: <WaitRoomContainer />,
+            children: [
+              {
+                path: "",
+                element: <WaitRoom />,
+              },
+              {
+                path: "rule",
+                element: <RoomRule />,
+              },
+              {
+                path: "golf_center",
+                element: <RoomCenter />,
+              },
+            ],
           },
           {
             path: "handicap_setup",

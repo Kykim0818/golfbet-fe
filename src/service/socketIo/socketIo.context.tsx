@@ -11,12 +11,20 @@ import { usePageRoute } from "../../hooks/usePageRoute";
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { SOCKET_URL } from "./config";
 import { EVENTS, TASK } from "./constant";
-import { convertSocketDataToUiGameRoomInfo } from "./util";
+import {
+  convertSocketDataToUiGameRoomInfo,
+  convertUiGameInfoToSocketData,
+} from "./util";
 
 interface Context {
   socket: Socket;
   connectState: boolean;
   gameRoomInfo?: GameRoomInfo;
+  updateRoom: (
+    gameId: string,
+    userId: string,
+    updateInfo: GameRoomInfo["gameInfo"]
+  ) => void;
   joinRoom: (gameId: string, userId: string) => void;
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
@@ -37,6 +45,7 @@ const SocketContext = createContext<Context>({
   socket,
   connectState: false,
   gameRoomInfo: undefined,
+  updateRoom: () => {},
   joinRoom: () => {},
   exitRoom: () => {},
   onReady: () => {},
@@ -138,6 +147,25 @@ function SocketsProvider(props: any) {
     });
   };
 
+  const updateRoom = (
+    gameId: string,
+    userId: string,
+    updateInfo: GameRoomInfo["gameInfo"]
+  ) => {
+    console.log(
+      `update Room gameId : ${gameId},userId: ${userId}, updateInfo : ${updateInfo}`
+    );
+    const convertedData = convertUiGameInfoToSocketData(updateInfo);
+    console.log(convertedData);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.ROOM_UPDATE,
+      data: {
+        userId,
+        ...convertedData,
+      },
+    });
+  };
+
   const exitRoom = (gameId: string, userId: string) => {
     console.log(`socket exit Test gameId : ${gameId} userId : ${userId}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
@@ -165,6 +193,7 @@ function SocketsProvider(props: any) {
         socket,
         connectState,
         gameRoomInfo,
+        updateRoom,
         joinRoom,
         exitRoom,
         onReady,

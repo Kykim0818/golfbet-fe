@@ -14,6 +14,11 @@ type ContextStateType = {
   gameRoomInfo: GameRoomInfo;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   exitRoom: (gameId: string, userId: string) => void;
+  updateRoom: (
+    gameId: string,
+    userId: string,
+    updateInfo: GameRoomInfo["gameInfo"]
+  ) => void;
 };
 
 export type GameRoomInfo = {
@@ -49,8 +54,15 @@ export type HandicapInfo = {
 
 export const GameRoom = () => {
   const { goHome } = usePageRoute();
-  const { socket, gameRoomInfo, joinRoom, connectState, onReady, exitRoom } =
-    useSockets();
+  const {
+    socket,
+    gameRoomInfo,
+    joinRoom,
+    connectState,
+    onReady,
+    exitRoom,
+    updateRoom,
+  } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
@@ -58,7 +70,7 @@ export const GameRoom = () => {
 
   useEffect(() => {
     if (connectState) {
-      if (gameId && userInfo.userId) {
+      if (gameId && userInfo.userId && gameRoomInfo === undefined) {
         joinRoom(gameId, userInfo.userId);
       } else {
         openModal({
@@ -88,7 +100,7 @@ export const GameRoom = () => {
     return <Loading />;
   return (
     <S.Wrapper>
-      <Outlet context={{ gameRoomInfo, onReady, exitRoom }} />
+      <Outlet context={{ gameRoomInfo, onReady, exitRoom, updateRoom }} />
     </S.Wrapper>
   );
 };

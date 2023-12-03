@@ -17,4 +17,5 @@ export const TASK = {
   JOIN_ROOM: "join",
   SET_READY: "ready",
   EXIT_ROOM: "exit",
-};
+  ROOM_UPDATE: "update",
+} as const;
