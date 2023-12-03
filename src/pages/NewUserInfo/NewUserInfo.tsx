@@ -105,6 +105,7 @@ export const NewUserInfo = () => {
     // email 중복검사
     if (userEmail !== "" && validEmailCheck(userEmail)) {
       apiCheckDuplicate("email", userEmail).then((res) => {
+        console.log(res);
         if (res?.duplicateYn === false) {
           setUserEmailHelp({
             status: true,
@@ -144,7 +145,7 @@ export const NewUserInfo = () => {
             text: "등록 가능한 닉네임입니다.",
           });
         } else {
-          setUserEmailHelp({
+          setNicknameHelp({
             status: false,
             text: "중복된 닉네임이 존재합니다.",
           });
@@ -264,7 +265,11 @@ export const NewUserInfo = () => {
         <Button
           onClick={handleRequestJoin}
           disabled={
-            !(userEmailHelp.status && nicknameHelp.status && phoneNumber !== "")
+            !!(
+              userEmailHelp.status &&
+              nicknameHelp.status &&
+              phoneNumber !== ""
+            )
           }
         >
           시작하기
