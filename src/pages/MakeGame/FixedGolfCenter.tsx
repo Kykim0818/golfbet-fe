@@ -83,11 +83,13 @@ const Styled = {
   NineCourseNameSection: styled.div`
     display: flex;
     justify-content: space-between;
+    gap: 12px;
   `,
   NineCourseNameWrapper: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
     border-radius: 10px;
     gap: 25px;
     min-width: 144px;

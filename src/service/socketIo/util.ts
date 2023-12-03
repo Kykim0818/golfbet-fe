@@ -1,4 +1,5 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { GameInfo } from "../../pages/MakeGame/MakeGame";
 
 // server GameRoomInfo Data -> client GameRoomInfo Data
 export function convertSocketDataToUiGameRoomInfo(
@@ -115,5 +116,41 @@ interface Player {
   handicapInfo: {
     userId: string;
     handicaps: any[];
+  };
+}
+
+export function convertUiGameInfoToSocketData(gameInfo: GameInfo) {
+  return {
+    gameId: gameInfo.gameId, // 참가하려고 하는 game ID
+    gameType: gameInfo.gameType,
+    gameCenter: {
+      centerId: gameInfo.golfCenter.id,
+      name: gameInfo.golfCenter.name,
+      frontNineCourse: {
+        courseId: gameInfo.golfCenter.frontNineCourse.id,
+        courseName: gameInfo.golfCenter.frontNineCourse.name,
+        coursePars: gameInfo.golfCenter.frontNineCourse.pars,
+      },
+      backNineCourse: {
+        courseId: gameInfo.golfCenter.backNineCourse.id,
+        courseName: gameInfo.golfCenter.backNineCourse.name,
+        coursePars: gameInfo.golfCenter.backNineCourse.pars,
+      },
+    },
+    playerCount: gameInfo.playerCount,
+    betType: gameInfo.betType,
+    betMoney: {
+      perShot: gameInfo.betAmountPerStroke,
+      deposit: gameInfo.bettingLimit,
+    },
+    gameRule: {
+      handicapType: gameInfo.gameRule.handiType[0],
+      doubleConditions: gameInfo.gameRule.specialBetRequirements,
+      ddang: gameInfo.gameRule.ddang[0],
+      nearest: {
+        type: gameInfo.gameRule.nearestType[0],
+        money: gameInfo.nearestAmount,
+      },
+    },
   };
 }

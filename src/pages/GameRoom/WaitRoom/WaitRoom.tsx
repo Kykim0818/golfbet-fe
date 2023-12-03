@@ -7,13 +7,14 @@ import { usePageRoute } from "../../../hooks/usePageRoute";
 import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
+import { useGameRoomInfo1 } from "./WaitRoomContainer";
 
 export const WaitRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { gameRoomInfo, onReady } = useGameRoomInfo();
+  const { gameRoomInfo, onReady } = useGameRoomInfo1();
   const { movePage, moveBack } = usePageRoute();
 
-  if (gameRoomInfo === undefined) return <Loading />;
+  // if (gameRoomInfo === undefined) return <Loading />;
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
     return {
       id: player.userId,
