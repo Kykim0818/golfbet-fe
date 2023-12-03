@@ -12,7 +12,7 @@ export type BasicUserInfo = {
   screenTotalMoneyChange: number;
   fieldScore: number;
   fieldTotalMoneyChange: number;
-  currentGameId?: string;
+  currentGameId: string;
 };
 
 export const getUser = async () => {
@@ -50,6 +50,7 @@ const mockUserInfo: BasicUserInfo = {
   screenTotalMoneyChange: 9999,
   fieldScore: 99,
   fieldTotalMoneyChange: 9999,
+  currentGameId: "",
 };
 
 // TODO : db 에서 토큰 검증

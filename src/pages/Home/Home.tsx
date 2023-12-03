@@ -8,6 +8,7 @@ import { BasicUserInfo, getUser } from "../../service/api/user";
 import { actionUser } from "../../store/user/userSlice";
 import { getDisplayMoney } from "../../utils/display";
 import { HomeImageButton } from "./HomeImageButton";
+import { ActiveGameNotifier } from "./ActiveGameNotifier";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const dispatch = useAppDispatch();
@@ -34,24 +35,30 @@ export const Home = (props: { handleLogout: () => void }) => {
       <Styled.Top>GOLF BET</Styled.Top>
       <UserInfoSection user={data.userInfo} />
       <Styled.S3>
-        <>
-          <HomeImageButton
-            label="게임 생성하기"
-            imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_make_game.svg"}
-            onClick={() => {
-              movePage("/make_game");
-            }}
-          />
-          <HomeImageButton
-            label="게임 참여하기"
-            imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_enter_game.svg"}
-            onClick={() => movePage("/enter_game")}
-          >
-            <Styled.EnterGameQrIcon
-              src={process.env.PUBLIC_URL + "/assets/svg/ic_enter_game_qr.svg"}
+        {data.userInfo.currentGameId !== "" ? (
+          <ActiveGameNotifier currentGameId={data.userInfo.currentGameId} />
+        ) : (
+          <>
+            <HomeImageButton
+              label="게임 생성하기"
+              imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_make_game.svg"}
+              onClick={() => {
+                movePage("/make_game");
+              }}
             />
-          </HomeImageButton>
-        </>
+            <HomeImageButton
+              label="게임 참여하기"
+              imgSrc={process.env.PUBLIC_URL + "/assets/svg/ic_enter_game.svg"}
+              onClick={() => movePage("/enter_game")}
+            >
+              <Styled.EnterGameQrIcon
+                src={
+                  process.env.PUBLIC_URL + "/assets/svg/ic_enter_game_qr.svg"
+                }
+              />
+            </HomeImageButton>
+          </>
+        )}
       </Styled.S3>
       {/* </Suspense> */}
       <Styled.Footer>
