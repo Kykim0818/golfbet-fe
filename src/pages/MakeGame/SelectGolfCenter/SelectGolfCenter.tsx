@@ -70,6 +70,7 @@ export const SelectGolfCenter = () => {
         </Styled.InputSection>
         <Styled.AddButtonSection>
           <Button
+            disabled
             onClick={() => movePage("../make_golf_center")}
             style={{ width: "fit-content" }}
             variants="outlined"

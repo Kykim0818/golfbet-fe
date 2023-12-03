@@ -10,11 +10,12 @@ import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
 import Rule from "../Rule";
 import { GameRule } from "../Rule/type";
+import { isCompleteMakingGameInfo } from "../util";
 
 export const Setup = () => {
   const { goHome, movePage } = usePageRoute();
   const { gameInfo } = useGameInfo();
-
+  const canGoNext = isCompleteMakingGameInfo(gameInfo);
   const [, setRenderFlag] = useState(false);
   const repaint = () => {
     setRenderFlag((prev) => !prev);
@@ -33,14 +34,17 @@ export const Setup = () => {
   //
   const handleChangeBetAmountPerStroke = (money: number) => {
     gameInfo.betAmountPerStroke = money;
+    repaint();
   };
   const handleChangeBettingLimit = (money: number) => {
     gameInfo.bettingLimit = money;
+    repaint();
   };
   //
   const handleOpenChangeGameRule = () => {
     movePage("rule_change");
   };
+  //
 
   return (
     <>
@@ -154,6 +158,7 @@ export const Setup = () => {
       </Styled.Body>
       <Styled.Footer>
         <Button
+          disabled={canGoNext === false}
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
           onClick={() => movePage("setup_check")}
         >

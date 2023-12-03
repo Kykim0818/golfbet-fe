@@ -25,7 +25,7 @@ export const RoomRule = () => {
     gameRoomInfo: { gameInfo, roomMakerId },
     updateRoom,
   } = useGameRoomInfo1();
-
+  const isRoomMaker = userInfo.userId === roomMakerId;
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
   const rules = getRule(gameInfo.playerCount);
 
@@ -79,11 +79,14 @@ export const RoomRule = () => {
             <Styled.Option key={rule.title}>
               <span>{rule.title}</span>
               <ToggleGroup
+                disable={isRoomMaker === false}
                 isMultiSelect={multiSelectOptions.includes(rule.optionType)}
                 multiSelectResetValue="none"
                 selectedValues={currentRule[rule.optionType]}
                 group={rule.options}
-                onChange={(values) => handleOnChange(rule.optionType, values)}
+                onChange={(values) => {
+                  handleOnChange(rule.optionType, values);
+                }}
               />
             </Styled.Option>
           );
@@ -94,6 +97,7 @@ export const RoomRule = () => {
           >
             <h5>니어리스트 별도 금액</h5>
             <BetMoney
+              disable={isRoomMaker === false}
               value={currentNearestAmount}
               fixedText="1타당"
               placeHolder="금액을 입력해주세요"
@@ -104,7 +108,7 @@ export const RoomRule = () => {
         )}
       </Styled.Body>
       <Styled.Footer>
-        {userInfo.userId === roomMakerId && (
+        {isRoomMaker && (
           <Button onClick={handleUpdateRoomRule}>수정하기</Button>
         )}
       </Styled.Footer>
