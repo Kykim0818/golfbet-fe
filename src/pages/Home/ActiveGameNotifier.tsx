@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import { typo } from "../../styles/typo";
+import { usePageRoute } from "../../hooks/usePageRoute";
 
 type Props = {
   currentGameId: string;
 };
 
 export const ActiveGameNotifier = ({ currentGameId }: Props) => {
+  const { movePage } = usePageRoute();
+  const handleJoinGame = () => {
+    movePage(`/game_room/${currentGameId}`);
+    return;
+  };
+
   return (
     <S.Wrapper>
       <S.BlueMarker
@@ -16,7 +23,7 @@ export const ActiveGameNotifier = ({ currentGameId }: Props) => {
       />
       <S.Section1>
         <S.Txt>참여중인 게임이 있습니다!</S.Txt>
-        <S.Btn>
+        <S.Btn onClick={handleJoinGame}>
           게임방으로 이동하기
           <img src={process.env.PUBLIC_URL + "assets/svg/ic_right_arrow.svg"} />
         </S.Btn>
