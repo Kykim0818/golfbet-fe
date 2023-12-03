@@ -5,14 +5,21 @@ type Props = {
   holeIndex: number;
   parCount: number;
   onChange?: (holeIndex: number, parCount: number) => void;
+  disable?: boolean;
 };
 
-export const ParDetail = ({ holeIndex, parCount, onChange }: Props) => {
+export const ParDetail = ({
+  holeIndex,
+  parCount,
+  disable = false,
+  onChange,
+}: Props) => {
   const [parCountState, setParCountState] = useState(parCount);
   const [parsOverFive, setParsOverFive] = useState(getParsOverFive(parCount));
 
   // TODO
   const handleOnClick = (holeIndex: number, parCount: number) => {
+    if (disable) return;
     // state
     setParCountState(parCount);
 
@@ -22,6 +29,7 @@ export const ParDetail = ({ holeIndex, parCount, onChange }: Props) => {
 
   // TODO
   const handlePlusClick = () => {
+    if (disable) return;
     const MAX_DEFAULT_PAR = 5;
     // 기본 5 + 현재까지 추가된 par + 의 다음 1
     setParsOverFive(getParsOverFive(MAX_DEFAULT_PAR + parsOverFive.length + 1));

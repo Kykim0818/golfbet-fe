@@ -10,6 +10,7 @@ type ToggleGroupProps = {
   selectedValues: string[];
   group: { label: string; value: string }[];
   onChange?: (values: string[]) => void;
+  disable?: boolean;
 };
 
 export const ToggleGroup = ({
@@ -18,10 +19,12 @@ export const ToggleGroup = ({
   group,
   selectedValues,
   onChange,
+  disable = false,
 }: ToggleGroupProps) => {
   const [currentValue, setCurrentValue] = useState(new Set(selectedValues));
 
   const handleToggleChange = (selectValue: string) => {
+    if (disable) return;
     let cloneValue = deepClone(currentValue);
     if (isMultiSelect) {
       // reset

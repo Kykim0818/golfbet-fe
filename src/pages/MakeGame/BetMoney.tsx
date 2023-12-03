@@ -9,6 +9,7 @@ type BetMoneyProps = {
   fixedText: string;
   placeHolder: string;
   plusMoneyArr: number[];
+  disable?: boolean;
   onChange?: (value: number) => void;
 };
 export const BetMoney = ({
@@ -16,11 +17,13 @@ export const BetMoney = ({
   fixedText,
   placeHolder,
   plusMoneyArr,
+  disable = false,
   onChange,
 }: BetMoneyProps) => {
   const [money, setMoney] = useState(value ?? 0);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (disable) return;
     if (isNumeric(e.target.value)) {
       setMoney(Number(e.target.value) >= 0 ? Number(e.target.value) : 0);
       onChange?.(Number(e.target.value) >= 0 ? Number(e.target.value) : 0);
@@ -31,6 +34,7 @@ export const BetMoney = ({
   };
 
   const handlePlusMoneyButtonClick = (plusMoney: number) => {
+    if (disable) return;
     setMoney(money + plusMoney);
     onChange?.(money + plusMoney);
   };
@@ -58,7 +62,14 @@ export const BetMoney = ({
             {getDisplayPlusMoney(plusMoney)}
           </Styled.Button>
         ))}
-        <Styled.Button variants={"custom"} onClick={() => setMoney(0)}>
+        <Styled.Button
+          variants={"custom"}
+          onClick={() => {
+            if (disable) return;
+            setMoney(0);
+            onChange?.(0);
+          }}
+        >
           초기화
         </Styled.Button>
       </Styled.ButtonGroup>
