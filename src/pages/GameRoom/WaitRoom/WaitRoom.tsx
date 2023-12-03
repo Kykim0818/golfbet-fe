@@ -4,7 +4,6 @@ import Loading from "../../../components/Loading";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { useGameRoomInfo } from "../GameRoom";
 import { GameRoomInfo } from "./GameRoomInfo";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 import { useGameRoomInfo1 } from "./WaitRoomContainer";

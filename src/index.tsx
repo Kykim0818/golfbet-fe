@@ -38,6 +38,7 @@ import { theme } from "./styles/theme";
 import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
 import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
 import { RoomCenter } from "./pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
+import { RoomQr } from "./pages/GameRoom/WaitRoom/RoomQr/RoomQr";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
               {
                 path: "golf_center",
                 element: <RoomCenter />,
+              },
+              {
+                path: "qr",
+                element: <RoomQr />,
               },
             ],
           },
