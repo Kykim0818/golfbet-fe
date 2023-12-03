@@ -49,6 +49,8 @@ function SocketsProvider(props: any) {
   const { goHome } = usePageRoute();
 
   useEffect(() => {
+    console.log("connect useEffect");
+    console.log("connect", socket.connected);
     socket.connect();
     window.onfocus = function () {
       document.title = "Room app";
@@ -78,8 +80,12 @@ function SocketsProvider(props: any) {
     });
     // 게임방정보 업데이트
     socket.on(EVENTS.FROM_SERVER.BROADCAST_ROOM_MESSAGE, (data) => {
-      if (data.gameRoomInfo === undefined) return;
+      if (data.gameRoomInfo === undefined) {
+        console.log(data);
+        return;
+      }
       if (data) {
+        console.log(data.gameRoomInfo);
         const convertedGameRoomInfo = convertSocketDataToUiGameRoomInfo(
           data.gameRoomInfo
         );

@@ -10,7 +10,7 @@ import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 
 export const WaitRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { gameRoomInfo, onReady, exitRoom } = useGameRoomInfo();
+  const { gameRoomInfo, onReady } = useGameRoomInfo();
   const { movePage, moveBack } = usePageRoute();
 
   if (gameRoomInfo === undefined) return <Loading />;
@@ -44,14 +44,7 @@ export const WaitRoom = () => {
     <>
       <GameTitleAsset
         visibleBack
-        handleBack={() => {
-          if (gameRoomInfo.gameInfo.gameId) {
-            exitRoom(gameRoomInfo.gameInfo.gameId, userInfo.userId);
-            moveBack();
-            return;
-          }
-          console.log("gameRoomInfo is undefined");
-        }}
+        handleBack={moveBack}
         title={gameRoomInfo.gameInfo.gameId}
       />
       <S.Body>
@@ -71,10 +64,20 @@ export const WaitRoom = () => {
       <S.Footer>
         {/* id가 방장 id와 일치하면 시작하기 아니면 ,규칙 동의 후 준비하기 */}
         {isRoomMaker ? (
-          <Button onClick={handleGameStart}>시작하기</Button>
+          <Button
+            onClick={handleGameStart}
+            disabled={
+              gameRoomInfo.players.length !== gameRoomInfo.gameInfo.playerCount
+            }
+          >
+            시작하기
+          </Button>
         ) : (
-          <Button onClick={handleOnReady} variants="outlined">
-            규칙 동의 후, 준비하기
+          <Button
+            onClick={handleOnReady}
+            variants={me?.readyState ? "primary" : "outlined"}
+          >
+            {me?.readyState ? "준비하기" : "규칙 동의 후, 준비하기"}
           </Button>
         )}
       </S.Footer>
