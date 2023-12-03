@@ -8,6 +8,7 @@ export type PlayersInfoUI = {
   avgScore: number;
   initMoney: number;
   readyState: boolean;
+  isHost: boolean;
 };
 
 type Props = {
@@ -26,12 +27,34 @@ export const PlayersInfo = ({ userId, players, gameMaxPlayer }: Props) => {
           return (
             <S.Player key={player.id}>
               <S.PlayerImgSection>
-                <img src={player.imgSrc} alt="avatar" />
+                <S.PlayerProfileImg
+                  src={player.imgSrc}
+                  alt="avatar"
+                  onError={(e) => {
+                    (e.target as any).src =
+                      process.env.PUBLIC_URL +
+                      "/assets/images/profile_test_img.png";
+                  }}
+                />
+                {player.isHost ? (
+                  <S.PlayerStatusIcon
+                    src={
+                      process.env.PUBLIC_URL + "/assets/svg/ic_room_maker.svg"
+                    }
+                  />
+                ) : (
+                  player.readyState && (
+                    <S.PlayerStatusIcon
+                      src={
+                        process.env.PUBLIC_URL + "/assets/svg/ic_room_ready.svg"
+                      }
+                    />
+                  )
+                )}
               </S.PlayerImgSection>
               <S.NickNameSection>
                 {userId === player.id && <div>나</div>}
                 <span>{player.nickName}</span>
-                {player.readyState && <span>준비</span>}
               </S.NickNameSection>
               <S.MoreInfo>
                 <S.ScoreSection>
@@ -98,14 +121,22 @@ const S = {
   PlayerImgSection: styled.div`
     display: flex;
     align-items: center;
-    img {
-      min-width: 50px;
-      max-width: 50px;
-      max-height: 50px;
-      min-height: 50px;
-      border-radius: 50%;
-    }
+    position: relative;
     margin-right: 15px;
+  `,
+  PlayerProfileImg: styled.img`
+    min-width: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+  `,
+  PlayerStatusIcon: styled.img`
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 0;
+    right: 0;
   `,
   NickNameSection: styled.div`
     display: flex;

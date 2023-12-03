@@ -22,6 +22,7 @@ export const WaitRoom = () => {
       avgScore: player.avgScore,
       initMoney: gameRoomInfo.gameInfo.bettingLimit,
       readyState: player.readyState,
+      isHost: player.userId === gameRoomInfo.roomMakerId,
     };
   });
   const me = playerInfos.find(
