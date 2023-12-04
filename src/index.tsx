@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserHistory } from "history";
-import React from "react";
 import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -15,6 +14,10 @@ import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
 import HandicapSetup from "./pages/GameRoom/HandicapSetup";
 import WaitRoom from "./pages/GameRoom/WaitRoom";
+import { RoomCenter } from "./pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
+import { RoomQr } from "./pages/GameRoom/WaitRoom/RoomQr/RoomQr";
+import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
+import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
 import MakeGame from "./pages/MakeGame";
 import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
 import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
@@ -35,10 +38,6 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
 import GlobalStyle from "./styles/global-styles";
 import { theme } from "./styles/theme";
-import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
-import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
-import { RoomCenter } from "./pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
-import { RoomQr } from "./pages/GameRoom/WaitRoom/RoomQr/RoomQr";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -195,18 +194,18 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <CookiesProvider>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </QueryClientProvider>
-      </Provider>
-    </CookiesProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <CookiesProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </Provider>
+  </CookiesProvider>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

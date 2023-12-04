@@ -1,4 +1,5 @@
-import { useAppSelector } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
 import EnterAndCheckScore from "../domain/EnterAndCheckScore";
 import Alert from "../modals/Alert";
@@ -12,10 +13,12 @@ export const ModalContainer = () => {
 const modalSelector = (
   modalParam: ModalParam & { handleClose: (result?: unknown) => void }
 ) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const dispatch = useAppDispatch();
   return (
     <Modal
-      closeModalByUI={modalParam.handleClose}
       modalType={getModalTypeById(modalParam.id)}
+      closeModalByUI={() => dispatch(actionModal.setModalStatus(null))}
     >
       {modalChildrenSelector(modalParam)}
     </Modal>
