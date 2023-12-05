@@ -19,7 +19,6 @@ export const useModal = () => {
       };
       dispatch(actionModal.setModalStatus({ ...modalParam, handleClose }));
       increaseBackToHomePageCount();
-      console.log("openModal");
       window.history.pushState(null, "", window.location.href);
     });
 

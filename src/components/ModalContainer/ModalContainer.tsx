@@ -7,18 +7,24 @@ import { ModalParam, getModalTypeById } from "../modals/type";
 
 export const ModalContainer = () => {
   const modalStatus = useAppSelector((state) => state.modal.status);
-  return <>{modalStatus && modalSelector(modalStatus)}</>;
+  const dispatch = useAppDispatch();
+  const closeModalByUi = () => {
+    dispatch(actionModal.setModalStatus(null));
+  };
+
+  return <>{modalStatus && modalSelector(modalStatus, closeModalByUi)}</>;
 };
 
 const modalSelector = (
-  modalParam: ModalParam & { handleClose: (result?: unknown) => void }
+  modalParam: ModalParam & {
+    handleClose: (result?: unknown) => void;
+  },
+  closeModalByUi: () => void
 ) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const dispatch = useAppDispatch();
   return (
     <Modal
       modalType={getModalTypeById(modalParam.id)}
-      closeModalByUI={() => dispatch(actionModal.setModalStatus(null))}
+      closeModalByUI={closeModalByUi}
     >
       {modalChildrenSelector(modalParam)}
     </Modal>
