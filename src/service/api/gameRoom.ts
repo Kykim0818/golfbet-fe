@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { getData, postData } from ".";
-import { GameRoomInfo, GameRoomUser } from "../../pages/GameRoom/GameRoom";
+import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { GameInfo } from "../../pages/MakeGame/MakeGame";
 import { API_URL } from "./constant";
 import { APIResponse } from "./type";
@@ -45,18 +45,15 @@ export async function apiCanEnterGameRoom(gameId: string) {
 export async function apiGetGameRoom(gameId: string) {
   try {
     // 응답성공
-    const response = await getData<{
-      gameRoomInfo: {
-        gameInfo: GameInfo;
-        roomMakerId: string;
-        players: GameRoomUser[];
-      };
-    }>(API_URL.GET_GAME_ROOM_INFO, {
-      timeout: 2000,
-      params: {
-        gameId,
-      },
-    });
+    const response = await getData<{ gameRoomInfo: GameRoomInfo }>(
+      API_URL.GET_GAME_ROOM_INFO,
+      {
+        timeout: 2000,
+        params: {
+          gameId,
+        },
+      }
+    );
     if (response.statusCode === 404 || response.statusCode === 500)
       throw new Error();
     return response;
@@ -101,11 +98,12 @@ const testGameRoomInfo: {
         ddang: ["onlyLastPlace"],
         nearestType: ["separateAmount"],
       },
+      gameState: "ready",
       nearestAmount: 0,
       betAmountPerStroke: 1000,
       bettingLimit: 50000,
     },
-    roomMakerId: "test",
+    hostUserId: "test",
     players: [
       {
         userId: "test",
