@@ -9,6 +9,7 @@ export function convertSocketDataToUiGameRoomInfo(
     gameInfo: {
       gameId: gameRoomInfo.gameInfo.gameId,
       gameType: gameRoomInfo.gameInfo.gameType,
+      gameState: gameRoomInfo.gameInfo.gameState,
       startDate: `${gameRoomInfo.gameInfo.createdDate}`,
       golfCenter: {
         id: `${gameRoomInfo.gameInfo.centerInfo.centerId}`,
@@ -39,7 +40,7 @@ export function convertSocketDataToUiGameRoomInfo(
       betAmountPerStroke: gameRoomInfo.gameInfo.betMoney.perShot,
       bettingLimit: gameRoomInfo.gameInfo.betMoney.deposit,
     },
-    roomMakerId: gameRoomInfo.gameInfo.hostUserId,
+    hostUserId: gameRoomInfo.gameInfo.hostUserId,
     players: gameRoomInfo.players.map((player) => {
       return {
         userId: player.userId,

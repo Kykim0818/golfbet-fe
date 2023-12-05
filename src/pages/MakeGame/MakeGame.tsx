@@ -49,6 +49,7 @@ export const initialContextState: ContextStateType = {
       ddang: ["onlyLastPlace"],
       nearestType: ["separateAmount"],
     },
+    gameState: "",
     nearestAmount: 0,
     betAmountPerStroke: 0,
     bettingLimit: 0,
@@ -163,6 +164,7 @@ export interface GameInfo {
       pars: number[];
     };
   };
+  gameState: string;
   betType: "stroke";
   playerCount: number;
   gameRule: GameRule;

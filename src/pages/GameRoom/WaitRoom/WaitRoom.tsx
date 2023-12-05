@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import Loading from "../../../components/Loading";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { usePageRoute } from "../../../hooks/usePageRoute";
@@ -22,13 +21,13 @@ export const WaitRoom = () => {
       avgScore: player.avgScore,
       initMoney: gameRoomInfo.gameInfo.bettingLimit,
       readyState: player.readyState,
-      isHost: player.userId === gameRoomInfo.roomMakerId,
+      isHost: player.userId === gameRoomInfo.hostUserId,
     };
   });
   const me = playerInfos.find(
     (playerInfo) => playerInfo.id === userInfo.userId
   );
-  const isRoomMaker = userInfo.userId === gameRoomInfo.roomMakerId;
+  const isRoomMaker = userInfo.userId === gameRoomInfo.hostUserId;
 
   const handleGameStart = () => {
     //

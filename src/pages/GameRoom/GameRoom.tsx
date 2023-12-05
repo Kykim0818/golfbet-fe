@@ -3,10 +3,10 @@ import { Outlet, useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
 import { useAppSelector } from "../../hooks/redux";
-import { useSockets } from "../../service/socketIo/socketIo.context";
-import { GameInfo } from "../MakeGame/MakeGame";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
+import { useSockets } from "../../service/socketIo/socketIo.context";
+import { GameInfo } from "../MakeGame/MakeGame";
 
 type ContextType = ContextStateType & ContextActionType;
 
@@ -23,7 +23,7 @@ type ContextStateType = {
 
 export type GameRoomInfo = {
   gameInfo: GameInfo;
-  roomMakerId: string;
+  hostUserId: string;
   players: GameRoomUser[];
 };
 
@@ -67,6 +67,7 @@ export const GameRoom = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
   const gameId = params.gameId;
+  // const [roomState, setRoomState] = useState(gameRoomInfo?.gameInfo);
 
   useEffect(() => {
     if (connectState) {

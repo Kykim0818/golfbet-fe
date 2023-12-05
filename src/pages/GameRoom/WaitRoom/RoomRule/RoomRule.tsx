@@ -1,6 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
+import Button from "../../../../components/Button";
+import TitleAsset from "../../../../components/TitleAsset";
+import ToggleGroup from "../../../../components/ToggleGroup";
+import { useAppSelector } from "../../../../hooks/redux";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { deepClone } from "../../../../utils/deepClone";
+import { BetMoney } from "../../../MakeGame/BetMoney";
+import { GAME_RULES } from "../../../MakeGame/Rule/constant";
+import { getDisplayRuleText } from "../../../MakeGame/Rule/getDisplayText";
 import {
   Rules,
   isDdangValue,
@@ -8,24 +16,16 @@ import {
   isNearestTypeValue,
   isSpecialBetRequirementsValue,
 } from "../../../MakeGame/Rule/type";
-import { deepClone } from "../../../../utils/deepClone";
-import TitleAsset from "../../../../components/TitleAsset";
-import ToggleGroup from "../../../../components/ToggleGroup";
-import { BetMoney } from "../../../MakeGame/BetMoney";
-import Button from "../../../../components/Button";
-import { GAME_RULES } from "../../../MakeGame/Rule/constant";
-import { getDisplayRuleText } from "../../../MakeGame/Rule/getDisplayText";
 import { useGameRoomInfo1 } from "../WaitRoomContainer";
-import { useAppSelector } from "../../../../hooks/redux";
 
 export const RoomRule = () => {
   const { moveBack } = usePageRoute();
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const {
-    gameRoomInfo: { gameInfo, roomMakerId },
+    gameRoomInfo: { gameInfo, hostUserId },
     updateRoom,
   } = useGameRoomInfo1();
-  const isRoomMaker = userInfo.userId === roomMakerId;
+  const isRoomMaker = userInfo.userId === hostUserId;
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
   const rules = getRule(gameInfo.playerCount);
 

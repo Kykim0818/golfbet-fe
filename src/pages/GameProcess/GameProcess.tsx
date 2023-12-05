@@ -17,7 +17,7 @@ import RankBoard from "./RankBoard";
 export const testGameRoomInfo: {
   gameRoomInfo: {
     gameInfo: GameInfo;
-    roomMakerId: string;
+    hostUserId: string;
     players: GameRoomUser[];
   };
 } = {
@@ -49,11 +49,12 @@ export const testGameRoomInfo: {
         ddang: ["onlyLastPlace"],
         nearestType: ["separateAmount"],
       },
+      gameState: "ready",
       nearestAmount: 0,
       betAmountPerStroke: 1000,
       bettingLimit: 50000,
     },
-    roomMakerId: "test",
+    hostUserId: "test",
     players: [
       {
         userId: "test",
@@ -91,8 +92,6 @@ export const testGameRoomInfo: {
     ],
   },
 };
-
-type GameProcessProps = {};
 
 export const GameProcess = () => {
   // # bottom sheet

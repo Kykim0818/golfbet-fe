@@ -1,6 +1,6 @@
 import { Outlet, useOutletContext } from "react-router-dom";
-import { GameRoomUser, useGameRoomInfo } from "../GameRoom";
 import { GameInfo } from "../../MakeGame/MakeGame";
+import { GameRoomUser, useGameRoomInfo } from "../GameRoom";
 
 type ContextType = ContextStateType & ContextActionType;
 
@@ -17,7 +17,7 @@ type ContextStateType = {
 
 export type GameRoomInfo = {
   gameInfo: GameInfo;
-  roomMakerId: string;
+  hostUserId: string;
   players: GameRoomUser[];
 };
 

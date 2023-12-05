@@ -1,21 +1,21 @@
 import styled from "styled-components";
-import { useGameRoomInfo1 } from "../WaitRoomContainer";
-import { deepClone } from "../../../../utils/deepClone";
-import { usePageRoute } from "../../../../hooks/usePageRoute";
+import Button from "../../../../components/Button";
 import TitleAsset from "../../../../components/TitleAsset";
+import { useAppSelector } from "../../../../hooks/redux";
+import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { deepClone } from "../../../../utils/deepClone";
 import { FixedGolfCenter } from "../../../MakeGame/FixedGolfCenter";
 import { ParDetail } from "../../../MakeGame/SetupCheck/ParDetail";
-import Button from "../../../../components/Button";
-import { useAppSelector } from "../../../../hooks/redux";
+import { useGameRoomInfo1 } from "../WaitRoomContainer";
 
 export const RoomCenter = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const { moveBack } = usePageRoute();
   const {
-    gameRoomInfo: { gameInfo, roomMakerId },
+    gameRoomInfo: { gameInfo, hostUserId },
     updateRoom,
   } = useGameRoomInfo1();
-  const isRoomMaker = userInfo.userId === roomMakerId;
+  const isRoomMaker = userInfo.userId === hostUserId;
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
   const handleModifyGameCenterInfo = (

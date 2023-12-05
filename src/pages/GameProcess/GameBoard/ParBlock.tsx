@@ -1,5 +1,4 @@
 import styled, { CSSProp, css } from "styled-components";
-import { typo } from "../../../styles/typo";
 
 export const STATUS = {
   NOT_STARTED: "Not Started",
