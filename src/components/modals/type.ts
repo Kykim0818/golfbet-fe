@@ -27,12 +27,8 @@ type ConfirmParam = {
   args: {
     title: string;
     msg: string;
-    btn1: {
-      label: string;
-    };
-    btn2: {
-      label: string;
-    };
+    okBtnLabel?: string;
+    cancelBtnLabel?: string;
   };
 };
 
