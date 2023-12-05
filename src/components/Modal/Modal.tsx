@@ -1,31 +1,13 @@
-import { useEffect } from "react";
 import styled, { CSSProp, css } from "styled-components";
-import { history } from "../..";
 import { ModalType } from "../modals/type";
 
 interface Props {
   children: React.ReactNode;
   sheetStyle?: CSSProp;
   modalType?: ModalType;
-  closeModalByUI: (result?: any) => void;
 }
 
-export const Modal = ({
-  children,
-  sheetStyle,
-  closeModalByUI,
-  modalType = 0,
-}: Props) => {
-  // 뒤로가기
-  useEffect(() => {
-    const event = history.listen((listener) => {
-      if (listener.action === "POP") {
-        closeModalByUI();
-      }
-    });
-    return event;
-  }, [closeModalByUI]);
-
+export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
   return (
     <S.Background>
       <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>

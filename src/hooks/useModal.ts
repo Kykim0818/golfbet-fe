@@ -17,14 +17,13 @@ export const useModal = () => {
           resolve(result);
         }, 100);
       };
-      dispatch(actionModal.setModalStatus({ ...modalParam, handleClose }));
+      dispatch(actionModal.openModal({ ...modalParam, handleClose }));
       increaseBackToHomePageCount();
       window.history.pushState(null, "", window.location.href);
     });
 
   function close() {
     moveBack();
-    dispatch(actionModal.setModalStatus(null));
   }
 
   return {

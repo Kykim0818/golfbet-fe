@@ -7,12 +7,12 @@ type SliceModalParam = ModalParam & {
   handleClose: (result?: any) => void;
 };
 export interface ModalState {
-  status: SliceModalParam | null;
+  status: SliceModalParam[];
 }
 
 // Define the initial state using that type
 const initialState: ModalState = {
-  status: null,
+  status: [],
 };
 
 export const modalSlice = createSlice({
@@ -21,8 +21,11 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    setModalStatus: (state, action: PayloadAction<SliceModalParam | null>) => {
-      state.status = action.payload;
+    openModal: (state, action: PayloadAction<SliceModalParam>) => {
+      state.status.push(action.payload);
+    },
+    closeModal: (state) => {
+      state.status.pop();
     },
   },
 });
