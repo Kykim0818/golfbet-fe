@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserHistory } from "history";
+import React from "react";
 import { CookiesProvider } from "react-cookie";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -194,18 +195,18 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  // <React.StrictMode>
-  <CookiesProvider>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </Provider>
-  </CookiesProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <CookiesProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </Provider>
+    </CookiesProvider>
+  </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

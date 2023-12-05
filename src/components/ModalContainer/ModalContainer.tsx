@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
@@ -9,26 +11,29 @@ import { ModalParam, getModalTypeById } from "../modals/type";
 export const ModalContainer = () => {
   const modalStatus = useAppSelector((state) => state.modal.status);
   const dispatch = useAppDispatch();
-  const closeModalByUi = () => {
-    dispatch(actionModal.setModalStatus(null));
-  };
+  // 뒤로가기
+  useEffect(() => {
+    const event = history.listen((listener) => {
+      if (listener.action === "POP") {
+        dispatch(actionModal.closeModal());
+      }
+    });
+    return event;
+  }, [dispatch]);
 
-  return <>{modalStatus && modalSelector(modalStatus, closeModalByUi)}</>;
-};
-
-const modalSelector = (
-  modalParam: ModalParam & {
-    handleClose: (result?: unknown) => void;
-  },
-  closeModalByUi: () => void
-) => {
   return (
-    <Modal
-      modalType={getModalTypeById(modalParam.id)}
-      closeModalByUI={closeModalByUi}
-    >
-      {modalChildrenSelector(modalParam)}
-    </Modal>
+    <>
+      {modalStatus.map((modal, index) => {
+        return (
+          <Modal
+            key={`${modal.id + index}`}
+            modalType={getModalTypeById(modal.id)}
+          >
+            {modalChildrenSelector(modal)}
+          </Modal>
+        );
+      })}
+    </>
   );
 };
 
