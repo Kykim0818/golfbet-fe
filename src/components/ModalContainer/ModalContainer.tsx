@@ -3,6 +3,7 @@ import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
 import EnterAndCheckScore from "../domain/EnterAndCheckScore";
 import Alert from "../modals/Alert";
+import { Confirm } from "../modals/Confirm/Confirm";
 import { ModalParam, getModalTypeById } from "../modals/type";
 
 export const ModalContainer = () => {
@@ -45,7 +46,15 @@ const modalChildrenSelector = (
         />
       );
     case "CONFIRM":
-      return <div>confirm</div>;
+      return (
+        <Confirm
+          title={modalParam.args.title}
+          okBtnLabel={modalParam.args.okBtnLabel}
+          cancelBtnLabel={modalParam.args.cancelBtnLabel}
+          contentTxt={modalParam.args.msg}
+          handleBtnClick={modalParam.handleClose}
+        />
+      );
 
     case "REGION_SELECT":
       return <div>Hello</div>;
