@@ -15,8 +15,8 @@ const FIRST_COURSE_IDX = 0;
 const SECOND_COURSE_IDX = 1;
 
 export const CoursePicker = ({ courses, onChange }: Props) => {
-  const currentFrontNineCourse = useRef(courses?.[FIRST_COURSE_IDX]);
-  const currentBackNineCourse = useRef(courses?.[SECOND_COURSE_IDX]);
+  const currentFrontNineCourseId = useRef(courses?.[FIRST_COURSE_IDX].id);
+  const currentBackNineCourseId = useRef(courses?.[SECOND_COURSE_IDX].id);
   const courseGroups = makeToggleGroups(courses);
 
   const handleChangeToggle = (
@@ -24,16 +24,18 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
     toggleValue: string[]
   ) => {
     if (courseType === "front") {
+      currentFrontNineCourseId.current = parseInt(toggleValue[0]);
       onChange({
         selectFrontCourseId: parseInt(toggleValue[0]),
-        selectBackCourseId: currentBackNineCourse.current.id,
+        selectBackCourseId: currentBackNineCourseId.current,
       });
       return;
     }
 
     if (courseType === "back") {
+      currentBackNineCourseId.current = parseInt(toggleValue[0]);
       onChange({
-        selectFrontCourseId: currentFrontNineCourse.current.id,
+        selectFrontCourseId: currentFrontNineCourseId.current,
         selectBackCourseId: parseInt(toggleValue[0]),
       });
       return;
@@ -45,9 +47,9 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
       <Styled.CourseWrapper>
         <span>전반 코스</span>
         <div>
-          {currentFrontNineCourse.current ? (
+          {currentFrontNineCourseId.current ? (
             <ToggleGroup
-              selectedValues={[`${currentFrontNineCourse.current.id}`]}
+              selectedValues={[`${currentFrontNineCourseId.current}`]}
               group={courseGroups}
               onChange={(value) => handleChangeToggle("front", value)}
             />
@@ -61,7 +63,7 @@ export const CoursePicker = ({ courses, onChange }: Props) => {
         <span>후반 코스</span>
         <div>
           <ToggleGroup
-            selectedValues={[`${currentBackNineCourse.current.id}`]}
+            selectedValues={[`${currentBackNineCourseId.current}`]}
             group={courseGroups}
             onChange={(value) => handleChangeToggle("back", value)}
           />
