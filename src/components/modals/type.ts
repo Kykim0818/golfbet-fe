@@ -1,5 +1,6 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { RuleChangeProps } from "../../pages/MakeGame/Rule/RuleChange";
+import { SelectGolfCenterProps } from "../../pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import { SetupCheckProps } from "../../pages/MakeGame/SetupCheck/SetupCheck";
 
 const MODAL_TYPE = {
@@ -12,13 +13,15 @@ const MODAL_TYPE = {
 } as const;
 
 export type ModalType = (typeof MODAL_TYPE)[keyof typeof MODAL_TYPE];
+
 export type ModalParam =
   | AlertParam
   | ConfirmParam
   | RegionSelectParam
   | EnterAndCheckScoreParam
   | SetupCheckParam
-  | RuleChangeParam;
+  | RuleChangeParam
+  | SelectGolfCenterParam;
 
 type AlertParam = {
   id: "ALERT";
@@ -59,11 +62,16 @@ type RuleChangeParam = {
   id: "RULE_CHANGE";
   args: RuleChangeProps;
 };
+type SelectGolfCenterParam = {
+  id: "SELECT_GOLF_CENTER";
+  args: SelectGolfCenterProps;
+};
 
 export const getModalTypeById = (id: ModalParam["id"]) => {
   switch (id) {
     case "RULE_CHANGE":
     case "SETUP_CHECK":
+    case "SELECT_GOLF_CENTER":
       return 2;
 
     case "REGION_SELECT":

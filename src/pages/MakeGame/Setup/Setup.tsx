@@ -19,7 +19,7 @@ export const Setup = () => {
   const { openModal } = useModal();
   const { onLoading } = useLoading();
   const { goHome, movePage } = usePageRoute();
-  const { gameInfo } = useGameInfo();
+  const { gameInfo, golfCenterList } = useGameInfo();
   const canGoNext = isCompleteMakingGameInfo(gameInfo);
   const [, setRenderFlag] = useState(false);
   const repaint = () => {
@@ -45,6 +45,20 @@ export const Setup = () => {
     gameInfo.bettingLimit = money;
     repaint();
   };
+  const handleOpenSelectGolfCenter = async () => {
+    const selectedGolfCenter = await openModal<GameInfo["golfCenter"]>({
+      id: "SELECT_GOLF_CENTER",
+      args: {
+        gameInfo: deepClone(gameInfo),
+        golfCenterList,
+      },
+    });
+    if (selectedGolfCenter) {
+      gameInfo.golfCenter = selectedGolfCenter;
+    }
+    repaint();
+  };
+
   //
   const handleOpenChangeGameRule = async () => {
     const result = await openModal<{
@@ -96,7 +110,7 @@ export const Setup = () => {
           <Styled.GolfCourse>
             <div
               className="golfCenter__input"
-              onClick={() => movePage("select_golf_center")}
+              onClick={handleOpenSelectGolfCenter}
             >
               <StyledInput
                 readOnly

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { RuleChange } from "../../pages/MakeGame/Rule/RuleChange";
+import SelectGolfCenter from "../../pages/MakeGame/SelectGolfCenter";
 import SetupCheck from "../../pages/MakeGame/SetupCheck";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
@@ -87,6 +88,15 @@ const modalChildrenSelector = (
       return (
         <RuleChange
           gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+
+    case "SELECT_GOLF_CENTER":
+      return (
+        <SelectGolfCenter
+          gameInfo={modalParam.args.gameInfo}
+          golfCenterList={modalParam.args.golfCenterList}
           handleModalResult={modalParam.handleClose}
         />
       );

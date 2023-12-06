@@ -1,19 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Tabs from "../../../components/Tabs";
 import TitleAsset from "../../../components/TitleAsset";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { useGameInfo } from "../MakeGame";
+import { PageStyle } from "../../../styles/page";
+import { GameInfo } from "../MakeGame";
 import { CenterList } from "./CenterList";
 import { useSelectGolfCenter } from "./useSelectGolfCenter";
 
 const NO_SEARCH_INPUT = "";
 
-export const SelectGolfCenter = () => {
+export type SelectGolfCenterProps = {
+  gameInfo: GameInfo;
+  golfCenterList: GolfCenterList;
+  handleModalResult?: (selectedCenter: GameInfo["golfCenter"]) => void;
+};
+
+export const SelectGolfCenter = ({
+  gameInfo,
+  golfCenterList,
+  handleModalResult,
+}: SelectGolfCenterProps) => {
+  const { openModal } = useModal();
   const { movePage, moveBack } = usePageRoute();
-  const { resetCenterInfoForAdd, gameInfo, golfCenterList } = useGameInfo();
   const [serachInputValue, setSearchInputValue] = useState(NO_SEARCH_INPUT);
   const [inputFocus, setInputFocus] = useState(false);
   // 검색 결과
@@ -27,26 +39,31 @@ export const SelectGolfCenter = () => {
   const { uiTabItems, currentSelectCenter, btnDisable, handleOnChange } =
     useSelectGolfCenter(gameInfo.golfCenter, golfCenterList);
 
-  // reset
-  useEffect(() => {
-    resetCenterInfoForAdd();
-  }, [resetCenterInfoForAdd]);
+  // TODO: reset
+  // useEffect(() => {
+  //   resetCenterInfoForAdd();
+  // }, [resetCenterInfoForAdd]);
 
   const handleSelectGolfCenter = () => {
     // course 동일한지 확인
     if (
-      currentSelectCenter.current.backNineCourse.name ===
-      currentSelectCenter.current.frontNineCourse.name
+      currentSelectCenter.current.backNineCourse.id ===
+      currentSelectCenter.current.frontNineCourse.id
     ) {
-      alert("전반과 후반 코스를 다르게 선택해주세요");
+      openModal({
+        id: "ALERT",
+        args: {
+          title: "코스 중복",
+          msg: "전반과 후반 코스를 다르게 선택해주세요",
+          okBtnLabel: "확인",
+        },
+      });
       return;
     }
-
-    gameInfo.golfCenter = currentSelectCenter.current;
-    movePage("/make_game");
+    handleModalResult?.(currentSelectCenter.current);
   };
   return (
-    <Styled.Wrapper>
+    <PageStyle.Wrapper>
       <TitleAsset
         title="골프장 선택"
         visibleClose
@@ -91,7 +108,7 @@ export const SelectGolfCenter = () => {
           선택하기
         </Button>
       </Styled.Footer>
-    </Styled.Wrapper>
+    </PageStyle.Wrapper>
   );
 };
 
@@ -126,11 +143,6 @@ export type CourseInfo = {
 // ];
 
 const Styled = {
-  Wrapper: styled.div`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-  `,
   Body: styled.div`
     display: flex;
     flex-direction: column;
