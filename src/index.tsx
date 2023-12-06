@@ -22,7 +22,6 @@ import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
 import MakeGame from "./pages/MakeGame";
 import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
 import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
-import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
 import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
 import ManageAccount from "./pages/ManageAccount";
@@ -154,10 +153,6 @@ const router = createBrowserRouter([
           {
             path: "make_golf_center_detail",
             element: <MakeGolfCenterDetail />,
-          },
-          {
-            path: "rule_change",
-            element: <RuleChange />,
           },
         ],
         errorElement: <ErrorPage />,

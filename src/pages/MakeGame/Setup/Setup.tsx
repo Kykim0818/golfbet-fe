@@ -8,6 +8,7 @@ import TitleAsset from "../../../components/TitleAsset";
 import { useLoading } from "../../../hooks/useLoading";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
 import Rule from "../Rule";
@@ -45,15 +46,28 @@ export const Setup = () => {
     repaint();
   };
   //
-  const handleOpenChangeGameRule = () => {
-    movePage("rule_change");
+  const handleOpenChangeGameRule = async () => {
+    const result = await openModal<{
+      changedRule: GameRule;
+      changedNearestAmount: number;
+    }>({
+      id: "RULE_CHANGE",
+      args: {
+        gameInfo: deepClone(gameInfo),
+      },
+    });
+    if (result) {
+      gameInfo.gameRule = result.changedRule;
+      gameInfo.nearestAmount = result.changedNearestAmount;
+    }
+    repaint();
   };
   //
 
   const handleNext = async () => {
     const gameId = await openModal({
       id: "SETUP_CHECK",
-      args: { gameInfo },
+      args: { gameInfo: deepClone(gameInfo) },
     });
     onLoading(2);
     console.log("gameId : ", gameId);

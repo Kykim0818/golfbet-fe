@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { RuleChange } from "../../pages/MakeGame/Rule/RuleChange";
 import SetupCheck from "../../pages/MakeGame/SetupCheck";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
@@ -42,6 +43,7 @@ const modalChildrenSelector = (
   modalParam: ModalParam & { handleClose: (result?: unknown) => void }
 ) => {
   switch (modalParam.id) {
+    // modal
     case "ALERT":
       return (
         <Alert
@@ -61,13 +63,7 @@ const modalChildrenSelector = (
           handleBtnClick={modalParam.handleClose}
         />
       );
-    case "SETUP_CHECK":
-      return (
-        <SetupCheck
-          gameInfo={modalParam.args.gameInfo}
-          handleModalResult={modalParam.handleClose}
-        />
-      );
+    // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
     case "ENTER_AND_CHECK_SCORE":
@@ -77,6 +73,21 @@ const modalChildrenSelector = (
           holeCount={modalParam.args.holeCount}
           par={modalParam.args.par}
           handleCloseSheet={modalParam.handleClose}
+        />
+      );
+    // modal page
+    case "SETUP_CHECK":
+      return (
+        <SetupCheck
+          gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "RULE_CHANGE":
+      return (
+        <RuleChange
+          gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
         />
       );
     default:
