@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import SetupCheck from "../../pages/MakeGame/SetupCheck";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
 import EnterAndCheckScore from "../domain/EnterAndCheckScore";
@@ -14,12 +15,12 @@ export const ModalContainer = () => {
   // 뒤로가기
   useEffect(() => {
     const event = history.listen((listener) => {
-      if (listener.action === "POP") {
+      if (listener.action === "POP" && modalStatus.length > 0) {
         dispatch(actionModal.closeModal());
       }
     });
     return event;
-  }, [dispatch]);
+  }, [dispatch, modalStatus]);
 
   return (
     <>
@@ -60,7 +61,13 @@ const modalChildrenSelector = (
           handleBtnClick={modalParam.handleClose}
         />
       );
-
+    case "SETUP_CHECK":
+      return (
+        <SetupCheck
+          gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
     case "REGION_SELECT":
       return <div>Hello</div>;
     case "ENTER_AND_CHECK_SCORE":

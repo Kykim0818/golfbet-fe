@@ -5,6 +5,8 @@ import Input from "../../../components/Input";
 import SegmentCell from "../../../components/SegmentCell";
 import Stepper from "../../../components/Stepper";
 import TitleAsset from "../../../components/TitleAsset";
+import { useLoading } from "../../../hooks/useLoading";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
@@ -13,6 +15,8 @@ import { GameRule } from "../Rule/type";
 import { isCompleteMakingGameInfo } from "../util";
 
 export const Setup = () => {
+  const { openModal } = useModal();
+  const { onLoading } = useLoading();
   const { goHome, movePage } = usePageRoute();
   const { gameInfo } = useGameInfo();
   const canGoNext = isCompleteMakingGameInfo(gameInfo);
@@ -45,6 +49,16 @@ export const Setup = () => {
     movePage("rule_change");
   };
   //
+
+  const handleNext = async () => {
+    const gameId = await openModal({
+      id: "SETUP_CHECK",
+      args: { gameInfo },
+    });
+    onLoading(2);
+    console.log("gameId : ", gameId);
+    movePage(`/game_room/${gameId}`, { replace: true });
+  };
 
   return (
     <>
@@ -160,7 +174,7 @@ export const Setup = () => {
         <Button
           disabled={canGoNext === false}
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
-          onClick={() => movePage("setup_check")}
+          onClick={handleNext}
         >
           다음
         </Button>
