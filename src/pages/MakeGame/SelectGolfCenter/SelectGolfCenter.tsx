@@ -44,6 +44,16 @@ export const SelectGolfCenter = ({
   //   resetCenterInfoForAdd();
   // }, [resetCenterInfoForAdd]);
 
+  const handleOpenMakeGolfCenter = async () => {
+    console.log("??");
+    const userMadeCenter = await openModal<GameInfo["golfCenter"]>({
+      id: "MAKE_GOLF_CENTER",
+    });
+    if (userMadeCenter) {
+      handleModalResult?.(userMadeCenter);
+    }
+  };
+
   const handleSelectGolfCenter = () => {
     // course 동일한지 확인
     if (
@@ -87,8 +97,7 @@ export const SelectGolfCenter = ({
         </Styled.InputSection>
         <Styled.AddButtonSection>
           <Button
-            disabled
-            onClick={() => movePage("../make_golf_center")}
+            onClick={handleOpenMakeGolfCenter}
             style={{ width: "fit-content" }}
             variants="outlined"
           >

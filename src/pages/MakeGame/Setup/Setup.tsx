@@ -45,6 +45,7 @@ export const Setup = () => {
     gameInfo.bettingLimit = money;
     repaint();
   };
+
   const handleOpenSelectGolfCenter = async () => {
     const selectedGolfCenter = await openModal<GameInfo["golfCenter"]>({
       id: "SELECT_GOLF_CENTER",

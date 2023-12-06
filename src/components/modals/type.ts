@@ -21,7 +21,8 @@ export type ModalParam =
   | EnterAndCheckScoreParam
   | SetupCheckParam
   | RuleChangeParam
-  | SelectGolfCenterParam;
+  | SelectGolfCenterParam
+  | MakeGolfCenterParam;
 
 type AlertParam = {
   id: "ALERT";
@@ -67,11 +68,16 @@ type SelectGolfCenterParam = {
   args: SelectGolfCenterProps;
 };
 
+type MakeGolfCenterParam = {
+  id: "MAKE_GOLF_CENTER";
+};
+
 export const getModalTypeById = (id: ModalParam["id"]) => {
   switch (id) {
     case "RULE_CHANGE":
     case "SETUP_CHECK":
     case "SELECT_GOLF_CENTER":
+    case "MAKE_GOLF_CENTER":
       return 2;
 
     case "REGION_SELECT":
