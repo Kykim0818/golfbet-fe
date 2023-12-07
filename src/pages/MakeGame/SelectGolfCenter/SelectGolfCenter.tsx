@@ -39,11 +39,6 @@ export const SelectGolfCenter = ({
   const { uiTabItems, currentSelectCenter, btnDisable, handleOnChange } =
     useSelectGolfCenter(gameInfo.golfCenter, golfCenterList);
 
-  // TODO: reset
-  // useEffect(() => {
-  //   resetCenterInfoForAdd();
-  // }, [resetCenterInfoForAdd]);
-
   const handleOpenMakeGolfCenter = async () => {
     const userMadeCenter = await openModal<GameInfo["golfCenter"]>({
       id: "MAKE_GOLF_CENTER",
