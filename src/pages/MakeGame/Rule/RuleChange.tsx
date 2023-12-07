@@ -4,12 +4,14 @@ import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import ToggleGroup from "../../../components/ToggleGroup";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { PageStyle } from "../../../styles/page";
 import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
-import { useGameInfo } from "../MakeGame";
+import { GameInfo } from "../MakeGame";
 import { GAME_RULES } from "./constant";
 import { getDisplayRuleText } from "./getDisplayText";
 import {
+  GameRule,
   Rules,
   isDdangValue,
   isHandiTypeValue,
@@ -17,16 +19,29 @@ import {
   isSpecialBetRequirementsValue,
 } from "./type";
 
-export const RuleChange = () => {
-  const { movePage, moveBack } = usePageRoute();
-  const { gameInfo } = useGameInfo();
+export type RuleChangeProps = {
+  gameInfo: GameInfo;
+  handleModalResult?: (result: {
+    changedRule: GameRule;
+    changedNearestAmount: number;
+  }) => void;
+};
+
+export const RuleChange = ({
+  gameInfo,
+  handleModalResult,
+}: RuleChangeProps) => {
+  const { moveBack } = usePageRoute();
 
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
   const rules = getRule(gameInfo.playerCount);
 
   const [currentRule, setCurrentRule] = useState(gameInfo.gameRule);
+  const [currentNearestAmount, setCurrentNearestAmount] = useState(
+    gameInfo.nearestAmount
+  );
 
-  const handleOnChange = (ruleType: Rules["ruleType"], values: string[]) => {
+  const handleRuleChange = (ruleType: Rules["ruleType"], values: string[]) => {
     let changedRule = deepClone(currentRule);
     if (ruleType === "handiType" && isHandiTypeValue(values)) {
       changedRule.handiType = values;
@@ -46,16 +61,12 @@ export const RuleChange = () => {
   };
 
   const handleChangeNearestAmount = (money: number) => {
-    gameInfo.nearestAmount = money;
+    setCurrentNearestAmount(money);
   };
 
   return (
-    <Styled.Wrapper>
-      <TitleAsset
-        title="게임 규칙"
-        handleBack={() => movePage("/make_game", { replace: true })}
-        visibleBack
-      />
+    <PageStyle.Wrapper>
+      <TitleAsset title="게임 규칙" handleBack={moveBack} visibleBack />
       <Styled.Body>
         {rules.map((rule) => {
           return (
@@ -66,7 +77,7 @@ export const RuleChange = () => {
                 multiSelectResetValue="none"
                 selectedValues={currentRule[rule.optionType]}
                 group={rule.options}
-                onChange={(values) => handleOnChange(rule.optionType, values)}
+                onChange={(values) => handleRuleChange(rule.optionType, values)}
               />
             </Styled.Option>
           );
@@ -77,7 +88,7 @@ export const RuleChange = () => {
           >
             <h5>니어리스트 별도 금액</h5>
             <BetMoney
-              value={0}
+              value={currentNearestAmount}
               fixedText="1타당"
               placeHolder="금액을 입력해주세요"
               plusMoneyArr={[1000, 5000, 10000]}
@@ -90,23 +101,20 @@ export const RuleChange = () => {
         <Button
           onClick={() => {
             // TODO: 뒤로가기
-            gameInfo.gameRule = currentRule;
-            moveBack();
+            handleModalResult?.({
+              changedRule: currentRule,
+              changedNearestAmount: currentNearestAmount,
+            });
           }}
         >
           수정하기
         </Button>
       </Styled.Footer>
-    </Styled.Wrapper>
+    </PageStyle.Wrapper>
   );
 };
 
 const Styled = {
-  Wrapper: styled.div`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-  `,
   Body: styled.section`
     display: flex;
     flex-direction: column;

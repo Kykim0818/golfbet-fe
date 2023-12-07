@@ -1,31 +1,37 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import SegmentCell from "../../../components/SegmentCell";
 import Stepper from "../../../components/Stepper";
 import TitleAsset from "../../../components/TitleAsset";
+import { useLoading } from "../../../hooks/useLoading";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
 import Rule from "../Rule";
 import { GameRule } from "../Rule/type";
-import { isCompleteMakingGameInfo } from "../util";
+import { defaultGameInfo, isCompleteMakingGameInfo } from "../util";
 
 export const Setup = () => {
+  const { openModal } = useModal();
+  const { onLoading } = useLoading();
   const { goHome, movePage } = usePageRoute();
-  const { gameInfo } = useGameInfo();
-  const canGoNext = isCompleteMakingGameInfo(gameInfo);
+  const gameInfo = useRef<GameInfo>(deepClone(defaultGameInfo));
+  const { golfCenterList } = useGameInfo();
   const [, setRenderFlag] = useState(false);
   const repaint = () => {
     setRenderFlag((prev) => !prev);
   };
 
+  const canGoNext = isCompleteMakingGameInfo(gameInfo.current);
   const handleChangePlayerCount = (playerCount: number) => {
     // #1
-    gameInfo.playerCount = playerCount;
+    gameInfo.current.playerCount = playerCount;
     // #2
-    gameInfo.gameRule.specialBetRequirements =
+    gameInfo.current.gameRule.specialBetRequirements =
       getDefaultSpecialBetRequirements(playerCount);
     // #3
     repaint();
@@ -33,18 +39,56 @@ export const Setup = () => {
   };
   //
   const handleChangeBetAmountPerStroke = (money: number) => {
-    gameInfo.betAmountPerStroke = money;
+    gameInfo.current.betAmountPerStroke = money;
     repaint();
   };
   const handleChangeBettingLimit = (money: number) => {
-    gameInfo.bettingLimit = money;
+    gameInfo.current.bettingLimit = money;
+    repaint();
+  };
+
+  const handleOpenSelectGolfCenter = async () => {
+    const selectedGolfCenter = await openModal<GameInfo["golfCenter"]>({
+      id: "SELECT_GOLF_CENTER",
+      args: {
+        gameInfo: deepClone(gameInfo.current),
+        golfCenterList,
+      },
+    });
+    if (selectedGolfCenter) {
+      gameInfo.current.golfCenter = selectedGolfCenter;
+    }
+    repaint();
+  };
+
+  //
+  const handleOpenChangeGameRule = async () => {
+    const result = await openModal<{
+      changedRule: GameRule;
+      changedNearestAmount: number;
+    }>({
+      id: "RULE_CHANGE",
+      args: {
+        gameInfo: deepClone(gameInfo.current),
+      },
+    });
+    if (result) {
+      gameInfo.current.gameRule = result.changedRule;
+      gameInfo.current.nearestAmount = result.changedNearestAmount;
+    }
     repaint();
   };
   //
-  const handleOpenChangeGameRule = () => {
-    movePage("rule_change");
+
+  const handleNext = async () => {
+    const gameId = await openModal({
+      id: "SETUP_CHECK",
+      args: { gameInfo: deepClone(gameInfo.current) },
+    });
+    onLoading(2);
+    console.log("gameId : ", gameId);
+    movePage(`/game_room/${gameId}`, { replace: true });
   };
-  //
 
   return (
     <>
@@ -59,7 +103,9 @@ export const Setup = () => {
               { label: "스크린", value: "screen" },
             ]}
             selectCellValue={"field"}
-            handleSelectCell={(cell) => (gameInfo.gameType = cell.value)}
+            handleSelectCell={(cell) =>
+              (gameInfo.current.gameType = cell.value)
+            }
           />
         </div>
         {/* ////// 골프장  */}
@@ -68,12 +114,12 @@ export const Setup = () => {
           <Styled.GolfCourse>
             <div
               className="golfCenter__input"
-              onClick={() => movePage("select_golf_center")}
+              onClick={handleOpenSelectGolfCenter}
             >
               <StyledInput
                 readOnly
                 placeholder="골프장을 검색해주세요"
-                value={gameInfo.golfCenter.name}
+                value={gameInfo.current.golfCenter.name}
               />
               <button>
                 <img
@@ -86,17 +132,17 @@ export const Setup = () => {
               <Styled.CourseInfo>
                 <span className="course__label">전반</span>
                 <span className="course__value">
-                  {gameInfo.golfCenter.frontNineCourse.name === ""
+                  {gameInfo.current.golfCenter.frontNineCourse.name === ""
                     ? "선택"
-                    : gameInfo.golfCenter.frontNineCourse.name}{" "}
+                    : gameInfo.current.golfCenter.frontNineCourse.name}{" "}
                 </span>
               </Styled.CourseInfo>
               <Styled.CourseInfo>
                 <span className="course__label">후반</span>
                 <span className="course__value">
-                  {gameInfo.golfCenter.backNineCourse.name === ""
+                  {gameInfo.current.golfCenter.backNineCourse.name === ""
                     ? "선택"
-                    : gameInfo.golfCenter.backNineCourse.name}{" "}
+                    : gameInfo.current.golfCenter.backNineCourse.name}{" "}
                 </span>
               </Styled.CourseInfo>
             </div>
@@ -105,7 +151,9 @@ export const Setup = () => {
         {/* ////// 내기종류 TODO: css */}
         <div>
           <h5>내기종류</h5>
-          <Styled.BetType>{getDisplayText(gameInfo.betType)}</Styled.BetType>
+          <Styled.BetType>
+            {getDisplayText(gameInfo.current.betType)}
+          </Styled.BetType>
         </div>
 
         {/* ////// 참여인원 TODO: css */}
@@ -114,7 +162,7 @@ export const Setup = () => {
           <Stepper
             max={4}
             min={2}
-            currentValue={gameInfo.playerCount}
+            currentValue={gameInfo.current.playerCount}
             onChange={(value) => {
               handleChangePlayerCount(value);
             }}
@@ -133,22 +181,22 @@ export const Setup = () => {
             />
           </Styled.RuleHeader>
           <Rule
-            rule={gameInfo.gameRule}
-            nearestAmount={gameInfo.nearestAmount}
+            rule={gameInfo.current.gameRule}
+            nearestAmount={gameInfo.current.nearestAmount}
           />
         </div>
         {/* ////// 내기금액 TODO: css */}
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <h5>내기금액</h5>
           <BetMoney
-            value={gameInfo.betAmountPerStroke}
+            value={gameInfo.current.betAmountPerStroke}
             fixedText="1타당"
             placeHolder="금액을 입력해주세요"
             plusMoneyArr={[1000, 5000, 10000]}
             onChange={handleChangeBetAmountPerStroke}
           />
           <BetMoney
-            value={gameInfo.bettingLimit}
+            value={gameInfo.current.bettingLimit}
             fixedText="한도 금액"
             placeHolder="금액을 입력해주세요"
             plusMoneyArr={[10000, 100000, 500000]}
@@ -160,7 +208,7 @@ export const Setup = () => {
         <Button
           disabled={canGoNext === false}
           style={{ marginTop: "30px", marginBottom: "19.5px" }}
-          onClick={() => movePage("setup_check")}
+          onClick={handleNext}
         >
           다음
         </Button>

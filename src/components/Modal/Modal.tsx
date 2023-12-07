@@ -30,6 +30,7 @@ const S = {
   `,
   Sheet: styled.div<{ modalType: ModalType; sheetStyle?: CSSProp }>`
     position: fixed;
+    // 일반 modal
     ${(props) =>
       props.modalType === 0 &&
       css`
@@ -37,7 +38,7 @@ const S = {
         top: 50%;
         transform: translate(-50%, -50%);
       `}
-
+    // bottom sheet
     ${(props) =>
       props.modalType === 1 &&
       css`
@@ -57,6 +58,13 @@ const S = {
             transform: translateY(0); /* 최종 위치: 페이지 상단으로 이동 */
           }
         }
+      `}
+      // 페이지 형 
+      ${(props) =>
+      props.modalType === 2 &&
+      css`
+        width: 100%;
+        height: 100%;
       `}
     ${(props) => props.sheetStyle}
   `,

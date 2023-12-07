@@ -3,48 +3,77 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import TitleAsset from "../../../components/TitleAsset";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { useGameInfo } from "../MakeGame";
+import { PageStyle } from "../../../styles/page";
+import { GameInfo } from "../MakeGame";
 
-export const MakeGolfCenter = () => {
-  const { movePage, moveBack } = usePageRoute();
-  const { tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } = useGameInfo();
+export type MakeGolfCenterProps = {
+  handleModalResult?: (userCustomCenter: GameInfo["golfCenter"]) => void;
+};
 
-  const [centerName, setCenterName] = useState(tmpGolfCourseInfoForAdd.name);
-  const [region, setRegion] = useState(tmpGolfCourseInfoForAdd.region);
-  const [frontNineCourseName, setFrontNineCourseName] = useState(
-    tmpGolfCourseInfoForAdd.frontNineCourse.name
-  );
-  const [backNineCourseName, setBackNineCourseName] = useState(
-    tmpGolfCourseInfoForAdd.backNineCourse.name
-  );
+export const MakeGolfCenter = ({ handleModalResult }: MakeGolfCenterProps) => {
+  const { moveBack } = usePageRoute();
+  const { openModal } = useModal();
+  const [centerName, setCenterName] = useState("");
+  // TODO: 임시 서울
+  const [region, setRegion] = useState("서울");
+  const [frontNineCourseName, setFrontNineCourseName] = useState("");
+  const [backNineCourseName, setBackNineCourseName] = useState("");
 
-  const handleClickNextBtn = () => {
+  const handleOpenMakeGolfCenterDetail = async () => {
     // save tmp data for add
     if (
       centerName === "" ||
       frontNineCourseName === "" ||
       backNineCourseName === ""
     ) {
-      //TODO: alert
-      alert("공백인 값이 있습니다. 확인해주세요");
+      openModal({
+        id: "ALERT",
+        args: {
+          title: "",
+          msg: "공백인 값이 있습니다. 확인해주세요",
+          okBtnLabel: "확인",
+        },
+      });
       return;
     }
-    tmpGolfCourseInfoForAdd.name = centerName;
-    tmpGolfCourseInfoForAdd.region = region;
-    tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
-    tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
-    movePage("../make_golf_center_detail");
+    const customGolfCenterDetail = await openModal<{
+      frontNineCoursePars: number[];
+      backNineCoursePars: number[];
+    }>({
+      id: "MAKE_GOLF_CENTER_DETAIL",
+      args: {
+        userCustomCenterInfo: {
+          centerName,
+          region,
+          frontNineCourseName,
+          backNineCourseName,
+        },
+      },
+    });
+    if (customGolfCenterDetail) {
+      handleModalResult?.({
+        id: "userCustom",
+        name: centerName,
+        region,
+        frontNineCourse: {
+          id: 0,
+          name: frontNineCourseName,
+          pars: customGolfCenterDetail.frontNineCoursePars,
+        },
+        backNineCourse: {
+          id: 0,
+          name: backNineCourseName,
+          pars: customGolfCenterDetail.backNineCoursePars,
+        },
+      });
+    }
   };
 
   return (
-    <>
-      <TitleAsset
-        title="골프장 추가"
-        visibleBack
-        // handleBack={() => movePage("../select_golf_center", { replace: true })}
-        handleBack={moveBack}
-      />
+    <PageStyle.Wrapper>
+      <TitleAsset title="골프장 추가" visibleBack handleBack={moveBack} />
       <Styled.Body>
         <div>
           <h5>골프장</h5>
@@ -56,7 +85,7 @@ export const MakeGolfCenter = () => {
         </div>
         <div>
           <h5>지역</h5>
-          <div>{region}</div>
+          <Styled.Input placeholder="지역을 선택하세요" value={region} />
         </div>
         <div>
           <h5>전반</h5>
@@ -76,9 +105,9 @@ export const MakeGolfCenter = () => {
         </div>
       </Styled.Body>
       <Styled.Footer>
-        <Button onClick={handleClickNextBtn}>다음</Button>
+        <Button onClick={handleOpenMakeGolfCenterDetail}>다음</Button>
       </Styled.Footer>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 

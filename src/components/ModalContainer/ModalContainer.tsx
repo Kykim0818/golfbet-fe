@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import MakeGolfCenter from "../../pages/MakeGame/MakeGolfCenter";
+import { MakeGolfCenterDetail } from "../../pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
+import { RuleChange } from "../../pages/MakeGame/Rule/RuleChange";
+import SelectGolfCenter from "../../pages/MakeGame/SelectGolfCenter";
+import SetupCheck from "../../pages/MakeGame/SetupCheck";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
 import EnterAndCheckScore from "../domain/EnterAndCheckScore";
@@ -14,12 +19,12 @@ export const ModalContainer = () => {
   // 뒤로가기
   useEffect(() => {
     const event = history.listen((listener) => {
-      if (listener.action === "POP") {
+      if (listener.action === "POP" && modalStatus.length > 0) {
         dispatch(actionModal.closeModal());
       }
     });
     return event;
-  }, [dispatch]);
+  }, [dispatch, modalStatus]);
 
   return (
     <>
@@ -41,6 +46,7 @@ const modalChildrenSelector = (
   modalParam: ModalParam & { handleClose: (result?: unknown) => void }
 ) => {
   switch (modalParam.id) {
+    // modal
     case "ALERT":
       return (
         <Alert
@@ -60,7 +66,7 @@ const modalChildrenSelector = (
           handleBtnClick={modalParam.handleClose}
         />
       );
-
+    // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
     case "ENTER_AND_CHECK_SCORE":
@@ -72,6 +78,42 @@ const modalChildrenSelector = (
           handleCloseSheet={modalParam.handleClose}
         />
       );
+    // modal page
+    case "SETUP_CHECK":
+      return (
+        <SetupCheck
+          gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "RULE_CHANGE":
+      return (
+        <RuleChange
+          gameInfo={modalParam.args.gameInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+
+    case "SELECT_GOLF_CENTER":
+      return (
+        <SelectGolfCenter
+          gameInfo={modalParam.args.gameInfo}
+          golfCenterList={modalParam.args.golfCenterList}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+
+    case "MAKE_GOLF_CENTER":
+      return <MakeGolfCenter handleModalResult={modalParam.handleClose} />;
+
+    case "MAKE_GOLF_CENTER_DETAIL":
+      return (
+        <MakeGolfCenterDetail
+          userCustomCenterInfo={modalParam.args.userCustomCenterInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+
     default:
       return null;
   }

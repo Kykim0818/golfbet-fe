@@ -20,12 +20,7 @@ import { RoomQr } from "./pages/GameRoom/WaitRoom/RoomQr/RoomQr";
 import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
 import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
 import MakeGame from "./pages/MakeGame";
-import MakeGolfCenter from "./pages/MakeGame/MakeGolfCenter";
-import { MakeGolfCenterDetail } from "./pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
-import { RuleChange } from "./pages/MakeGame/Rule/RuleChange";
-import { SelectGolfCenter } from "./pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
 import Setup from "./pages/MakeGame/Setup";
-import SetupCheck from "./pages/MakeGame/SetupCheck";
 import ManageAccount from "./pages/ManageAccount";
 import NewUserInfo from "./pages/NewUserInfo";
 import { ScoreHistory } from "./pages/ScoreHistory/ScoreHistory";
@@ -143,26 +138,6 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <Setup />,
-          },
-          {
-            path: "setup_check",
-            element: <SetupCheck />,
-          },
-          {
-            path: "select_golf_center",
-            element: <SelectGolfCenter />,
-          },
-          {
-            path: "make_golf_center",
-            element: <MakeGolfCenter />,
-          },
-          {
-            path: "make_golf_center_detail",
-            element: <MakeGolfCenterDetail />,
-          },
-          {
-            path: "rule_change",
-            element: <RuleChange />,
           },
         ],
         errorElement: <ErrorPage />,

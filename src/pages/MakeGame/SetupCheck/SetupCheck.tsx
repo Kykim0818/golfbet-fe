@@ -1,22 +1,28 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
-import { useLoading } from "../../../hooks/useLoading";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { apiMakeGame } from "../../../service/api/gameRoom";
+import { PageStyle } from "../../../styles/page";
 import { deepClone } from "../../../utils/deepClone";
 import { FixedGolfCenter } from "../FixedGolfCenter";
-import { useGameInfo } from "../MakeGame";
+import { GameInfo } from "../MakeGame";
 import { ParDetail } from "./ParDetail";
 
-export const SetupCheck = () => {
-  const { openModal } = useModal();
-  const { movePage, movePageWithHome } = usePageRoute();
-  const { onLoading } = useLoading();
-  const { gameInfo } = useGameInfo();
-  const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
+export type SetupCheckProps = {
+  gameInfo: GameInfo;
+  handleModalResult?: (result: string) => void;
+};
 
+export const SetupCheck = ({
+  gameInfo,
+  handleModalResult,
+}: SetupCheckProps) => {
+  const { openModal } = useModal();
+  const { moveBack } = usePageRoute();
+
+  const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
   const handleModifyGameCenterInfo = (
     courseType: "front" | "back",
     holeIndex: number,
@@ -37,9 +43,9 @@ export const SetupCheck = () => {
     console.log("make game Info ", tmpRet);
     const gameId = await apiMakeGame(tmpRet);
     console.log("gameId", gameId);
-    // TODO: 테스트용 나중엔 실패했을 때랑 예외 처리
+
     if (gameId === "") {
-      const modalRes = await openModal({
+      await openModal({
         id: "ALERT",
         args: {
           title: "게임 방 생성",
@@ -47,23 +53,15 @@ export const SetupCheck = () => {
           okBtnLabel: "확인",
         },
       });
-      // if (modalRes) {
-      //   onLoading(2);
-      //   movePageWithHome(`/game_room/test`);
-      // }
     } else {
-      onLoading(2);
-      movePageWithHome(`/game_room/${gameId}`);
+      // 성공 시 페이지 닫으면서 gameId 전달
+      handleModalResult?.(gameId);
     }
   };
 
   return (
-    <>
-      <TitleAsset
-        title="게임 만들기"
-        visibleBack
-        handleBack={() => movePage("/make_game", { replace: true })}
-      />
+    <PageStyle.Wrapper>
+      <TitleAsset title="게임 만들기" visibleBack handleBack={moveBack} />
       <Styled.Body>
         <FixedGolfCenter
           centerType={gameInfo.gameType}
@@ -115,7 +113,7 @@ export const SetupCheck = () => {
       <Styled.Footer>
         <Button onClick={handleMakeGameRoom}>게임 생성하기</Button>
       </Styled.Footer>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 
