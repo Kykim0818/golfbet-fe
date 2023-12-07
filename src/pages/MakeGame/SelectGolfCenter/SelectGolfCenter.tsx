@@ -45,10 +45,10 @@ export const SelectGolfCenter = ({
   // }, [resetCenterInfoForAdd]);
 
   const handleOpenMakeGolfCenter = async () => {
-    console.log("??");
     const userMadeCenter = await openModal<GameInfo["golfCenter"]>({
       id: "MAKE_GOLF_CENTER",
     });
+    console.log("userMadeCenter", userMadeCenter);
     if (userMadeCenter) {
       handleModalResult?.(userMadeCenter);
     }
@@ -97,6 +97,7 @@ export const SelectGolfCenter = ({
         </Styled.InputSection>
         <Styled.AddButtonSection>
           <Button
+            disabled
             onClick={handleOpenMakeGolfCenter}
             style={{ width: "fit-content" }}
             variants="outlined"

@@ -3,47 +3,51 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { PageStyle } from "../../../styles/page";
 import { FixedGolfCenter } from "../FixedGolfCenter";
-import { useGameInfo } from "../MakeGame";
 import { ParDetail } from "../SetupCheck/ParDetail";
 
 // TODO 전역값 관리 어디서할지 정하면 수정
 const GOLF_COURSE_COUNT = 9;
+const defualtPars = [3, 3, 3, 3, 3, 3, 3, 3, 3];
+export type MakeGolfCenterDetailProps = {
+  userCustomCenterInfo: {
+    centerName: string;
+    region: string;
+    frontNineCourseName: string;
+    backNineCourseName: string;
+  };
+  handleModalResult?: (userCustomCenterParInfo: {
+    frontNineCoursePars: number[];
+    backNineCoursePars: number[];
+  }) => void;
+};
 
-export const MakeGolfCenterDetail = () => {
-  const { movePage, moveBack } = usePageRoute();
-  const { gameInfo, tmpGolfCenterInfoForAdd: tmpGolfCourseInfoForAdd } =
-    useGameInfo();
-  const frontNineCourseDetail = useRef(
-    tmpGolfCourseInfoForAdd.frontNineCourse.pars
-  );
-  const backNineCourseDetail = useRef(
-    tmpGolfCourseInfoForAdd.backNineCourse.pars
-  );
+export const MakeGolfCenterDetail = ({
+  userCustomCenterInfo: {
+    centerName,
+    region,
+    frontNineCourseName,
+    backNineCourseName,
+  },
+  handleModalResult,
+}: MakeGolfCenterDetailProps) => {
+  const { moveBack } = usePageRoute();
+  const frontNineCourseDetail = useRef([...defualtPars]);
+  const backNineCourseDetail = useRef([...defualtPars]);
 
   const handleClickSelectGolfCenterBtn = () => {
     // TODO-Server : 저장전 서버에 데이터 전송후,
     // 성공 response 후에 그 값을 선택으로 지정
-    gameInfo.golfCenter = {
-      id: "customUserCenterId",
-      name: tmpGolfCourseInfoForAdd.name,
-      region: tmpGolfCourseInfoForAdd.region,
-      frontNineCourse: {
-        id: 0,
-        name: tmpGolfCourseInfoForAdd.frontNineCourse.name,
-        pars: frontNineCourseDetail.current,
-      },
-      backNineCourse: {
-        id: 0,
-        name: tmpGolfCourseInfoForAdd.backNineCourse.name,
-        pars: backNineCourseDetail.current,
-      },
-    };
-    movePage("/make_game");
+
+    handleModalResult?.({
+      frontNineCoursePars: frontNineCourseDetail.current,
+      backNineCoursePars: backNineCourseDetail.current,
+    });
   };
 
   return (
-    <>
+    <PageStyle.Wrapper>
       <TitleAsset
         title="골프장 상세"
         visibleBack
@@ -52,13 +56,13 @@ export const MakeGolfCenterDetail = () => {
       />
       <Styled.Body>
         <FixedGolfCenter
-          centerType={gameInfo.gameType}
-          name={tmpGolfCourseInfoForAdd.name}
-          frontNineCourseName={tmpGolfCourseInfoForAdd.frontNineCourse.name}
-          backNineCourseName={tmpGolfCourseInfoForAdd.backNineCourse.name}
+          centerType="field"
+          name={centerName}
+          frontNineCourseName={frontNineCourseName}
+          backNineCourseName={backNineCourseName}
         />
         <div>
-          <span>{tmpGolfCourseInfoForAdd.frontNineCourse.name}</span>
+          <span>{frontNineCourseName}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
             <ParDetail
               key={index}
@@ -71,7 +75,7 @@ export const MakeGolfCenterDetail = () => {
           ))}
         </div>
         <div>
-          <span>{tmpGolfCourseInfoForAdd.backNineCourse.name}</span>
+          <span>{backNineCourseName}</span>
           {[...new Array(GOLF_COURSE_COUNT)].map((_, index) => (
             <ParDetail
               key={index}
@@ -89,7 +93,7 @@ export const MakeGolfCenterDetail = () => {
           추가 후 선택하기
         </Button>
       </Styled.Footer>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 

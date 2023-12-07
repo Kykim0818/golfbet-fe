@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import MakeGolfCenter from "../../pages/MakeGame/MakeGolfCenter";
+import { MakeGolfCenterDetail } from "../../pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
 import { RuleChange } from "../../pages/MakeGame/Rule/RuleChange";
 import SelectGolfCenter from "../../pages/MakeGame/SelectGolfCenter";
 import SetupCheck from "../../pages/MakeGame/SetupCheck";
@@ -104,6 +105,15 @@ const modalChildrenSelector = (
 
     case "MAKE_GOLF_CENTER":
       return <MakeGolfCenter handleModalResult={modalParam.handleClose} />;
+
+    case "MAKE_GOLF_CENTER_DETAIL":
+      return (
+        <MakeGolfCenterDetail
+          userCustomCenterInfo={modalParam.args.userCustomCenterInfo}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+
     default:
       return null;
   }

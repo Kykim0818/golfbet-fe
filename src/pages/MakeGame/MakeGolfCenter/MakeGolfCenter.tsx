@@ -8,12 +8,12 @@ import { usePageRoute } from "../../../hooks/usePageRoute";
 import { PageStyle } from "../../../styles/page";
 import { GameInfo } from "../MakeGame";
 
-type MakeGolfCenterProps = {
+export type MakeGolfCenterProps = {
   handleModalResult?: (userCustomCenter: GameInfo["golfCenter"]) => void;
 };
 
 export const MakeGolfCenter = ({ handleModalResult }: MakeGolfCenterProps) => {
-  const { movePage, moveBack } = usePageRoute();
+  const { moveBack } = usePageRoute();
   const { openModal } = useModal();
   const [centerName, setCenterName] = useState("");
   // TODO: 임시 서울
@@ -21,7 +21,7 @@ export const MakeGolfCenter = ({ handleModalResult }: MakeGolfCenterProps) => {
   const [frontNineCourseName, setFrontNineCourseName] = useState("");
   const [backNineCourseName, setBackNineCourseName] = useState("");
 
-  const handleClickNextBtn = () => {
+  const handleOpenMakeGolfCenterDetail = async () => {
     // save tmp data for add
     if (
       centerName === "" ||
@@ -38,11 +38,37 @@ export const MakeGolfCenter = ({ handleModalResult }: MakeGolfCenterProps) => {
       });
       return;
     }
-    // tmpGolfCourseInfoForAdd.name = centerName;
-    // tmpGolfCourseInfoForAdd.region = region;
-    // tmpGolfCourseInfoForAdd.frontNineCourse.name = frontNineCourseName;
-    // tmpGolfCourseInfoForAdd.backNineCourse.name = backNineCourseName;
-    movePage("../make_golf_center_detail");
+    const customGolfCenterDetail = await openModal<{
+      frontNineCoursePars: number[];
+      backNineCoursePars: number[];
+    }>({
+      id: "MAKE_GOLF_CENTER_DETAIL",
+      args: {
+        userCustomCenterInfo: {
+          centerName,
+          region,
+          frontNineCourseName,
+          backNineCourseName,
+        },
+      },
+    });
+    if (customGolfCenterDetail) {
+      handleModalResult?.({
+        id: "userCustom",
+        name: centerName,
+        region,
+        frontNineCourse: {
+          id: 0,
+          name: frontNineCourseName,
+          pars: customGolfCenterDetail.frontNineCoursePars,
+        },
+        backNineCourse: {
+          id: 0,
+          name: backNineCourseName,
+          pars: customGolfCenterDetail.backNineCoursePars,
+        },
+      });
+    }
   };
 
   return (
@@ -79,7 +105,7 @@ export const MakeGolfCenter = ({ handleModalResult }: MakeGolfCenterProps) => {
         </div>
       </Styled.Body>
       <Styled.Footer>
-        <Button onClick={handleClickNextBtn}>다음</Button>
+        <Button onClick={handleOpenMakeGolfCenterDetail}>다음</Button>
       </Styled.Footer>
     </PageStyle.Wrapper>
   );
