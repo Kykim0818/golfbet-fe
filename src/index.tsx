@@ -11,7 +11,6 @@ import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
 import GameEnd from "./pages/GameEnd";
-import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
 import HandicapSetup from "./pages/GameRoom/HandicapSetup";
 import WaitRoom from "./pages/GameRoom/WaitRoom";
@@ -88,11 +87,6 @@ const router = createBrowserRouter([
       {
         path: "/enter_game",
         element: <EnterGame />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/process_game/:gameId",
-        element: <GameProcess />,
         errorElement: <ErrorPage />,
       },
       {

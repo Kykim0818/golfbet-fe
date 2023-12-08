@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { GameRoomUser } from "../GameRoom/GameRoom";
-import { getUserId } from "../../utils/getUserId";
-import { RankBoardPlayerInfo } from "../GameProcess/RankBoard/RankBoardPlayerInfo";
 import { useState } from "react";
+import styled from "styled-components";
+import { RankBoardPlayerInfo } from "../../components/domain/RankBoard/RankBoardPlayerInfo";
 import ScoreBoard from "../../components/domain/ScoreBoard";
+import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
+import { GameRoomUser } from "../GameRoom/GameRoom";
 
 type ScoreHistroyRankBoardProps = {
   players: GameRoomUser[];

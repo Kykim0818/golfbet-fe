@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
+import RankBoard from "../../components/domain/RankBoard";
 import ScoreBoard from "../../components/domain/ScoreBoard";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
-import { testGameRoomInfo } from "../GameProcess/GameProcess";
-import RankBoard from "../GameProcess/RankBoard";
+import { testGameRoomInfo } from "../GameRoom/InGame/InGame";
 import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
 
 export const GameEnd = () => {

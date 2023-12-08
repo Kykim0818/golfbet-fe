@@ -1,14 +1,17 @@
 import styled from "styled-components";
-import { GameInfo } from "../../MakeGame/MakeGame";
+import { GameInfo } from "../../../MakeGame/MakeGame";
 import { ParBlock, STATUS } from "./ParBlock";
-import { typo } from "../../../styles/typo";
+import { typo } from "../../../../styles/typo";
 
-type GameBoardProps = {
+type ProgressBoardProps = {
   currentHole: number;
   centerInfo: GameInfo["golfCenter"];
 };
 
-export const GameBoard = ({ currentHole, centerInfo }: GameBoardProps) => {
+export const ProgressBoard = ({
+  currentHole,
+  centerInfo,
+}: ProgressBoardProps) => {
   return (
     <S.Wrapper>
       <S.CourseName>{centerInfo.frontNineCourse.name}</S.CourseName>

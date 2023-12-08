@@ -1,18 +1,19 @@
 import styled from "styled-components";
-import Button from "../../components/Button";
-import TitleAsset from "../../components/TitleAsset";
-import { useModal } from "../../hooks/useModal";
-import { usePageRoute } from "../../hooks/usePageRoute";
-import { typo } from "../../styles/typo";
+
+import Button from "../../../components/Button";
+import TitleAsset from "../../../components/TitleAsset";
+import RankBoard from "../../../components/domain/RankBoard";
+import { useModal } from "../../../hooks/useModal";
+import { usePageRoute } from "../../../hooks/usePageRoute";
+import { typo } from "../../../styles/typo";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
-} from "../../utils/display";
-import { GameRoomUser } from "../GameRoom/GameRoom";
-import { GameInfo } from "../MakeGame/MakeGame";
-import GameBoard from "./GameBoard";
-import RankBoard from "./RankBoard";
+} from "../../../utils/display";
+import { GameInfo } from "../../MakeGame/MakeGame";
+import { GameRoomUser } from "../GameRoom";
+import ProgressBoard from "./ProgressBoard";
 
 export const testGameRoomInfo: {
   gameRoomInfo: {
@@ -93,7 +94,7 @@ export const testGameRoomInfo: {
   },
 };
 
-export const GameProcess = () => {
+export const InGame = () => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
@@ -168,7 +169,7 @@ export const GameProcess = () => {
           <div>
             <Button size="small">땅하기</Button>
           </div>
-          <GameBoard currentHole={currentHole} centerInfo={centerInfo} />
+          <ProgressBoard currentHole={currentHole} centerInfo={centerInfo} />
         </S.Top>
         <S.Mid>
           <S.RankBoardHeader>순위</S.RankBoardHeader>
