@@ -1,16 +1,19 @@
+import { QRCodeSVG } from "qrcode.react";
 import styled from "styled-components";
 import TitleAsset from "../../../../components/TitleAsset";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
-import { useGameRoomInfo1 } from "../WaitRoomContainer";
-import { QRCodeSVG } from "qrcode.react";
+import { PageStyle } from "../../../../styles/page";
+import { GameRoomInfo } from "../../GameRoom";
 
-export const RoomQr = () => {
-  const {
-    gameRoomInfo: { gameInfo, players },
-  } = useGameRoomInfo1();
+export type RoomQrProps = {
+  gameRoomInfo: GameRoomInfo;
+};
+
+export const RoomQr = ({ gameRoomInfo }: RoomQrProps) => {
+  const { gameInfo, players } = gameRoomInfo;
   const { moveBack } = usePageRoute();
   return (
-    <>
+    <PageStyle.Wrapper>
       <TitleAsset
         visibleBack
         handleBack={moveBack}
@@ -35,7 +38,7 @@ export const RoomQr = () => {
           </S.Desc>
         </>
       </S.Body>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 

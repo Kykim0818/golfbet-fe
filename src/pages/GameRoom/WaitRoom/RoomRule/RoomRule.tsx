@@ -3,29 +3,38 @@ import styled from "styled-components";
 import Button from "../../../../components/Button";
 import TitleAsset from "../../../../components/TitleAsset";
 import ToggleGroup from "../../../../components/ToggleGroup";
-import { useAppSelector } from "../../../../hooks/redux";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { PageStyle } from "../../../../styles/page";
 import { deepClone } from "../../../../utils/deepClone";
 import { BetMoney } from "../../../MakeGame/BetMoney";
 import { GAME_RULES } from "../../../MakeGame/Rule/constant";
 import { getDisplayRuleText } from "../../../MakeGame/Rule/getDisplayText";
 import {
+  GameRule,
   Rules,
   isDdangValue,
   isHandiTypeValue,
   isNearestTypeValue,
   isSpecialBetRequirementsValue,
 } from "../../../MakeGame/Rule/type";
-import { useGameRoomInfo1 } from "../WaitRoomContainer";
+import { GameRoomInfo } from "../../GameRoom";
 
-export const RoomRule = () => {
+export type RoomRuleProps = {
+  gameRoomInfo: GameRoomInfo;
+  userId: string;
+  handleModalResult?: (result: {
+    changedRule: GameRule;
+    changedNearestAmount: number;
+  }) => void;
+};
+
+export const RoomRule = ({
+  gameRoomInfo: { gameInfo, hostUserId },
+  userId,
+  handleModalResult,
+}: RoomRuleProps) => {
   const { moveBack } = usePageRoute();
-  const userInfo = useAppSelector((state) => state.users.userInfo);
-  const {
-    gameRoomInfo: { gameInfo, hostUserId },
-    updateRoom,
-  } = useGameRoomInfo1();
-  const isRoomMaker = userInfo.userId === hostUserId;
+  const isRoomMaker = userId === hostUserId;
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
   const rules = getRule(gameInfo.playerCount);
 
@@ -58,20 +67,18 @@ export const RoomRule = () => {
   };
 
   const handleUpdateRoomRule = () => {
-    const clonedGameInfo = deepClone(gameInfo);
-    clonedGameInfo.gameRule = currentRule;
-    clonedGameInfo.nearestAmount = currentNearestAmount;
-    console.log("update Game Info", clonedGameInfo);
+    console.log("update Game Info", currentRule, currentNearestAmount);
     if (gameInfo.gameId) {
-      updateRoom(gameInfo.gameId, userInfo.userId, clonedGameInfo);
-      moveBack();
-      return;
+      handleModalResult?.({
+        changedRule: currentRule,
+        changedNearestAmount: currentNearestAmount,
+      });
     }
     console.log("gmaeInfo.gameId is undefined");
   };
 
   return (
-    <Styled.Wrapper>
+    <PageStyle.Wrapper>
       <TitleAsset title="규칙 상세" handleBack={moveBack} visibleBack />
       <Styled.Body>
         {rules.map((rule) => {
@@ -112,16 +119,11 @@ export const RoomRule = () => {
           <Button onClick={handleUpdateRoomRule}>수정하기</Button>
         )}
       </Styled.Footer>
-    </Styled.Wrapper>
+    </PageStyle.Wrapper>
   );
 };
 
 const Styled = {
-  Wrapper: styled.div`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-  `,
   Body: styled.section`
     display: flex;
     flex-direction: column;

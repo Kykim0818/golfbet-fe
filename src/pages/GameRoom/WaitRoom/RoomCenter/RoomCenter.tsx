@@ -1,21 +1,28 @@
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import TitleAsset from "../../../../components/TitleAsset";
-import { useAppSelector } from "../../../../hooks/redux";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { PageStyle } from "../../../../styles/page";
 import { deepClone } from "../../../../utils/deepClone";
 import { FixedGolfCenter } from "../../../MakeGame/FixedGolfCenter";
+import { GameInfo } from "../../../MakeGame/MakeGame";
 import { ParDetail } from "../../../MakeGame/SetupCheck/ParDetail";
-import { useGameRoomInfo1 } from "../WaitRoomContainer";
+import { GameRoomInfo } from "../../GameRoom";
 
-export const RoomCenter = () => {
-  const userInfo = useAppSelector((state) => state.users.userInfo);
+export type RoomCenterProps = {
+  gameRoomInfo: GameRoomInfo;
+  userId: string;
+  handleModalResult?: (modifiedCenter: GameInfo["golfCenter"]) => void;
+};
+
+export const RoomCenter = ({
+  gameRoomInfo,
+  userId,
+  handleModalResult,
+}: RoomCenterProps) => {
   const { moveBack } = usePageRoute();
-  const {
-    gameRoomInfo: { gameInfo, hostUserId },
-    updateRoom,
-  } = useGameRoomInfo1();
-  const isRoomMaker = userInfo.userId === hostUserId;
+  const { gameInfo, hostUserId } = gameRoomInfo;
+  const isRoomMaker = userId === hostUserId;
   const modifedGameCenterInfo = deepClone(gameInfo.golfCenter);
 
   const handleModifyGameCenterInfo = (
@@ -31,19 +38,12 @@ export const RoomCenter = () => {
   };
 
   const handleUpdateRoomCenter = () => {
-    const clonedGameInfo = deepClone(gameInfo);
-    clonedGameInfo.golfCenter = modifedGameCenterInfo;
-    console.log("update Game Info", clonedGameInfo);
-    if (gameInfo.gameId) {
-      updateRoom(gameInfo.gameId, userInfo.userId, clonedGameInfo);
-      moveBack();
-      return;
-    }
-    console.log("gmaeInfo.gameId is undefined");
+    console.log("changed Game Center Info", modifedGameCenterInfo);
+    handleModalResult?.(modifedGameCenterInfo);
   };
 
   return (
-    <>
+    <PageStyle.Wrapper>
       <TitleAsset title="게임 만들기" visibleBack handleBack={moveBack} />
       <Styled.Body>
         <FixedGolfCenter
@@ -101,7 +101,7 @@ export const RoomCenter = () => {
           <Button onClick={handleUpdateRoomCenter}>수정 하기</Button>
         )}
       </Styled.Footer>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 

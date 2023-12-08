@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
+import { RoomQr } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
+import { RoomRule } from "../../pages/GameRoom/WaitRoom/RoomRule/RoomRule";
 import MakeGolfCenter from "../../pages/MakeGame/MakeGolfCenter";
 import { MakeGolfCenterDetail } from "../../pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
 import { RuleChange } from "../../pages/MakeGame/Rule/RuleChange";
@@ -114,6 +117,24 @@ const modalChildrenSelector = (
         />
       );
 
+    case "ROOM_CENTER":
+      return (
+        <RoomCenter
+          gameRoomInfo={modalParam.args.gameRoomInfo}
+          userId={modalParam.args.userId}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "ROOM_RULE":
+      return (
+        <RoomRule
+          gameRoomInfo={modalParam.args.gameRoomInfo}
+          userId={modalParam.args.userId}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "ROOM_QR":
+      return <RoomQr gameRoomInfo={modalParam.args.gameRoomInfo} />;
     default:
       return null;
   }

@@ -9,11 +9,14 @@ import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
-import { testGameRoomInfo } from "../GameRoom/InGame/InGame";
+import { GameRoomInfo } from "../GameRoom/GameRoom";
 
-export const GameEnd = () => {
+type GameEndProps = {
+  gameRoomInfo: GameRoomInfo;
+};
+
+export const GameEnd = ({ gameRoomInfo }: GameEndProps) => {
   const { goHome } = usePageRoute();
-  const gameRoomInfo = testGameRoomInfo.gameRoomInfo;
   const players = gameRoomInfo.players;
   const userId = getUserId();
   const rank = players.findIndex((player) => player.userId === userId) + 1;
@@ -26,11 +29,11 @@ export const GameEnd = () => {
       <TitleAsset title="게임종료" />
       <S.Body>
         <GameInfoSection
-          centerType={gameRoomInfo?.gameInfo.gameType}
-          name={gameRoomInfo?.gameInfo.golfCenter.name}
-          betType={gameRoomInfo?.gameInfo.betType}
-          betAmountPerStroke={gameRoomInfo?.gameInfo.betAmountPerStroke}
-          bettingLimit={gameRoomInfo?.gameInfo.bettingLimit}
+          centerType={gameRoomInfo.gameInfo.gameType}
+          name={gameRoomInfo.gameInfo.golfCenter.name}
+          betType={gameRoomInfo.gameInfo.betType}
+          betAmountPerStroke={gameRoomInfo.gameInfo.betAmountPerStroke}
+          bettingLimit={gameRoomInfo.gameInfo.bettingLimit}
           uiType="gameEnd"
         />
         <S.TitleSection>
@@ -39,7 +42,9 @@ export const GameEnd = () => {
         </S.TitleSection>
         <S.ScoreBoardWrapper>
           <S.Summary>
-            <div>113타 | 80,000원</div>
+            <div>
+              {me.currentScore} | {me.currentMoney}
+            </div>
             <span>(니어 +10,000원)</span>
           </S.Summary>
           <ScoreBoard

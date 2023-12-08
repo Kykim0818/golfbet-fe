@@ -1,4 +1,7 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { RoomCenterProps } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
+import { RoomQrProps } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
+import { RoomRuleProps } from "../../pages/GameRoom/WaitRoom/RoomRule/RoomRule";
 import { MakeGolfCenterDetailProps } from "../../pages/MakeGame/MakeGolfCenter/MakeGolfCenterDetail";
 import { RuleChangeProps } from "../../pages/MakeGame/Rule/RuleChange";
 import { SelectGolfCenterProps } from "../../pages/MakeGame/SelectGolfCenter/SelectGolfCenter";
@@ -24,7 +27,10 @@ export type ModalParam =
   | RuleChangeParam
   | SelectGolfCenterParam
   | MakeGolfCenterParam
-  | MakeGolfCenterDetailParam;
+  | MakeGolfCenterDetailParam
+  | RoomCenterParam
+  | RoomRuleParam
+  | RoomQrParam;
 
 type AlertParam = {
   id: "ALERT";
@@ -69,14 +75,24 @@ type SelectGolfCenterParam = {
   id: "SELECT_GOLF_CENTER";
   args: SelectGolfCenterProps;
 };
-
 type MakeGolfCenterParam = {
   id: "MAKE_GOLF_CENTER";
 };
-
 type MakeGolfCenterDetailParam = {
   id: "MAKE_GOLF_CENTER_DETAIL";
   args: MakeGolfCenterDetailProps;
+};
+type RoomCenterParam = {
+  id: "ROOM_CENTER";
+  args: RoomCenterProps;
+};
+type RoomRuleParam = {
+  id: "ROOM_RULE";
+  args: RoomRuleProps;
+};
+type RoomQrParam = {
+  id: "ROOM_QR";
+  args: RoomQrProps;
 };
 
 export const getModalTypeById = (id: ModalParam["id"]) => {
@@ -86,6 +102,9 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
     case "SELECT_GOLF_CENTER":
     case "MAKE_GOLF_CENTER":
     case "MAKE_GOLF_CENTER_DETAIL":
+    case "ROOM_CENTER":
+    case "ROOM_RULE":
+    case "ROOM_QR":
       return 2;
 
     case "REGION_SELECT":

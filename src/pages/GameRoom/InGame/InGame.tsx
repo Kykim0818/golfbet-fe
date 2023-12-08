@@ -5,122 +5,48 @@ import TitleAsset from "../../../components/TitleAsset";
 import RankBoard from "../../../components/domain/RankBoard";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../../utils/display";
-import { GameInfo } from "../../MakeGame/MakeGame";
-import { GameRoomUser } from "../GameRoom";
+import { GameRoomInfo } from "../GameRoom";
 import ProgressBoard from "./ProgressBoard";
 
-export const testGameRoomInfo: {
-  gameRoomInfo: {
-    gameInfo: GameInfo;
-    hostUserId: string;
-    players: GameRoomUser[];
-  };
-} = {
-  gameRoomInfo: {
-    gameInfo: {
-      gameId: "FIELD2023050701",
-      gameType: "field",
-      startDate: "2023-11-04",
-      golfCenter: {
-        id: "test",
-        name: "이천 실크밸리GG",
-        region: "",
-        frontNineCourse: {
-          id: 0,
-          name: "레이크",
-          pars: [3, 3, 3, 5, 3, 3, 3, 3, 3],
-        },
-        backNineCourse: {
-          id: 0,
-          name: "벨리",
-          pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
-        },
-      },
-      betType: "stroke",
-      playerCount: 4,
-      gameRule: {
-        handiType: ["backHandicap"],
-        specialBetRequirements: ["buddy", "triple", "threeOrMoreTie"],
-        ddang: ["onlyLastPlace"],
-        nearestType: ["separateAmount"],
-      },
-      gameState: "ready",
-      nearestAmount: 0,
-      betAmountPerStroke: 1000,
-      bettingLimit: 50000,
-    },
-    hostUserId: "test",
-    players: [
-      {
-        userId: "test",
-        nickName: "테스트",
-        imgSrc: "",
-        avgScore: 85,
-        readyState: true,
-        handicaps: [],
-        currentMoney: 0,
-        currentScore: 0,
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      },
-      {
-        userId: "user1",
-        nickName: "유저1",
-        imgSrc: "",
-        avgScore: 80,
-        readyState: false,
-        handicaps: [],
-        currentMoney: 0,
-        currentScore: 0,
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      },
-      {
-        userId: "user2",
-        nickName: "유저2",
-        imgSrc: "",
-        avgScore: 81,
-        readyState: true,
-        handicaps: [],
-        currentMoney: 0,
-        currentScore: 0,
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      },
-    ],
-  },
+export type InGameProps = {
+  gameRoomInfo: GameRoomInfo;
+  // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
-export const InGame = () => {
+export const InGame = ({ gameRoomInfo }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
   // # web socket game info
-  const centerType = testGameRoomInfo.gameRoomInfo.gameInfo.gameType;
-  const name = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter.name;
-  const betType = testGameRoomInfo.gameRoomInfo.gameInfo.betType;
-  const betAmountPerStroke =
-    testGameRoomInfo.gameRoomInfo.gameInfo.betAmountPerStroke;
-  const bettingLimit = testGameRoomInfo.gameRoomInfo.gameInfo.bettingLimit;
-  const centerInfo = testGameRoomInfo.gameRoomInfo.gameInfo.golfCenter;
-  const players = testGameRoomInfo.gameRoomInfo.players;
+
+  const centerType = gameRoomInfo.gameInfo.gameType;
+  const name = gameRoomInfo.gameInfo.golfCenter.name;
+  const betType = gameRoomInfo.gameInfo.betType;
+  const betAmountPerStroke = gameRoomInfo.gameInfo.betAmountPerStroke;
+  const bettingLimit = gameRoomInfo.gameInfo.bettingLimit;
+  const centerInfo = gameRoomInfo.gameInfo.golfCenter;
+  const players = gameRoomInfo.players;
   // TODO
   const currentHole = 4;
   // 전후반 결정 요소
-  const isFrontNine = true;
+  const isFrontNine = currentHole <= 9;
   const currentPar = isFrontNine
     ? centerInfo.frontNineCourse.pars[currentHole - 1]
     : centerInfo.backNineCourse.pars[currentHole - 1];
 
   return (
-    <S.Wrapper>
+    <PageStyle.Wrapper>
       <TitleAsset
         handleBack={() => moveBack()}
         visibleBack
-        title={testGameRoomInfo.gameRoomInfo.gameInfo.gameId}
+        title={gameRoomInfo.gameInfo.gameId}
       />
       <div
         style={{
@@ -182,7 +108,7 @@ export const InGame = () => {
             openModal({
               id: "ENTER_AND_CHECK_SCORE",
               args: {
-                gameRoomInfo: testGameRoomInfo.gameRoomInfo,
+                gameRoomInfo,
                 holeCount: currentHole,
                 par: currentPar,
               },
@@ -192,18 +118,12 @@ export const InGame = () => {
           +스코어 입력하기
         </Button>
       </S.Footer>
-    </S.Wrapper>
+    </PageStyle.Wrapper>
   );
 };
 
 //
 const S = {
-  Wrapper: styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: var(--color-bg, #f6f8fc);
-  `,
   Top: styled.div`
     display: flex;
     flex-direction: column;
