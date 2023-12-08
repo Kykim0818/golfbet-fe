@@ -3,7 +3,7 @@ import Button from "../../../components/Button";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { GameRoomInfo } from "./GameRoomInfo";
+import { GameInfoSection } from "./GameInfoSection";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
 import { useGameRoomInfo1 } from "./WaitRoomContainer";
 
@@ -48,7 +48,7 @@ export const WaitRoom = () => {
         title={gameRoomInfo.gameInfo.gameId}
       />
       <S.Body>
-        <GameRoomInfo
+        <GameInfoSection
           centerType={gameRoomInfo?.gameInfo.gameType}
           name={gameRoomInfo?.gameInfo.golfCenter.name}
           betType={gameRoomInfo?.gameInfo.betType}

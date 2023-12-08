@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
+import GameInfoSection from "../../components/domain/GameInfoSection";
 import RankBoard from "../../components/domain/RankBoard";
 import ScoreBoard from "../../components/domain/ScoreBoard";
 import { usePageRoute } from "../../hooks/usePageRoute";
@@ -9,7 +10,6 @@ import { typo } from "../../styles/typo";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
 import { testGameRoomInfo } from "../GameRoom/InGame/InGame";
-import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
 
 export const GameEnd = () => {
   const { goHome } = usePageRoute();
@@ -25,7 +25,7 @@ export const GameEnd = () => {
     <PageStyle.Wrapper>
       <TitleAsset title="게임종료" />
       <S.Body>
-        <GameRoomInfo
+        <GameInfoSection
           centerType={gameRoomInfo?.gameInfo.gameType}
           name={gameRoomInfo?.gameInfo.golfCenter.name}
           betType={gameRoomInfo?.gameInfo.betType}

@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import { GameInfo } from "../../MakeGame/MakeGame";
+import { usePageRoute } from "../../../hooks/usePageRoute";
+import { GameInfo } from "../../../pages/MakeGame/MakeGame";
+import { typo } from "../../../styles/typo";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
   getDisplayMoney,
 } from "../../../utils/display";
-import { typo } from "../../../styles/typo";
-import { usePageRoute } from "../../../hooks/usePageRoute";
 
 type Props = {
   centerType: GameInfo["gameType"];
@@ -19,7 +19,7 @@ type Props = {
   uiType?: "waitRoom" | "gameEnd";
 };
 
-export const GameRoomInfo = ({
+export const GameInfoSection = ({
   centerType,
   name,
   betType,

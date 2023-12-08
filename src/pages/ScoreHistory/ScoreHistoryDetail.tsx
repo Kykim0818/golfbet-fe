@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
 import TitleAsset from "../../components/TitleAsset";
+import GameInfoSection from "../../components/domain/GameInfoSection";
 import ScoreBoard from "../../components/domain/ScoreBoard";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { UNIQUE_QUERY_KEY } from "../../service/api/constant";
@@ -12,7 +13,6 @@ import { typo } from "../../styles/typo";
 import { getDisplayDate } from "../../utils/display";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
-import { GameRoomInfo } from "../GameRoom/WaitRoom/GameRoomInfo";
 import { ScoreHistroyRankBoard } from "./ScoreHistoryRankBoard";
 
 export const ScoreHistoryDetail = () => {
@@ -44,7 +44,7 @@ export const ScoreHistoryDetail = () => {
           <S.GameId>{gameRoomInfo.gameInfo.gameId}</S.GameId>
           <S.Date>{getDisplayDate(gameRoomInfo.gameInfo.startDate)}</S.Date>
         </S.DateSection>
-        <GameRoomInfo
+        <GameInfoSection
           centerType={gameRoomInfo?.gameInfo.gameType}
           name={gameRoomInfo?.gameInfo.golfCenter.name}
           betType={gameRoomInfo?.gameInfo.betType}
