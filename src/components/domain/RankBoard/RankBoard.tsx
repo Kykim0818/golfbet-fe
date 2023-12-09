@@ -1,7 +1,7 @@
 import styled from "styled-components";
+import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import { deepClone } from "../../../utils/deepClone";
 import { getUserId } from "../../../utils/getUserId";
-import { GameRoomUser } from "../../GameRoom/GameRoom";
 import { RankBoardPlayerInfo } from "./RankBoardPlayerInfo";
 
 type RankBoardProps = {

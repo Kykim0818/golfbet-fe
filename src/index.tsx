@@ -10,15 +10,7 @@ import App from "./App";
 import { decreaseBackToHomePageCount } from "./hooks/usePageRoute";
 import EnterGame from "./pages/EnterGame";
 import { ErrorPage } from "./pages/ErrorPage";
-import GameEnd from "./pages/GameEnd";
-import GameProcess from "./pages/GameProcess";
 import GameRoom from "./pages/GameRoom";
-import HandicapSetup from "./pages/GameRoom/HandicapSetup";
-import WaitRoom from "./pages/GameRoom/WaitRoom";
-import { RoomCenter } from "./pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
-import { RoomQr } from "./pages/GameRoom/WaitRoom/RoomQr/RoomQr";
-import { RoomRule } from "./pages/GameRoom/WaitRoom/RoomRule/RoomRule";
-import { WaitRoomContainer } from "./pages/GameRoom/WaitRoom/WaitRoomContainer";
 import MakeGame from "./pages/MakeGame";
 import Setup from "./pages/MakeGame/Setup";
 import ManageAccount from "./pages/ManageAccount";
@@ -91,44 +83,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "/process_game/:gameId",
-        element: <GameProcess />,
-        errorElement: <ErrorPage />,
-      },
-      {
         path: "/game_room/:gameId",
         element: (
           <SocketsProvider>
             <GameRoom />
           </SocketsProvider>
         ),
-        children: [
-          {
-            element: <WaitRoomContainer />,
-            children: [
-              {
-                path: "",
-                element: <WaitRoom />,
-              },
-              {
-                path: "rule",
-                element: <RoomRule />,
-              },
-              {
-                path: "golf_center",
-                element: <RoomCenter />,
-              },
-              {
-                path: "qr",
-                element: <RoomQr />,
-              },
-            ],
-          },
-          {
-            path: "handicap_setup",
-            element: <HandicapSetup />,
-          },
-        ],
         errorElement: <ErrorPage />,
       },
       {
@@ -142,11 +102,11 @@ const router = createBrowserRouter([
         ],
         errorElement: <ErrorPage />,
       },
-      {
-        path: "/game_end",
-        element: <GameEnd />,
-        errorElement: <ErrorPage />,
-      },
+      // {
+      //   path: "/game_end",
+      //   element: <GameEnd />,
+      //   errorElement: <ErrorPage />,
+      // },
     ],
   },
 ]);

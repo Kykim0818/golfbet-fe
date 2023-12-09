@@ -1,16 +1,36 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
+import GameInfoSection from "../../../components/domain/GameInfoSection";
 import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
+import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
-import { GameRoomInfo } from "./GameRoomInfo";
+import { PageStyle } from "../../../styles/page";
+import { deepClone } from "../../../utils/deepClone";
+import { GameInfo } from "../../MakeGame/MakeGame";
+import { GameRule } from "../../MakeGame/Rule/type";
+import { GameRoomInfo } from "../GameRoom";
 import { PlayersInfo, PlayersInfoUI } from "./PlayersInfo";
-import { useGameRoomInfo1 } from "./WaitRoomContainer";
 
-export const WaitRoom = () => {
+type WaitRoomProps = {
+  gameRoomInfo: GameRoomInfo;
+  onReady: (gameId: string, userId: string, readyState: boolean) => void;
+  updateRoom: (
+    gameId: string,
+    userId: string,
+    updateInfo: GameRoomInfo["gameInfo"]
+  ) => void;
+  // onGameStart : ()
+};
+
+export const WaitRoom = ({
+  gameRoomInfo,
+  onReady,
+  updateRoom,
+}: WaitRoomProps) => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { gameRoomInfo, onReady } = useGameRoomInfo1();
   const { movePage, moveBack } = usePageRoute();
+  const { openModal } = useModal();
 
   // if (gameRoomInfo === undefined) return <Loading />;
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
@@ -29,6 +49,44 @@ export const WaitRoom = () => {
   );
   const isRoomMaker = userInfo.userId === gameRoomInfo.hostUserId;
 
+  const handleOpenRoomCenter = async () => {
+    const modifiedGolfCenter = await openModal<GameInfo["golfCenter"]>({
+      id: "ROOM_CENTER",
+      args: {
+        gameRoomInfo,
+        userId: userInfo.userId,
+      },
+    });
+    if (modifiedGolfCenter && gameRoomInfo.gameInfo.gameId) {
+      const clonedGameInfo = deepClone(gameRoomInfo.gameInfo);
+      clonedGameInfo.golfCenter = modifiedGolfCenter;
+      updateRoom(gameRoomInfo.gameInfo.gameId, userInfo.userId, clonedGameInfo);
+    }
+  };
+
+  const handleOpenRoomRule = async () => {
+    const modifiedRule = await openModal<{
+      changedRule: GameRule;
+      changedNearestAmount: number;
+    }>({
+      id: "ROOM_RULE",
+      args: {
+        gameRoomInfo,
+        userId: userInfo.userId,
+      },
+    });
+    if (modifiedRule && gameRoomInfo.gameInfo.gameId) {
+      const clonedGameInfo = deepClone(gameRoomInfo.gameInfo);
+      clonedGameInfo.gameRule = modifiedRule.changedRule;
+      clonedGameInfo.nearestAmount = modifiedRule.changedNearestAmount;
+      updateRoom(gameRoomInfo.gameInfo.gameId, userInfo.userId, clonedGameInfo);
+    }
+  };
+
+  const handleOpenRoomQr = () => {
+    openModal({ id: "ROOM_QR", args: { gameRoomInfo } });
+  };
+
   const handleGameStart = () => {
     //
     movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
@@ -41,19 +99,22 @@ export const WaitRoom = () => {
   };
 
   return (
-    <>
+    <PageStyle.Wrapper>
       <GameTitleAsset
         visibleBack
         handleBack={moveBack}
         title={gameRoomInfo.gameInfo.gameId}
+        handleOpenRoomQr={handleOpenRoomQr}
       />
       <S.Body>
-        <GameRoomInfo
+        <GameInfoSection
           centerType={gameRoomInfo?.gameInfo.gameType}
           name={gameRoomInfo?.gameInfo.golfCenter.name}
           betType={gameRoomInfo?.gameInfo.betType}
           betAmountPerStroke={gameRoomInfo?.gameInfo.betAmountPerStroke}
           bettingLimit={gameRoomInfo?.gameInfo.bettingLimit}
+          handleOpenRoomCenter={handleOpenRoomCenter}
+          handleOpenRoomRule={handleOpenRoomRule}
         />
         <PlayersInfo
           userId={userInfo.userId}
@@ -81,7 +142,7 @@ export const WaitRoom = () => {
           </Button>
         )}
       </S.Footer>
-    </>
+    </PageStyle.Wrapper>
   );
 };
 

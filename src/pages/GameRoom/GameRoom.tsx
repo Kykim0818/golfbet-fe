@@ -1,12 +1,16 @@
 import { useEffect } from "react";
-import { Outlet, useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
 import { useAppSelector } from "../../hooks/redux";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { useSockets } from "../../service/socketIo/socketIo.context";
+import GameEnd from "../GameEnd";
 import { GameInfo } from "../MakeGame/MakeGame";
+import InGame from "./InGame";
+import WaitRoom from "./WaitRoom";
+import { GAME_STATE } from "./constant";
 
 type ContextType = ContextStateType & ContextActionType;
 
@@ -99,11 +103,31 @@ export const GameRoom = () => {
   // 3 웹 소켓 연결
   if (socket.connected === false || gameRoomInfo === undefined)
     return <Loading />;
-  return (
-    <S.Wrapper>
-      <Outlet context={{ gameRoomInfo, onReady, exitRoom, updateRoom }} />
-    </S.Wrapper>
-  );
+  // 대기실
+  if (gameRoomInfo.gameInfo.gameState === GAME_STATE.WAIT)
+    return (
+      <WaitRoom
+        gameRoomInfo={gameRoomInfo}
+        onReady={onReady}
+        updateRoom={updateRoom}
+      />
+    );
+  // 게임중
+  if (gameRoomInfo.gameInfo.gameState === GAME_STATE.IN_PROGRESS)
+    return <InGame gameRoomInfo={gameRoomInfo} />;
+  // 종료
+  if (gameRoomInfo.gameInfo.gameState === GAME_STATE.END)
+    return <GameEnd gameRoomInfo={gameRoomInfo} />;
+  return <Loading />;
+  // if (gameRoomInfo.gameInfo.gameState === GAME_STATE.IN_PROGRESS)
+  //   return <WaitRoom />;
+  // if (gameRoomInfo.gameInfo.gameState === GAME_STATE.END) return <WaitRoom />;
+
+  // return (
+  //   <S.Wrapper>
+  //     <Outlet context={{ gameRoomInfo, onReady, exitRoom, updateRoom }} />
+  //   </S.Wrapper>
+  // );
 };
 
 // TODO:refactor 분리가능한지 확인

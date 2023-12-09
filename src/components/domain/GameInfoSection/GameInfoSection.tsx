@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import Button from "../../../components/Button";
-import { GameInfo } from "../../MakeGame/MakeGame";
+import { GameInfo } from "../../../pages/MakeGame/MakeGame";
+import { typo } from "../../../styles/typo";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
   getDisplayMoney,
 } from "../../../utils/display";
-import { typo } from "../../../styles/typo";
-import { usePageRoute } from "../../../hooks/usePageRoute";
 
 type Props = {
   centerType: GameInfo["gameType"];
@@ -17,17 +16,22 @@ type Props = {
   betAmountPerStroke: GameInfo["betAmountPerStroke"];
   bettingLimit: GameInfo["bettingLimit"];
   uiType?: "waitRoom" | "gameEnd";
+
+  // 아래 2개는 waitRoom 일때만 사용 더 확장 될 시, GameInfoSection을 분리
+  handleOpenRoomCenter?: () => Promise<void>;
+  handleOpenRoomRule?: () => Promise<void>;
 };
 
-export const GameRoomInfo = ({
+export const GameInfoSection = ({
   centerType,
   name,
   betType,
   betAmountPerStroke,
   bettingLimit,
   uiType = "waitRoom",
+  handleOpenRoomCenter,
+  handleOpenRoomRule,
 }: Props) => {
-  const { movePage } = usePageRoute();
   return (
     <S.Wrapper>
       {/* 1 */}
@@ -72,11 +76,11 @@ export const GameRoomInfo = ({
             size="small"
             variants="custom"
             style={{ backgroundColor: "F5F5F5", color: "#004F59" }}
-            onClick={() => movePage("golf_center")}
+            onClick={handleOpenRoomCenter}
           >
             골프장 정보
           </Button>
-          <Button size="small" onClick={() => movePage("rule")}>
+          <Button size="small" onClick={handleOpenRoomRule}>
             규칙 보기
           </Button>
         </S.BtnGroup>
