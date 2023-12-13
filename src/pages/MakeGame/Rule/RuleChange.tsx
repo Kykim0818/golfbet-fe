@@ -4,6 +4,7 @@ import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import ToggleGroup from "../../../components/ToggleGroup";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { usePreventLeaveInModal } from "../../../hooks/usePreventLeaveInModal";
 import { PageStyle } from "../../../styles/page";
 import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
@@ -31,6 +32,14 @@ export const RuleChange = ({
   gameInfo,
   handleModalResult,
 }: RuleChangeProps) => {
+  const [triggerFlag, setTriggerFlag] = useState(true);
+  usePreventLeaveInModal({
+    confirmTriggerFlag: triggerFlag,
+    args: {
+      title: "나가기",
+      msg: "변경 중인 규칙이 있습니다. 나가시겠습니까?\n 페이지를 나가는 경우, 입력된 정보는 잃게 됩니다.",
+    },
+  });
   const { moveBack } = usePageRoute();
 
   const multiSelectOptions: Rules["ruleType"][] = ["specialBetRequirements"];
@@ -101,6 +110,8 @@ export const RuleChange = ({
         <Button
           onClick={() => {
             // TODO: 뒤로가기
+            setTriggerFlag(false);
+            moveBack();
             handleModalResult?.({
               changedRule: currentRule,
               changedNearestAmount: currentNearestAmount,

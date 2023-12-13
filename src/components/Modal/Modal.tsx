@@ -9,7 +9,7 @@ interface Props {
 
 export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
   return (
-    <S.Background>
+    <S.Background modalType={modalType}>
       <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>
         {children}
       </S.Sheet>
@@ -18,7 +18,12 @@ export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
 };
 
 const S = {
-  Background: styled.div`
+  Background: styled.div<{ modalType: ModalType }>`
+    ${(props) =>
+      props.modalType === 3 &&
+      css`
+        display: none;
+      `}
     position: fixed;
     top: 0;
     left: 0;
