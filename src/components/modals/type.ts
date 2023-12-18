@@ -14,6 +14,8 @@ const MODAL_TYPE = {
   BOTTOM_SHEET: 1,
   /** 페이지 형 */
   PAGE: 2,
+  /** 패딩 */
+  EMPTY: 3,
 } as const;
 
 export type ModalType = (typeof MODAL_TYPE)[keyof typeof MODAL_TYPE];
@@ -30,7 +32,8 @@ export type ModalParam =
   | MakeGolfCenterDetailParam
   | RoomCenterParam
   | RoomRuleParam
-  | RoomQrParam;
+  | RoomQrParam
+  | EmptyParam;
 
 type AlertParam = {
   id: "ALERT";
@@ -48,6 +51,9 @@ type ConfirmParam = {
     okBtnLabel?: string;
     cancelBtnLabel?: string;
   };
+};
+type EmptyParam = {
+  id: "EMPTY";
 };
 
 type RegionSelectParam = {
@@ -97,6 +103,9 @@ type RoomQrParam = {
 
 export const getModalTypeById = (id: ModalParam["id"]) => {
   switch (id) {
+    case "EMPTY":
+      return 3;
+
     case "RULE_CHANGE":
     case "SETUP_CHECK":
     case "SELECT_GOLF_CENTER":

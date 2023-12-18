@@ -14,6 +14,7 @@ import { Modal } from "../Modal/Modal";
 import EnterAndCheckScore from "../domain/EnterAndCheckScore";
 import Alert from "../modals/Alert";
 import { Confirm } from "../modals/Confirm/Confirm";
+import { Empty } from "../modals/Empty/Empty";
 import { ModalParam, getModalTypeById } from "../modals/type";
 
 export const ModalContainer = () => {
@@ -23,6 +24,13 @@ export const ModalContainer = () => {
   useEffect(() => {
     const event = history.listen((listener) => {
       if (listener.action === "POP" && modalStatus.length > 0) {
+        // 단순 뒤로가기를 통해 모달이 닫히는 경우에도 useModal - openModal에 return으로 false를 반환해주기 위한 작업
+        // ISSUE: settTimeout을 사용한 이유는 confirm에서 ok를 눌럿을 경우, result (true) 를 하는 시점보다 pop 햇을때 리스너가 더 빨리 실행되어서 처리함
+        setTimeout(() => {
+          modalStatus?.[modalStatus.length - 1].handleCloseWithoutMoveBack(
+            false
+          );
+        }, 100);
         dispatch(actionModal.closeModal());
       }
     });
@@ -135,6 +143,8 @@ const modalChildrenSelector = (
       );
     case "ROOM_QR":
       return <RoomQr gameRoomInfo={modalParam.args.gameRoomInfo} />;
+    case "EMPTY":
+      return <Empty />;
     default:
       return null;
   }

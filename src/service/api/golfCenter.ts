@@ -42,28 +42,28 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 36,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "SUN 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 1,
+              id: 2,
               name: "SUN 후반",
               // nameDetail: "후반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 2,
+              id: 3,
               name: "VALLY 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 4, 3, 5, 4, 4, 3, 4, 5],
             },
             {
-              id: 3,
+              id: 4,
               name: "VALLY 후반",
               // nameDetail: "후반",
               parsSum: 36,
@@ -79,14 +79,14 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 18,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "BIRCH",
               // nameDetail: "",
               parsSum: 36,
               pars: [5, 4, 3, 4, 4, 4, 4, 3, 5],
             },
             {
-              id: 1,
+              id: 2,
               name: "HILL",
               // nameDetail: "",
               parsSum: 36,
@@ -108,28 +108,28 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 36,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "SUN 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 1,
+              id: 2,
               name: "SUN 후반",
               // nameDetail: "후반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 2,
+              id: 3,
               name: "VALLY 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 4, 3, 5, 4, 4, 3, 4, 5],
             },
             {
-              id: 3,
+              id: 4,
               name: "VALLY 후반",
               // nameDetail: "후반",
               parsSum: 36,
@@ -145,14 +145,14 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 18,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "BIRCH",
               // nameDetail: "",
               parsSum: 36,
               pars: [5, 4, 3, 4, 4, 4, 4, 3, 5],
             },
             {
-              id: 1,
+              id: 2,
               name: "HILL",
               // nameDetail: "",
               parsSum: 36,
@@ -178,28 +178,28 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 36,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "SUN 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 1,
+              id: 2,
               name: "SUN 후반",
               // nameDetail: "후반",
               parsSum: 36,
               pars: [4, 5, 3, 4, 4, 5, 3, 4, 4],
             },
             {
-              id: 2,
+              id: 3,
               name: "VALLY 전반",
               // nameDetail: "전반",
               parsSum: 36,
               pars: [4, 4, 3, 5, 4, 4, 3, 4, 5],
             },
             {
-              id: 3,
+              id: 4,
               name: "VALLY 후반",
               // nameDetail: "후반",
               parsSum: 36,
@@ -215,14 +215,14 @@ const testCourses1: { centerInfos: GolfCenterList } = {
           holeCount: 18,
           courses: [
             {
-              id: 0,
+              id: 1,
               name: "BIRCH",
               // nameDetail: "",
               parsSum: 36,
               pars: [5, 4, 3, 4, 4, 4, 4, 3, 5],
             },
             {
-              id: 1,
+              id: 2,
               name: "HILL",
               // nameDetail: "",
               parsSum: 36,

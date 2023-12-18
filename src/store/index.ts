@@ -16,7 +16,10 @@ export const store = configureStore({
         // Ignore these action types
         // ignoredActions: [""],
         // Ignore these field paths in all actions
-        ignoredActionPaths: ["payload.handleClose"],
+        ignoredActionPaths: [
+          "payload.handleClose",
+          "payload.handleCloseWithoutMoveBack",
+        ],
         // // Ignore these paths in the state
         // ignoredPaths: ["items.dates"],
       },

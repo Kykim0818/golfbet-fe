@@ -5,9 +5,11 @@ import Input from "../../../components/Input";
 import SegmentCell from "../../../components/SegmentCell";
 import Stepper from "../../../components/Stepper";
 import TitleAsset from "../../../components/TitleAsset";
+import { useAppSelector } from "../../../hooks/redux";
 import { useLoading } from "../../../hooks/useLoading";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { usePreventLeave } from "../../../hooks/usePreventLeave";
 import { deepClone } from "../../../utils/deepClone";
 import { BetMoney } from "../BetMoney";
 import { GameInfo, useGameInfo } from "../MakeGame";
@@ -16,15 +18,24 @@ import { GameRule } from "../Rule/type";
 import { defaultGameInfo, isCompleteMakingGameInfo } from "../util";
 
 export const Setup = () => {
+  const modalStatus = useAppSelector((state) => state.modal.status);
   const { openModal } = useModal();
   const { onLoading } = useLoading();
-  const { goHome, movePage } = usePageRoute();
+  const { moveBack, movePage } = usePageRoute();
   const gameInfo = useRef<GameInfo>(deepClone(defaultGameInfo));
   const { golfCenterList } = useGameInfo();
   const [, setRenderFlag] = useState(false);
   const repaint = () => {
     setRenderFlag((prev) => !prev);
   };
+
+  usePreventLeave({
+    confirmTriggerFlag: modalStatus.length === 0,
+    args: {
+      title: "나가기",
+      msg: "생성중인 게임이 있습니다. 나가시겠습니까?\n 페이지를 나가는 경우, 입력된 정보는 잃게 됩니다.",
+    },
+  });
 
   const canGoNext = isCompleteMakingGameInfo(gameInfo.current);
   const handleChangePlayerCount = (playerCount: number) => {
@@ -85,14 +96,16 @@ export const Setup = () => {
       id: "SETUP_CHECK",
       args: { gameInfo: deepClone(gameInfo.current) },
     });
-    onLoading(2);
-    console.log("gameId : ", gameId);
-    movePage(`/game_room/${gameId}`, { replace: true });
+    if (gameId) {
+      onLoading(2);
+      console.log("gameId : ", gameId);
+      movePage(`/game_room/${gameId}`, { replace: true });
+    }
   };
 
   return (
     <>
-      <TitleAsset title="게임 만들기" visibleBack handleBack={goHome} />
+      <TitleAsset title="게임 만들기" visibleBack handleBack={moveBack} />
       <Styled.Body>
         {/* ////// 게임분류  */}
         <div>

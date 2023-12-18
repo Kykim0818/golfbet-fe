@@ -5,6 +5,7 @@ import { ModalParam } from "../../components/modals/type";
 // Define a type for the slice state
 type SliceModalParam = ModalParam & {
   handleClose: (result?: any) => void;
+  handleCloseWithoutMoveBack: (result?: any) => void;
 };
 export interface ModalState {
   status: SliceModalParam[];
