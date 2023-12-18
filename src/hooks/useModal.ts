@@ -17,7 +17,16 @@ export const useModal = () => {
           resolve(result);
         }, 100);
       };
-      dispatch(actionModal.openModal({ ...modalParam, handleClose }));
+      const handleCloseWithoutMoveBack = (result: T) => {
+        resolve(result);
+      };
+      dispatch(
+        actionModal.openModal({
+          ...modalParam,
+          handleClose,
+          handleCloseWithoutMoveBack,
+        })
+      );
       increaseBackToHomePageCount();
       window.history.pushState(null, "", window.location.href);
     });
