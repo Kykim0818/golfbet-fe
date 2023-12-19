@@ -1,20 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import BottomNav from "../../components/@common/BottomNav";
 import Loading from "../../components/Loading";
 import { useAppDispatch } from "../../hooks/redux";
+import { useBottomNav } from "../../hooks/useBottomNav";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { BasicUserInfo, getUser } from "../../service/api/user";
 import { actionUser } from "../../store/user/userSlice";
 import { getDisplayMoney } from "../../utils/display";
-import { HomeImageButton } from "./HomeImageButton";
 import { ActiveGameNotifier } from "./ActiveGameNotifier";
+import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const dispatch = useAppDispatch();
-  const { movePage, goHome } = usePageRoute();
+  const { movePage } = usePageRoute();
   const { isLoading, error, data } = useQuery(["userInfo"], () => getUser());
-
+  const { bottomNavList } = useBottomNav();
   useEffect(() => {
     if (data) {
       dispatch(
@@ -61,25 +63,17 @@ export const Home = (props: { handleLogout: () => void }) => {
         )}
       </Styled.S3>
       {/* </Suspense> */}
-      <Styled.Footer>
-        <Styled.FooterC1 onClick={goHome}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_home.svg"}
-          />
-        </Styled.FooterC1>
-        <Styled.FooterB onClick={() => movePage("/score_history")}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_score.svg"}
-            alt="no icons"
-          />
-        </Styled.FooterB>
-        <Styled.FooterB onClick={() => movePage("/setting")}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
-            alt="no icons"
-          />
-        </Styled.FooterB>
-      </Styled.Footer>
+      <BottomNav
+        navList={bottomNavList}
+        selectedNav="home"
+        customStyle={{
+          position: "fixed",
+          bottom: 0,
+          backgroundColor: "#ffffff",
+          width: "100%",
+          borderRadius: "15px 15px 0px 0px",
+        }}
+      />
     </Styled.Wrapper>
   );
 };
@@ -275,11 +269,8 @@ const Styled = {
   `,
 
   Footer: styled.div`
-    display: flex;
-    justify-content: end;
     width: 100%;
-    height: 73px;
-
+    max-height: 65px;
     position: fixed;
     bottom: 0;
 

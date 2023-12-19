@@ -1,7 +1,9 @@
 import styled, { css } from "styled-components";
+import BottomNav from "../../components/@common/BottomNav";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
 import { useAppSelector } from "../../hooks/redux";
+import { useBottomNav } from "../../hooks/useBottomNav";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
@@ -9,7 +11,7 @@ import { typo } from "../../styles/typo";
 export const Setting = () => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const { goHome, movePage } = usePageRoute();
-
+  const { bottomNavList } = useBottomNav();
   // TODO: userId가 없어졌을때 로직 추가 필요
   if (!userInfo.userId) goHome();
   return (
@@ -72,29 +74,17 @@ export const Setting = () => {
           </S.Menu>
         </S.MenuSection>
       </S.Body>
-      <S.Footer>
-        <S.FooterC1 onClick={goHome}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_home.svg"}
-          />
-        </S.FooterC1>
-        <S.FooterB onClick={() => movePage("/score_history")}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_score.svg"}
-            alt="no icons"
-          />
-        </S.FooterB>
-        <S.FooterB
-          onClick={() => {
-            console.log("//");
-          }}
-        >
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
-            alt="no icons"
-          />
-        </S.FooterB>
-      </S.Footer>
+      <BottomNav
+        navList={bottomNavList}
+        selectedNav="setting"
+        customStyle={{
+          position: "fixed",
+          bottom: 0,
+          backgroundColor: "#ffffff",
+          width: "100%",
+          borderRadius: "15px 15px 0px 0px",
+        }}
+      />
     </PageStyle.Wrapper>
   );
 };

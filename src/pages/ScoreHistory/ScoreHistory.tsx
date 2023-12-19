@@ -1,17 +1,20 @@
-import styled from "styled-components";
-import { PageStyle } from "../../styles/page";
-import { usePageRoute } from "../../hooks/usePageRoute";
-import TitleAsset from "../../components/TitleAsset";
 import { useQuery } from "@tanstack/react-query";
-import { apiGetUserGameHistories } from "../../service/api/gameScore";
-import { typo } from "../../styles/typo";
+import styled from "styled-components";
+import BottomNav from "../../components/@common/BottomNav";
+import TitleAsset from "../../components/TitleAsset";
 import GameSummary from "../../components/domain/GameSummary";
+import { useBottomNav } from "../../hooks/useBottomNav";
+import { usePageRoute } from "../../hooks/usePageRoute";
+import { apiGetUserGameHistories } from "../../service/api/gameScore";
+import { PageStyle } from "../../styles/page";
+import { typo } from "../../styles/typo";
 
 export const ScoreHistory = () => {
   const { goHome, movePage } = usePageRoute();
   const { isLoading, error, data } = useQuery(["userGameHistory"], () =>
     apiGetUserGameHistories()
   );
+  const { bottomNavList } = useBottomNav();
   return (
     <PageStyle.Wrapper>
       <TitleAsset title="스코어" />
@@ -38,25 +41,17 @@ export const ScoreHistory = () => {
           ))
         )}
       </S.Body>
-      <S.Footer>
-        <S.FooterC1 onClick={goHome}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_home.svg"}
-          />
-        </S.FooterC1>
-        <S.FooterB>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_score.svg"}
-            alt="no icons"
-          />
-        </S.FooterB>
-        <S.FooterB onClick={() => movePage("/setting")}>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/svg/bottom_bar_menu.svg"}
-            alt="no icons"
-          />
-        </S.FooterB>
-      </S.Footer>
+      <BottomNav
+        navList={bottomNavList}
+        selectedNav="score_history"
+        customStyle={{
+          position: "fixed",
+          bottom: 0,
+          backgroundColor: "#ffffff",
+          width: "100%",
+          borderRadius: "15px 15px 0px 0px",
+        }}
+      />
     </PageStyle.Wrapper>
   );
 };
