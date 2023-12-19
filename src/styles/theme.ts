@@ -1,10 +1,13 @@
 import { DefaultTheme } from "styled-components";
+import colors from "./theme/colors";
+import common from "./theme/common";
+import sizes from "./theme/sizes";
 
 // example
 const theme: DefaultTheme = {
   basicWidth: "320px",
 
-  color: {
+  colors: {
     bg: "#F6F8FC",
     main: "#009EB2",
     sub: "#fff",
@@ -14,11 +17,17 @@ const theme: DefaultTheme = {
 const nextTheme: DefaultTheme = {
   basicWidth: "320px",
 
-  color: {
+  colors: {
     bg: "#F6F8FC",
     main: "#1c1f25",
     sub: "#fff",
   },
 };
 
-export { theme, nextTheme };
+const Theme: DefaultTheme = {
+  colors,
+  sizes,
+  common,
+};
+
+export { Theme, nextTheme, theme };

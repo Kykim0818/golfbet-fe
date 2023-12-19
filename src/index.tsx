@@ -24,8 +24,9 @@ import reportWebVitals from "./reportWebVitals";
 import SocketsProvider from "./service/socketIo/socketIo.context";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { store } from "./store";
-import GlobalStyle from "./styles/global-styles";
-import { theme } from "./styles/theme";
+import GlobalFont from "./styles/GlobalFont";
+import GlobalStyle from "./styles/GlobalStyle";
+import { Theme } from "./styles/theme";
 
 // TODO : 현재 도메인이 /pwa-react-test라 반드시 붙여야하는지? 확인 필요
 const router = createBrowserRouter([
@@ -134,7 +135,8 @@ root.render(
     <CookiesProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={Theme}>
+            <GlobalFont />
             <GlobalStyle />
             <RouterProvider router={router} />
           </ThemeProvider>

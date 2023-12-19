@@ -3,7 +3,6 @@ import { css } from "styled-components";
 export const typo = {
   s16w700: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -11,7 +10,6 @@ export const typo = {
   `,
   s16w400: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -19,7 +17,6 @@ export const typo = {
   `,
   s15w500: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 15px;
     font-style: normal;
     font-weight: 500;
@@ -27,7 +24,6 @@ export const typo = {
   `,
   s14w700: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -35,7 +31,6 @@ export const typo = {
   `,
   s14w400: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -43,7 +38,6 @@ export const typo = {
   `,
   s12w700: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
@@ -51,7 +45,6 @@ export const typo = {
   `,
   s12w500: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -59,7 +52,6 @@ export const typo = {
   `,
   s10w500: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -67,7 +59,6 @@ export const typo = {
   `,
   s10w400: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
@@ -75,7 +66,6 @@ export const typo = {
   `,
   s8w500: css`
     color: #000;
-    font-family: NotoSans KR;
     font-size: 8px;
     font-style: normal;
     font-weight: 500;
