@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import BottomNav from "../../components/@common/BottomNav";
+import BottomNav from "../../components/@common/molecules/BottomNav";
+import Loading from "../../components/Loading";
 import TitleAsset from "../../components/TitleAsset";
 import GameSummary from "../../components/domain/GameSummary";
 import { useBottomNav } from "../../hooks/useBottomNav";
-import { usePageRoute } from "../../hooks/usePageRoute";
 import { apiGetUserGameHistories } from "../../service/api/gameScore";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 
 export const ScoreHistory = () => {
-  const { goHome, movePage } = usePageRoute();
-  const { isLoading, error, data } = useQuery(["userGameHistory"], () =>
+  const { isLoading, data } = useQuery(["userGameHistory"], () =>
     apiGetUserGameHistories()
   );
   const { bottomNavList } = useBottomNav();
+  if (isLoading) return <Loading />;
   return (
     <PageStyle.Wrapper>
       <TitleAsset title="스코어" />
@@ -23,6 +23,7 @@ export const ScoreHistory = () => {
           <S.Empty>
             <img
               src={process.env.PUBLIC_URL + "assets/svg/img/no_history.svg"}
+              alt="no history"
             />
             <S.Txt>기록된 정보가 없습니다.</S.Txt>
           </S.Empty>
@@ -81,33 +82,5 @@ const S = {
     ${typo.s14w400}
     color: #3C4043;
     padding: 10px;
-  `,
-  Footer: styled.div`
-    display: flex;
-    justify-content: end;
-    width: 100%;
-    height: 73px;
-
-    position: fixed;
-    bottom: 0;
-
-    background-color: #ffffff;
-    border-radius: 46px 46px 0px 0px;
-  `,
-  FooterC1: styled.div`
-    position: absolute;
-
-    left: calc(50% - 38px);
-    top: -38px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `,
-  FooterB: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
   `,
 };

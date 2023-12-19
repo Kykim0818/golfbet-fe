@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import BottomNav from "../../components/@common/BottomNav";
+import BottomNav from "../../components/@common/molecules/BottomNav";
 import Button from "../../components/Button";
 import TitleAsset from "../../components/TitleAsset";
 import { useAppSelector } from "../../hooks/redux";
@@ -91,7 +91,10 @@ export const Setting = () => {
 
 const RightArrow = () => {
   return (
-    <img src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"} />
+    <img
+      src={process.env.PUBLIC_URL + "/assets/svg/ic_right_arrow.svg"}
+      alt="right_arrow"
+    />
   );
 };
 
@@ -167,34 +170,5 @@ const S = {
     margin-left: 16px;
     ${typo.s10w400}
     color: var(--color-grey-400, #bdc1c6);
-  `,
-  //
-  Footer: styled.div`
-    display: flex;
-    justify-content: end;
-    width: 100%;
-    height: 73px;
-
-    position: fixed;
-    bottom: 0;
-
-    background-color: #ffffff;
-    border-radius: 46px 46px 0px 0px;
-  `,
-  FooterC1: styled.div`
-    position: absolute;
-
-    left: calc(50% - 38px);
-    top: -38px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `,
-  FooterB: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
   `,
 };

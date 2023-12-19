@@ -1,8 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import colors from "../../../styles/theme/colors";
-import commonStyle from "../../../styles/theme/common";
-import sizes, { sizesHeight } from "../../../styles/theme/sizes";
+import colors from "../../../../styles/theme/colors";
+import commonStyle from "../../../../styles/theme/common";
+import sizes, { sizesHeight } from "../../../../styles/theme/sizes";
 
 export interface NavItem {
   id: string;

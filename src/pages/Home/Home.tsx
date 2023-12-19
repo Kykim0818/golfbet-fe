@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import BottomNav from "../../components/@common/BottomNav";
+import BottomNav from "../../components/@common/molecules/BottomNav";
 import Loading from "../../components/Loading";
 import { useAppDispatch } from "../../hooks/redux";
 import { useBottomNav } from "../../hooks/useBottomNav";
@@ -266,31 +266,5 @@ const Styled = {
     height: 233px;
     border-radius: 15px;
     background-color: #ffe4c7;
-  `,
-
-  Footer: styled.div`
-    width: 100%;
-    max-height: 65px;
-    position: fixed;
-    bottom: 0;
-
-    background-color: #ffffff;
-    border-radius: 46px 46px 0px 0px;
-  `,
-  FooterC1: styled.div`
-    position: absolute;
-
-    left: calc(50% - 38px);
-    top: -38px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `,
-  FooterB: styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
   `,
 };
