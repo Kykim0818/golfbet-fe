@@ -3,7 +3,7 @@ import { history } from "..";
 import { actionModal } from "../store/modal/modalSlice";
 import { useAppDispatch } from "./redux";
 import { useModal } from "./useModal";
-import { increaseBackToHomePageCount, usePageRoute } from "./usePageRoute";
+import { increaseBackToHomePageCount } from "./usePageRoute";
 import { useStrictModeEffectOnce } from "./useStrictModeEffectOnce";
 
 type Param = {
@@ -14,18 +14,16 @@ type Param = {
     okBtnLabel?: string;
     cancelBtnLabel?: string;
   };
+  handleClickOk: () => void;
 };
 
 export const usePreventLeave = ({
   confirmTriggerFlag = false,
   args: { title, msg, okBtnLabel, cancelBtnLabel },
+  handleClickOk,
 }: Param) => {
   const { openModal } = useModal();
-  const { moveBack } = usePageRoute();
   const dispatch = useAppDispatch();
-  // confirmTriggerFlag
-  // 패딩 페이지는 들어가고, 현재
-
   const visibleConfirmFlag = useRef(true);
 
   // strictMode 에서는 패딩이 2번 작동하여 문제 발생
@@ -57,14 +55,14 @@ export const usePreventLeave = ({
           // confirm 에서 ok 처리
           console.log(res);
           if (res) {
-            setTimeout(() => {
-              moveBack();
-            }, 100);
+            handleClickOk();
           } else {
             // cancel 처리
             console.log("패딩 페이지 삽입");
             dispatch(actionModal.closeModal());
+            // 다시 confirm 표시되게 값 변경
             visibleConfirmFlag.current = true;
+            // 뒤로가기가 눌렸으니, 취소 했을 때 다시 뒤로가기시에 팝업 떠야해서 다시 패딩 추가
             window.history.pushState(null, "", window.location.href);
             increaseBackToHomePageCount();
           }
@@ -75,7 +73,7 @@ export const usePreventLeave = ({
   }, [
     openModal,
     dispatch,
-    moveBack,
+    handleClickOk,
     confirmTriggerFlag,
     title,
     msg,

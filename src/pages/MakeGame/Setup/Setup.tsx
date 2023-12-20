@@ -35,6 +35,7 @@ export const Setup = () => {
       title: "나가기",
       msg: "생성중인 게임이 있습니다. 나가시겠습니까?\n 페이지를 나가는 경우, 입력된 정보는 잃게 됩니다.",
     },
+    handleClickOk: moveBack,
   });
 
   const canGoNext = isCompleteMakingGameInfo(gameInfo.current);
