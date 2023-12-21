@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
 import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQr } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
 import { RoomRule } from "../../pages/GameRoom/WaitRoom/RoomRule/RoomRule";
@@ -77,6 +78,8 @@ const modalChildrenSelector = (
           handleBtnClick={modalParam.handleClose}
         />
       );
+    case "VIEW_RULE":
+      return <ViewRule gameRoomInfo={modalParam.args.gameRoomInfo} />;
     // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;

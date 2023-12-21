@@ -1,4 +1,5 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
 import { RoomCenterProps } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQrProps } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
 import { RoomRuleProps } from "../../pages/GameRoom/WaitRoom/RoomRule/RoomRule";
@@ -21,10 +22,14 @@ const MODAL_TYPE = {
 export type ModalType = (typeof MODAL_TYPE)[keyof typeof MODAL_TYPE];
 
 export type ModalParam =
+  //
   | AlertParam
   | ConfirmParam
+  | ViewRuleParam
+  //
   | RegionSelectParam
   | EnterAndCheckScoreParam
+  //
   | SetupCheckParam
   | RuleChangeParam
   | SelectGolfCenterParam
@@ -55,7 +60,12 @@ type ConfirmParam = {
 type EmptyParam = {
   id: "EMPTY";
 };
+type ViewRuleParam = {
+  id: "VIEW_RULE";
+  args: ViewRuleProps;
+};
 
+//
 type RegionSelectParam = {
   id: "REGION_SELECT";
   args: {};

@@ -63,7 +63,7 @@ const Styled = {
   `,
 };
 
-const getSpecialBetRequirementsDiplay = (
+export const getSpecialBetRequirementsDiplay = (
   values: SpecialBetRequirements["value"][]
 ) => {
   return values
