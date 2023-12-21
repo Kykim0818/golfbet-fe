@@ -67,7 +67,7 @@ export async function apiGetGameRoom(gameId: string) {
 }
 
 // TODO 데이터 세팅 부분 로직 필요
-const testGameRoomInfo: {
+export const testGameRoomInfo: {
   gameRoomInfo: GameRoomInfo;
 } = {
   gameRoomInfo: {
