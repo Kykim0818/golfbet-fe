@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { history } from "..";
 import { useAppDispatch } from "./redux";
 import { useModal } from "./useModal";
-import { usePageRoute } from "./usePageRoute";
 import { useStrictModeEffectOnce } from "./useStrictModeEffectOnce";
 
 type Param = {
@@ -13,22 +12,21 @@ type Param = {
     okBtnLabel?: string;
     cancelBtnLabel?: string;
   };
+  handleClickOk: () => void;
 };
 
 /** modal 형태의 페이지 (라우팅이 없는경우) 에서 뒤로가기시 이탈처리를 한번 막아야 할 경우는 페이지 이탈처리와 다른 부분이 있음 */
 export const usePreventLeaveInModal = ({
   confirmTriggerFlag = false,
   args: { title, msg, okBtnLabel, cancelBtnLabel },
+  handleClickOk,
 }: Param) => {
   const { openModal } = useModal();
-  const { moveBack } = usePageRoute();
   const dispatch = useAppDispatch();
-
   const visibleConfirmFlag = useRef(true);
-
   /** prevent시에 페이지의 경우 별도 처리가 필요없지만, modal의 경우는 뒤로가기 동작시에 default 상태가 modal이 닫힌상태 이기때문에 패딩 modal을 열어줘야함
    *  page : 방지시에 page -> 패딩 page , 뒤로가기눌러도 page 이므로 유지가 됨
-   *  modal : page -> modal -> 패딩 페이지, 상태에서 뒤로가기를 누르면 패딩페이지 빠지면서, modal도 닫히므로 (모달이 열린 상태에서 뒤로가기를 누르면 modal이 닫히게 되어있음)
+   *  modal : page -> modal -> 패딩 페이지, 상태에서 뒤로 가기를 누르면 패딩페이지 빠지면서, modal도 닫히므로 (모달이 열린 상태에서 뒤로가기를 누르면 modal이 닫히게 되어있음)
    *  뒤로가기를 누를때, 이전 모달형 페이지가 닫히지 않도록, 뒤로가기를 한번 막아줄 패딩 모달이 필요함
    */
   useStrictModeEffectOnce(() => {
@@ -57,7 +55,7 @@ export const usePreventLeaveInModal = ({
         }).then((res) => {
           // confirm 에서 ok 처리
           if (res) {
-            moveBack();
+            handleClickOk();
           } else {
             // cancel 처리
             console.log("패딩 페이지 삽입");
@@ -71,7 +69,7 @@ export const usePreventLeaveInModal = ({
   }, [
     openModal,
     dispatch,
-    moveBack,
+    handleClickOk,
     confirmTriggerFlag,
     title,
     msg,

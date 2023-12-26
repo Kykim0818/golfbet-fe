@@ -6,11 +6,14 @@ import TitleAsset from "../../../components/TitleAsset";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { getUserId } from "../../../utils/getUserId";
 import { isNumeric } from "../../../utils/isNumeric";
-import { useGameRoomInfo } from "../GameRoom";
+import { GameRoomInfo } from "../GameRoom";
 
-export const HandicapSetup = () => {
+type HandicapSetupProps = {
+  gameRoomInfo: GameRoomInfo;
+};
+
+export const HandicapSetup = ({ gameRoomInfo }: HandicapSetupProps) => {
   const { movePage } = usePageRoute();
-  const { gameRoomInfo } = useGameRoomInfo();
   const handleBackBtn = () => {
     movePage(`/game_room/${gameRoomInfo.gameInfo.gameId}`, { replace: true });
   };

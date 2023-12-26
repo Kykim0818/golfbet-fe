@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameInfoSection from "../../../components/domain/GameInfoSection";
@@ -5,6 +6,7 @@ import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { usePreventLeave } from "../../../hooks/usePreventLeave";
 import { PageStyle } from "../../../styles/page";
 import { deepClone } from "../../../utils/deepClone";
 import { GameInfo } from "../../MakeGame/MakeGame";
@@ -31,6 +33,19 @@ export const WaitRoom = ({
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const { movePage, moveBack } = usePageRoute();
   const { openModal } = useModal();
+
+  const [preventFlag, setPreventFlag] = useState(true);
+
+  usePreventLeave({
+    confirmTriggerFlag: preventFlag,
+    args: {
+      title: "게임방 나가기",
+      msg: "참여중인 게임방에서 나가겠습니까?",
+      okBtnLabel: "나가기",
+      cancelBtnLabel: "닫기",
+    },
+    handleClickOk: moveBack,
+  });
 
   // if (gameRoomInfo === undefined) return <Loading />;
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
@@ -89,7 +104,10 @@ export const WaitRoom = ({
 
   const handleGameStart = () => {
     //
-    movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
+    setPreventFlag(false);
+    moveBack();
+    console.log("TODO: send GameStart Task to socket");
+    //movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
   };
 
   const handleOnReady = () => {

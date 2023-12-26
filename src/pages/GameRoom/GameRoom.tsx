@@ -130,11 +130,6 @@ export const GameRoom = () => {
   // );
 };
 
-// TODO:refactor 분리가능한지 확인
-export function useGameRoomInfo() {
-  return useOutletContext<ContextType>();
-}
-
 const S = {
   Wrapper: styled.div`
     display: flex;
