@@ -66,6 +66,7 @@ export const GameRoom = () => {
     onReady,
     exitRoom,
     updateRoom,
+    startGame,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -112,6 +113,7 @@ export const GameRoom = () => {
         onReady={onReady}
         updateRoom={updateRoom}
         exitRoom={handleExitWaitRoom}
+        startGame={startGame}
       />
     );
   // 게임중
