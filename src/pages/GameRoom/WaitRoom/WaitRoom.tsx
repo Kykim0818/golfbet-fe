@@ -22,29 +22,31 @@ type WaitRoomProps = {
     userId: string,
     updateInfo: GameRoomInfo["gameInfo"]
   ) => void;
-  // onGameStart : ()
+  exitRoom: () => void;
 };
 
 export const WaitRoom = ({
   gameRoomInfo,
   onReady,
   updateRoom,
+  exitRoom,
 }: WaitRoomProps) => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { movePage, moveBack } = usePageRoute();
+  const modalStatus = useAppSelector((state) => state.modal.status);
+  const { moveBack } = usePageRoute();
   const { openModal } = useModal();
-
   const [preventFlag, setPreventFlag] = useState(true);
 
+  // 모달이 떠있으면, 패딩 X && 임의 플래그
   usePreventLeave({
-    confirmTriggerFlag: preventFlag,
+    confirmTriggerFlag: modalStatus.length === 0 && preventFlag,
     args: {
       title: "게임방 나가기",
       msg: "참여중인 게임방에서 나가겠습니까?",
       okBtnLabel: "나가기",
       cancelBtnLabel: "닫기",
     },
-    handleClickOk: moveBack,
+    handleClickOk: exitRoom,
   });
 
   // if (gameRoomInfo === undefined) return <Loading />;

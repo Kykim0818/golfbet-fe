@@ -38,7 +38,8 @@ export const EnterGame = () => {
   };
 
   const test = () => {
-    handleScan(tmpGameId);
+    movePage(`/game_room/${tmpGameId}`);
+    return;
   };
 
   return (
