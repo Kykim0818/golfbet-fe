@@ -25,12 +25,14 @@ export const Setup = () => {
   const gameInfo = useRef<GameInfo>(deepClone(defaultGameInfo));
   const { golfCenterList } = useGameInfo();
   const [, setRenderFlag] = useState(false);
+  const [preventFlag, setPreventFlag] = useState(true);
+
   const repaint = () => {
     setRenderFlag((prev) => !prev);
   };
 
   usePreventLeave({
-    confirmTriggerFlag: modalStatus.length === 0,
+    confirmTriggerFlag: modalStatus.length === 0 && preventFlag,
     args: {
       title: "나가기",
       msg: "생성중인 게임이 있습니다. 나가시겠습니까?\n 페이지를 나가는 경우, 입력된 정보는 잃게 됩니다.",
@@ -98,9 +100,15 @@ export const Setup = () => {
       args: { gameInfo: deepClone(gameInfo.current) },
     });
     if (gameId) {
+      // 뒤로가기 막기 X
+      setPreventFlag(false);
+      // 뒤로가기로 패딩 제거
+      moveBack();
       onLoading(2);
-      console.log("gameId : ", gameId);
-      movePage(`/game_room/${gameId}`, { replace: true });
+      // 방 이동 라우팅 순서 조절 용으로 setTimeout 추가
+      setTimeout(() => {
+        movePage(`/game_room/${gameId}`, { replace: true });
+      }, 100);
     }
   };
 
