@@ -41,6 +41,17 @@ export const InGame = ({ gameRoomInfo }: InGameProps) => {
     ? centerInfo.frontNineCourse.pars[currentHole - 1]
     : centerInfo.backNineCourse.pars[currentHole - 1];
 
+  const handleOpenEnterScore = async () => {
+    const res = await openModal({
+      id: "ENTER_AND_CHECK_SCORE",
+      args: {
+        gameRoomInfo,
+        holeCount: currentHole,
+        par: currentPar,
+      },
+    });
+  };
+
   return (
     <PageStyle.Wrapper>
       <TitleAsset
@@ -103,20 +114,7 @@ export const InGame = ({ gameRoomInfo }: InGameProps) => {
         </S.Mid>
       </div>
       <S.Footer>
-        <Button
-          onClick={() => {
-            openModal({
-              id: "ENTER_AND_CHECK_SCORE",
-              args: {
-                gameRoomInfo,
-                holeCount: currentHole,
-                par: currentPar,
-              },
-            });
-          }}
-        >
-          +스코어 입력하기
-        </Button>
+        <Button onClick={() => {}}>+스코어 입력하기</Button>
       </S.Footer>
     </PageStyle.Wrapper>
   );

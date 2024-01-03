@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import gameSlice from "./gameRoomInfo/gameSlice";
 import loadingSlice from "./loading/loadingSlice";
 import modalSlice from "./modal/modalSlice";
 import userSlice from "./user/userSlice";
@@ -9,6 +10,7 @@ export const store = configureStore({
     users: userSlice,
     modal: modalSlice,
     loading: loadingSlice,
+    game: gameSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
