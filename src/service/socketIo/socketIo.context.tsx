@@ -16,19 +16,6 @@ import {
   convertUiGameInfoToSocketData,
 } from "./util";
 
-interface Context {
-  socket: Socket;
-  connectState: boolean;
-  gameRoomInfo?: GameRoomInfo;
-  updateRoom: (
-    gameId: string,
-    userId: string,
-    updateInfo: GameRoomInfo["gameInfo"]
-  ) => void;
-  joinRoom: (gameId: string, userId: string) => void;
-  exitRoom: (gameId: string, userId: string) => void;
-  onReady: (gameId: string, userId: string, readyState: boolean) => void;
-}
 const socket = io(SOCKET_URL, {
   // room 네임스페이스
   autoConnect: false,
@@ -41,6 +28,21 @@ const socket = io(SOCKET_URL, {
 });
 console.log("socket test", socket);
 
+interface Context {
+  socket: Socket;
+  connectState: boolean;
+  gameRoomInfo?: GameRoomInfo;
+  updateRoom: (
+    gameId: string,
+    userId: string,
+    updateInfo: GameRoomInfo["gameInfo"]
+  ) => void;
+  joinRoom: (gameId: string, userId: string) => void;
+  exitRoom: (gameId: string, userId: string) => void;
+  onReady: (gameId: string, userId: string, readyState: boolean) => void;
+  startGame: (gameId: string, userId: string) => void;
+}
+
 const SocketContext = createContext<Context>({
   socket,
   connectState: false,
@@ -49,6 +51,7 @@ const SocketContext = createContext<Context>({
   joinRoom: () => {},
   exitRoom: () => {},
   onReady: () => {},
+  startGame: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -89,8 +92,11 @@ function SocketsProvider(props: any) {
     });
     // 게임방정보 업데이트
     socket.on(EVENTS.FROM_SERVER.BROADCAST_ROOM_MESSAGE, (data) => {
+      console.log(data);
       if (data.gameRoomInfo === undefined) {
         console.log(data);
+        if (data === "already joined") {
+        }
         return;
       }
       if (data) {
@@ -177,6 +183,16 @@ function SocketsProvider(props: any) {
     });
   };
 
+  const startGame = (gameId: string, userId: string) => {
+    console.log(`socket start Game gameId : ${gameId} userId : ${userId}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.START_GAME,
+      data: {
+        gameId,
+        userId,
+      },
+    });
+  };
   // useEffect(() => {
   //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
   //     if (!document.hasFocus()) {
@@ -197,6 +213,7 @@ function SocketsProvider(props: any) {
         joinRoom,
         exitRoom,
         onReady,
+        startGame,
       }}
       {...props}
     />

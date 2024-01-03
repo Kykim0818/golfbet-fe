@@ -57,7 +57,7 @@ export type HandicapInfo = {
 };
 
 export const GameRoom = () => {
-  const { goHome } = usePageRoute();
+  const { goHome, moveBack } = usePageRoute();
   const {
     socket,
     gameRoomInfo,
@@ -66,6 +66,7 @@ export const GameRoom = () => {
     onReady,
     exitRoom,
     updateRoom,
+    startGame,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -90,15 +91,16 @@ export const GameRoom = () => {
     }
   }, [gameId, userInfo.userId, connectState, joinRoom]);
 
-  useEffect(() => {
-    // ISSUE 나가기 처리 브라우저 닫기 관련 고민 필요
-    return () => {
-      if (gameId) {
-        exitRoom(gameId, userInfo.userId);
+  const handleExitWaitRoom = () => {
+    if (gameId) {
+      exitRoom(gameId, userInfo.userId);
+      moveBack();
+      // exit 처리되기전에 disconnect 되버리면 작동안하는 거 같음 (추정)
+      setTimeout(() => {
         socket.disconnect();
-      }
-    };
-  }, []);
+      }, 500);
+    }
+  };
 
   // 3 웹 소켓 연결
   if (socket.connected === false || gameRoomInfo === undefined)
@@ -110,6 +112,8 @@ export const GameRoom = () => {
         gameRoomInfo={gameRoomInfo}
         onReady={onReady}
         updateRoom={updateRoom}
+        exitRoom={handleExitWaitRoom}
+        startGame={startGame}
       />
     );
   // 게임중
@@ -129,11 +133,6 @@ export const GameRoom = () => {
   //   </S.Wrapper>
   // );
 };
-
-// TODO:refactor 분리가능한지 확인
-export function useGameRoomInfo() {
-  return useOutletContext<ContextType>();
-}
 
 const S = {
   Wrapper: styled.div`

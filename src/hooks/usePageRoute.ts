@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { NavigateOptions, useNavigate } from "react-router";
 
 export const usePageRoute = () => {
@@ -14,10 +15,10 @@ export const usePageRoute = () => {
     }
     navigate(to, options);
   };
-  const moveBack = () => {
+  const moveBack = useCallback(() => {
     // 자동으로 index.tsx 에서 decrease 해줌
     navigate(-1);
-  };
+  }, [navigate]);
 
   const goHome = () => {
     const backToHomePageCount = getBackToHomePageCount();

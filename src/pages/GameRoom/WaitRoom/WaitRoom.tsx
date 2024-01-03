@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import GameInfoSection from "../../../components/domain/GameInfoSection";
@@ -5,6 +6,7 @@ import GameTitleAsset from "../../../components/domain/GameTitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { usePreventLeave } from "../../../hooks/usePreventLeave";
 import { PageStyle } from "../../../styles/page";
 import { deepClone } from "../../../utils/deepClone";
 import { GameInfo } from "../../MakeGame/MakeGame";
@@ -20,17 +22,34 @@ type WaitRoomProps = {
     userId: string,
     updateInfo: GameRoomInfo["gameInfo"]
   ) => void;
-  // onGameStart : ()
+  exitRoom: () => void;
+  startGame: (gameId: string, userId: string) => void;
 };
 
 export const WaitRoom = ({
   gameRoomInfo,
   onReady,
   updateRoom,
+  exitRoom,
+  startGame,
 }: WaitRoomProps) => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const { movePage, moveBack } = usePageRoute();
+  const modalStatus = useAppSelector((state) => state.modal.status);
+  const { moveBack } = usePageRoute();
   const { openModal } = useModal();
+  const [preventFlag, setPreventFlag] = useState(true);
+
+  // 모달이 떠있으면, 패딩 X && 임의 플래그
+  usePreventLeave({
+    confirmTriggerFlag: modalStatus.length === 0 && preventFlag,
+    args: {
+      title: "게임방 나가기",
+      msg: "참여중인 게임방에서 나가겠습니까?",
+      okBtnLabel: "나가기",
+      cancelBtnLabel: "닫기",
+    },
+    handleClickOk: exitRoom,
+  });
 
   // if (gameRoomInfo === undefined) return <Loading />;
   const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
@@ -89,7 +108,14 @@ export const WaitRoom = ({
 
   const handleGameStart = () => {
     //
-    movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
+    if (gameRoomInfo.gameInfo.gameId) {
+      setPreventFlag(false);
+      // moveBack();
+      console.log("TODO: send GameStart Task to socket");
+      startGame(gameRoomInfo.gameInfo.gameId, userInfo.userId);
+    } else {
+      console.log("gameId is undefined");
+    }
   };
 
   const handleOnReady = () => {
@@ -128,6 +154,7 @@ export const WaitRoom = ({
           <Button
             onClick={handleGameStart}
             disabled={
+              // TODO: ready 상태인지 확인 조건
               gameRoomInfo.players.length !== gameRoomInfo.gameInfo.playerCount
             }
           >

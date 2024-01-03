@@ -79,7 +79,13 @@ const S = {
 
     margin-right: 15px;
   `,
-  ProfileImg: styled.img``,
+  ProfileImg: styled.img`
+    min-width: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+  `,
 
   //
   IdSection: styled.div`
