@@ -23,6 +23,7 @@ type WaitRoomProps = {
     updateInfo: GameRoomInfo["gameInfo"]
   ) => void;
   exitRoom: () => void;
+  startGame: (gameId: string, userId: string) => void;
 };
 
 export const WaitRoom = ({
@@ -30,6 +31,7 @@ export const WaitRoom = ({
   onReady,
   updateRoom,
   exitRoom,
+  startGame,
 }: WaitRoomProps) => {
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const modalStatus = useAppSelector((state) => state.modal.status);
@@ -106,10 +108,14 @@ export const WaitRoom = ({
 
   const handleGameStart = () => {
     //
-    setPreventFlag(false);
-    moveBack();
-    console.log("TODO: send GameStart Task to socket");
-    //movePage(`/process_game/${gameRoomInfo.gameInfo.gameId}`);
+    if (gameRoomInfo.gameInfo.gameId) {
+      setPreventFlag(false);
+      // moveBack();
+      console.log("TODO: send GameStart Task to socket");
+      startGame(gameRoomInfo.gameInfo.gameId, userInfo.userId);
+    } else {
+      console.log("gameId is undefined");
+    }
   };
 
   const handleOnReady = () => {
@@ -148,6 +154,7 @@ export const WaitRoom = ({
           <Button
             onClick={handleGameStart}
             disabled={
+              // TODO: ready 상태인지 확인 조건
               gameRoomInfo.players.length !== gameRoomInfo.gameInfo.playerCount
             }
           >
