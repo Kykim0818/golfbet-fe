@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../../components/Loading";
 import { useAppSelector } from "../../hooks/redux";

@@ -1,41 +1,31 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { GameRoomInfo } from "../../../pages/GameRoom/GameRoom";
-import { typo } from "../../../styles/typo";
+import { typo } from "../../../../styles/typo";
 import { EnterHoleScore } from "./EnterHoleScore";
+import { useAppSelector } from "../../../../hooks/redux";
+import { usePageRoute } from "../../../../hooks/usePageRoute";
 
-type EnterAndCheckScoreProps = {
-  handleCloseSheet: (result: boolean) => void;
-  gameRoomInfo: GameRoomInfo;
-  holeCount: number;
-  par: number;
+type EnterScoreProps = {
+  handleModalResult?: (result: any) => void;
 };
 
-type EnterAndCheckScoreStatus = "Enter" | "Check";
-
-export const EnterAndCheckScore = ({
-  handleCloseSheet,
-  gameRoomInfo,
-  holeCount,
-  par,
-}: EnterAndCheckScoreProps) => {
-  const [status, setStatus] = useState<EnterAndCheckScoreStatus>("Enter");
+export const EnterScore = ({ handleModalResult }: EnterScoreProps) => {
+  const { moveBack } = usePageRoute();
+  const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
   // 예외 : par 나 holecount 없을 경우, 닫기
+  if (gameRoomInfo === undefined) moveBack();
   return (
     <S.Wrapper>
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
-          onClick={() => handleCloseSheet(true)}
+          onClick={() => handleModalResult?.(true)}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
           alt="close"
         />
       </S.ModalHeader>
-      <S.HoleInfo>
-        {holeCount}H | 파{par}
-      </S.HoleInfo>
+      <S.HoleInfo>holeCount H | 파 par</S.HoleInfo>
       <EnterHoleScore
-        handleNext={() => handleCloseSheet(true)}
+        handleNext={() => handleModalResult?.(true)}
         players={gameRoomInfo.players}
         holeCount={holeCount}
         par={par}
