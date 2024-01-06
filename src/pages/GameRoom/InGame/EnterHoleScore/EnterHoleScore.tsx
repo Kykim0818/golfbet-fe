@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../components/Button";
 import { useAppSelector } from "../../../../hooks/redux";
@@ -6,18 +6,23 @@ import { usePageRoute } from "../../../../hooks/usePageRoute";
 import { typo } from "../../../../styles/typo";
 import { getDisplayEnterScore } from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
+import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
+import { deepClone } from "../../../../utils/deepClone";
 
 type EnterHoleScoreProps = {
   handleModalResult?: (result: any) => void;
 };
 
+type PlayerScores = Record<string, number>;
+
 export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
+  const [playerScores, setPlayerScores] = useState<PlayerScores>({});
   const { moveBack } = usePageRoute();
   // 예외 : par 나 holecount 없을 경우, 닫기
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
   if (gameRoomInfo === undefined) moveBack();
 
-  const currentHole = 1;
+  const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
     currentHole,
     gameRoomInfo!?.gameInfo.golfCenter.frontNineCourse.pars,
@@ -37,10 +42,29 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   }, [currentPar]);
   const players = gameRoomInfo?.players ?? [];
 
+  const handleClickScoreBtn = (playerId: string, clickedValue: number) => {
+    const scores: PlayerScores = deepClone(playerScores);
+    if (playerScores[playerId] === clickedValue) {
+      scores[playerId] = UNENTERED_HOLE_SCORE;
+    } else {
+      scores[playerId] = clickedValue;
+    }
+    setPlayerScores(scores);
+    // 기존 입력점수람 같은 버튼을 클릭하면 끄기
+    // 다른 버튼 클릭하면 선택 되게 하기
+  };
   const handleGameFinish = () => {
     //
     console.log("finish");
   };
+
+  useEffect(() => {
+    const scores: PlayerScores = {};
+    players.forEach((player) => {
+      scores[player.userId] = player.holeScores[currentHole - 1];
+    });
+    setPlayerScores(scores);
+  }, []);
 
   return (
     <S.Wrapper>
@@ -52,7 +76,9 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           alt="close"
         />
       </S.ModalHeader>
-      <S.HoleInfo>holeCount H | 파 {currentPar}</S.HoleInfo>
+      <S.HoleInfo>
+        {currentHole} H | 파 {currentPar}
+      </S.HoleInfo>
       <S.Body>
         <S.Section>
           {players.map((player) => {
@@ -67,8 +93,9 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
                     return (
                       <S.ScoreButton
                         key={score}
-                        isSelected={
-                          player.holeScores[currentHole - 1] === score
+                        isSelected={playerScores[player.userId] === score}
+                        onClick={() =>
+                          handleClickScoreBtn(player.userId, score)
                         }
                       >
                         {getDisplayEnterScore(score)}
@@ -143,6 +170,7 @@ const S = {
       height: 35px;
       min-width: 35px;
       min-height: 35px;
+      border-radius: 50%;
     }
     span {
       ${typo.s14w700}

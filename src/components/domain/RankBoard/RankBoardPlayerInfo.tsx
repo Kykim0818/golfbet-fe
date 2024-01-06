@@ -5,6 +5,7 @@ import { getDisplayMoney } from "../../../utils/display";
 type RankBoardPlayerInfoProps = {
   rank: number;
   id: string;
+  nickName: string;
   imgSrc: string;
   currentScore: number;
   currentMoney: number;
@@ -14,6 +15,7 @@ type RankBoardPlayerInfoProps = {
 export const RankBoardPlayerInfo = ({
   rank,
   id,
+  nickName,
   imgSrc,
   currentMoney,
   currentScore,
@@ -27,7 +29,7 @@ export const RankBoardPlayerInfo = ({
       </S.ProfileImgSection>
       <S.IdSection>
         {isSelf && <div>나</div>}
-        <span>{id}</span>
+        <span>{nickName}</span>
       </S.IdSection>
       <S.MoreInfo>
         <S.ScoreSection>

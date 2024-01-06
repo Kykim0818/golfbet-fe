@@ -44,6 +44,7 @@ export const ScoreHistroyRankBoard = ({
               key={player.userId}
               rank={index + 1}
               id={player.userId}
+              nickName={player.nickName}
               imgSrc={player.imgSrc}
               isSelf={player.userId === userId}
               currentMoney={player.currentMoney}

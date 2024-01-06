@@ -2,7 +2,7 @@ import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { GameInfo } from "../../pages/MakeGame/MakeGame";
 
 /** 점수 미입력 상태 표시 값 */
-export const DEFAULT_HOLE_SCORE = 999;
+export const UNENTERED_HOLE_SCORE = 999;
 // server GameRoomInfo Data -> client GameRoomInfo Data
 export function convertSocketDataToUiGameRoomInfo(
   gameRoomInfo: SocketGameRoomInfo

@@ -109,7 +109,7 @@ export const InGame = ({ gameRoomInfo }: InGameProps) => {
         </S.Mid>
       </div>
       <S.Footer>
-        <Button onClick={() => {}}>+스코어 입력하기</Button>
+        <Button onClick={handleOpenEnterScore}>+스코어 입력하기</Button>
       </S.Footer>
     </PageStyle.Wrapper>
   );
