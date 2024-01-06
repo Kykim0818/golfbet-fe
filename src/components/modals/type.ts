@@ -1,4 +1,3 @@
-import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
 import { RoomCenterProps } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQrProps } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
@@ -28,7 +27,7 @@ export type ModalParam =
   | ViewRuleParam
   //
   | RegionSelectParam
-  | EnterAndCheckScoreParam
+  | EnterHoleScoreParam
   //
   | SetupCheckParam
   | RuleChangeParam
@@ -70,13 +69,8 @@ type RegionSelectParam = {
   id: "REGION_SELECT";
   args: {};
 };
-type EnterAndCheckScoreParam = {
-  id: "ENTER_AND_CHECK_SCORE";
-  args: {
-    gameRoomInfo: GameRoomInfo;
-    holeCount: number;
-    par: number;
-  };
+type EnterHoleScoreParam = {
+  id: "ENTER_HOLE_SCORE";
 };
 
 type SetupCheckParam = {
@@ -127,7 +121,7 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
       return 2;
 
     case "REGION_SELECT":
-    case "ENTER_AND_CHECK_SCORE":
+    case "ENTER_HOLE_SCORE":
       return 1;
 
     default:

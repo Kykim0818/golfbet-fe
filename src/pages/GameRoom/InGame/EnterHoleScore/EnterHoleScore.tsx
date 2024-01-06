@@ -1,49 +1,58 @@
 import { useMemo } from "react";
 import styled, { css } from "styled-components";
-import { usePageRoute } from "../../../hooks/usePageRoute";
-import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
-import { typo } from "../../../styles/typo";
-import { getDisplayEnterScore } from "../../../utils/display";
-import Button from "../../Button";
+import Button from "../../../../components/Button";
+import { useAppSelector } from "../../../../hooks/redux";
+import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { typo } from "../../../../styles/typo";
+import { getDisplayEnterScore } from "../../../../utils/display";
+import { getCurrentPar } from "../../../../utils/gameInfo";
 
 type EnterHoleScoreProps = {
-  handleNext: () => void;
-  players: GameRoomUser[];
-  holeCount: number;
-  par: number;
+  handleModalResult?: (result: any) => void;
 };
 
-export const EnterHoleScore = ({
-  handleNext,
-  players,
-  holeCount,
-  par,
-}: EnterHoleScoreProps) => {
+export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
+  const { moveBack } = usePageRoute();
   // 예외 : par 나 holecount 없을 경우, 닫기
-  const { movePage } = usePageRoute();
+  const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
+  if (gameRoomInfo === undefined) moveBack();
+
+  const currentHole = 1;
+  const currentPar = getCurrentPar(
+    currentHole,
+    gameRoomInfo!?.gameInfo.golfCenter.frontNineCourse.pars,
+    gameRoomInfo!?.gameInfo.golfCenter.backNineCourse.pars
+  );
   const inputScores = useMemo(() => {
-    if (par) {
+    if (currentPar) {
       const scores = [];
-      const maxScore = par;
-      const minScore = par * -1 + 1;
+      const maxScore = currentPar;
+      const minScore = currentPar * -1 + 1;
       for (let i = minScore; i <= maxScore; i++) {
         scores.push(i);
       }
       return scores;
     }
     return [];
-  }, [par]);
+  }, [currentPar]);
+  const players = gameRoomInfo?.players ?? [];
 
   const handleGameFinish = () => {
-    handleNext();
-
-    setTimeout(() => {
-      movePage("/game_end");
-    }, 100);
+    //
+    console.log("finish");
   };
 
   return (
     <S.Wrapper>
+      <S.ModalHeader>
+        <div className="modalheader__title">스코어 입력하기</div>
+        <img
+          onClick={() => handleModalResult?.(true)}
+          src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
+          alt="close"
+        />
+      </S.ModalHeader>
+      <S.HoleInfo>holeCount H | 파 {currentPar}</S.HoleInfo>
       <S.Body>
         <S.Section>
           {players.map((player) => {
@@ -58,7 +67,9 @@ export const EnterHoleScore = ({
                     return (
                       <S.ScoreButton
                         key={score}
-                        isSelected={player.holeScores[holeCount - 1] === score}
+                        isSelected={
+                          player.holeScores[currentHole - 1] === score
+                        }
                       >
                         {getDisplayEnterScore(score)}
                       </S.ScoreButton>
@@ -82,8 +93,33 @@ const S = {
     display: flex;
     flex-direction: column;
   `,
-  Header: styled.header`
+  ModalHeader: styled.div`
     display: flex;
+    justify-content: center;
+
+    .modalheader__title {
+      top: 25px;
+      position: absolute;
+      ${typo.s16w700}
+      color: var(--color-main, #009EB2);
+    }
+    img {
+      top: 25px;
+      position: absolute;
+      right: 16.5px;
+    }
+  `,
+  HoleInfo: styled.span`
+    display: flex;
+    justify-content: center;
+
+    color: var(--color-main-darker, #003d45);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    margin-bottom: 20px;
   `,
   Body: styled.main`
     display: flex;

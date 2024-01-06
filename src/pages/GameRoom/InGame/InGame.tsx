@@ -43,12 +43,7 @@ export const InGame = ({ gameRoomInfo }: InGameProps) => {
 
   const handleOpenEnterScore = async () => {
     const res = await openModal({
-      id: "ENTER_AND_CHECK_SCORE",
-      args: {
-        gameRoomInfo,
-        holeCount: currentHole,
-        par: currentPar,
-      },
+      id: "ENTER_HOLE_SCORE",
     });
   };
 

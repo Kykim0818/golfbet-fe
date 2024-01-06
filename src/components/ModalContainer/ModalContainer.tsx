@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import EnterScore from "../../pages/GameRoom/InGame/EnterHoleScore";
 import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
 import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQr } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
@@ -12,11 +13,11 @@ import SelectGolfCenter from "../../pages/MakeGame/SelectGolfCenter";
 import SetupCheck from "../../pages/MakeGame/SetupCheck";
 import { actionModal } from "../../store/modal/modalSlice";
 import { Modal } from "../Modal/Modal";
-import EnterAndCheckScore from "../domain/EnterAndCheckScore";
 import Alert from "../modals/Alert";
 import { Confirm } from "../modals/Confirm/Confirm";
 import { Empty } from "../modals/Empty/Empty";
 import { ModalParam, getModalTypeById } from "../modals/type";
+import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 
 export const ModalContainer = () => {
   const modalStatus = useAppSelector((state) => state.modal.status);
@@ -83,15 +84,8 @@ const modalChildrenSelector = (
     // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
-    case "ENTER_AND_CHECK_SCORE":
-      return (
-        <EnterAndCheckScore
-          gameRoomInfo={modalParam.args.gameRoomInfo}
-          holeCount={modalParam.args.holeCount}
-          par={modalParam.args.par}
-          handleCloseSheet={modalParam.handleClose}
-        />
-      );
+    case "ENTER_HOLE_SCORE":
+      return <EnterHoleScore handleModalResult={modalParam.handleClose} />;
     // modal page
     case "SETUP_CHECK":
       return (
