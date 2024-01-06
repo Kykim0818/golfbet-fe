@@ -43,6 +43,12 @@ interface Context {
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   startGame: (gameId: string, userId: string) => void;
+  enterScore: (
+    gameId: string,
+    userId: string,
+    holeIdx: number,
+    value: number
+  ) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -54,6 +60,7 @@ const SocketContext = createContext<Context>({
   exitRoom: () => {},
   onReady: () => {},
   startGame: () => {},
+  enterScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -198,6 +205,13 @@ function SocketsProvider(props: any) {
       },
     });
   };
+
+  const enterScore = (
+    gameId: string,
+    userId: string,
+    holeIdx: number,
+    value: number
+  ) => {};
   // useEffect(() => {
   //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
   //     if (!document.hasFocus()) {

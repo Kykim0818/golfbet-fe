@@ -128,6 +128,7 @@ interface Player {
   };
 }
 
+// updateRoom
 export function convertUiGameInfoToSocketData(gameInfo: GameInfo) {
   return {
     gameId: gameInfo.gameId, // 참가하려고 하는 game ID

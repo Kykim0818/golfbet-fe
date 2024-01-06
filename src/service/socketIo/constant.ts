@@ -19,4 +19,5 @@ export const TASK = {
   EXIT_ROOM: "exit",
   ROOM_UPDATE: "update",
   START_GAME: "start",
+  ENTER_SCORE: "insert",
 } as const;

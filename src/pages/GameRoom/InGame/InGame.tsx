@@ -14,17 +14,34 @@ import {
 } from "../../../utils/display";
 import { GameRoomInfo } from "../GameRoom";
 import ProgressBoard from "./ProgressBoard";
+import { usePreventLeave } from "../../../hooks/usePreventLeave";
+import { useAppSelector } from "../../../hooks/redux";
+import { useState } from "react";
 
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
+  exitRoom: () => void;
   // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
-export const InGame = ({ gameRoomInfo }: InGameProps) => {
+export const InGame = ({ gameRoomInfo, exitRoom }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
+  const modalStatus = useAppSelector((state) => state.modal.status);
+  const [preventFlag, setPreventFlag] = useState(true);
   // # web socket game info
+  // 모달이 떠있으면, 패딩 X && 임의 플래그
+  usePreventLeave({
+    confirmTriggerFlag: modalStatus.length === 0 && preventFlag,
+    args: {
+      title: "게임방 나가기",
+      msg: "참여중인 게임방에서 나가겠습니까?",
+      okBtnLabel: "나가기",
+      cancelBtnLabel: "닫기",
+    },
+    handleClickOk: exitRoom,
+  });
 
   const centerType = gameRoomInfo.gameInfo.gameType;
   const name = gameRoomInfo.gameInfo.golfCenter.name;
@@ -34,7 +51,7 @@ export const InGame = ({ gameRoomInfo }: InGameProps) => {
   const centerInfo = gameRoomInfo.gameInfo.golfCenter;
   const players = gameRoomInfo.players;
   // TODO
-  const currentHole = 4;
+  const currentHole = gameRoomInfo.gameInfo.currentHole;
   // 전후반 결정 요소
   const isFrontNine = currentHole <= 9;
   const currentPar = isFrontNine
