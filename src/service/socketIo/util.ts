@@ -1,6 +1,8 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { GameInfo } from "../../pages/MakeGame/MakeGame";
 
+/** 점수 미입력 상태 표시 값 */
+export const UNENTERED_HOLE_SCORE = 999;
 // server GameRoomInfo Data -> client GameRoomInfo Data
 export function convertSocketDataToUiGameRoomInfo(
   gameRoomInfo: SocketGameRoomInfo
@@ -39,6 +41,7 @@ export function convertSocketDataToUiGameRoomInfo(
       nearestAmount: gameRoomInfo.gameInfo.gameRule.nearest.money,
       betAmountPerStroke: gameRoomInfo.gameInfo.betMoney.perShot,
       bettingLimit: gameRoomInfo.gameInfo.betMoney.deposit,
+      currentHole: gameRoomInfo.gameInfo.currentHole,
     },
     hostUserId: gameRoomInfo.gameInfo.hostUserId,
     players: gameRoomInfo.players.map((player) => {
@@ -48,7 +51,11 @@ export function convertSocketDataToUiGameRoomInfo(
         imgSrc: player.profileImgSrc,
         avgScore: player.avgScore,
         currentScore: player.currentScore,
-        holeScores: [player.holeScores],
+        holeScores: player.holeScores.map((score) => {
+          const numberScore = Number(score);
+          if (isNaN(numberScore) || score.trim() === "") return 999;
+          return numberScore;
+        }),
         currentMoney: player.currentMoney,
         readyState: player.readyState === "true" ? true : false,
         handicaps: [],
@@ -80,6 +87,7 @@ interface SocketGameRoomInfo {
         coursePars: number[];
       };
     };
+    currentHole: number;
     createdDate: number;
     endDate: number;
     gameRule: {
@@ -111,7 +119,7 @@ interface Player {
   profileImgSrc: string;
   avgScore: number;
   currentScore: number;
-  holeScores: number;
+  holeScores: string[];
   currentMoney: number;
   readyState: string;
   handicapInfo: {

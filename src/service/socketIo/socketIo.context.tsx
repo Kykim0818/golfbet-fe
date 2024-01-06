@@ -6,9 +6,11 @@ import {
   useState,
 } from "react";
 import io, { Socket } from "socket.io-client";
+import { useAppDispatch } from "../../hooks/redux";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { actionGame } from "../../store/gameRoomInfo/gameSlice";
 import { SOCKET_URL } from "./config";
 import { EVENTS, TASK } from "./constant";
 import {
@@ -57,9 +59,11 @@ const SocketContext = createContext<Context>({
 function SocketsProvider(props: any) {
   const [connectState, setConnectState] = useState(false);
   const [gameRoomInfo, setGameRoomInfo] = useState<GameRoomInfo>();
+  const dispatch = useAppDispatch();
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
 
+  //
   useEffect(() => {
     console.log("connect useEffect");
     console.log("connect", socket.connected);
@@ -106,9 +110,10 @@ function SocketsProvider(props: any) {
         );
         console.log(convertedGameRoomInfo);
         setGameRoomInfo(convertedGameRoomInfo);
+        dispatch(actionGame.setGameRoomInfo(convertedGameRoomInfo));
       }
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // TODO: goHome , openModal deps 어디서 다시 재할당 되는지 확인해서 최적화 필요
