@@ -78,6 +78,7 @@ export interface GameInfo {
       pars: number[];
     };
   };
+  currentHole: number;
   gameState: string;
   betType: "stroke";
   playerCount: number;

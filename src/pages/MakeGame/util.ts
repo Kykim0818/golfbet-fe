@@ -29,6 +29,7 @@ export const defaultGameInfo: GameInfo = {
       pars: [3, 3, 3, 3, 3, 3, 3, 3, 3],
     },
   },
+  currentHole: 1,
   betType: "stroke",
   playerCount: 4,
   gameRule: {

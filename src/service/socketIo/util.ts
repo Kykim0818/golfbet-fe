@@ -39,6 +39,7 @@ export function convertSocketDataToUiGameRoomInfo(
       nearestAmount: gameRoomInfo.gameInfo.gameRule.nearest.money,
       betAmountPerStroke: gameRoomInfo.gameInfo.betMoney.perShot,
       bettingLimit: gameRoomInfo.gameInfo.betMoney.deposit,
+      currentHole: gameRoomInfo.gameInfo.currentHole,
     },
     hostUserId: gameRoomInfo.gameInfo.hostUserId,
     players: gameRoomInfo.players.map((player) => {
@@ -80,6 +81,7 @@ interface SocketGameRoomInfo {
         coursePars: number[];
       };
     };
+    currentHole: number;
     createdDate: number;
     endDate: number;
     gameRule: {

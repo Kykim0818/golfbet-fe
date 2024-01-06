@@ -91,6 +91,7 @@ export const testGameRoomInfo: {
         },
       },
       betType: "stroke",
+      currentHole: 1,
       playerCount: 4,
       gameRule: {
         handiType: ["backHandicap"],
