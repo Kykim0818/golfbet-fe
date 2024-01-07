@@ -18,6 +18,7 @@ import {
   convertUiGameInfoToSocketData,
 } from "./util";
 import { SocketResponse } from "./type";
+import { EnterScoreResult } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 
 const socket = io(SOCKET_URL, {
   // room 네임스페이스
@@ -44,6 +45,11 @@ interface Context {
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   startGame: (gameId: string, userId: string) => void;
+  enterScore: (
+    gameId: string,
+    holeIdx: number,
+    enterScoreResult: EnterScoreResult
+  ) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -55,6 +61,7 @@ const SocketContext = createContext<Context>({
   exitRoom: () => {},
   onReady: () => {},
   startGame: () => {},
+  enterScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -201,6 +208,38 @@ function SocketsProvider(props: any) {
       },
     });
   };
+
+  const enterScore = (
+    gameId: string,
+    holeIdx: number,
+    enterScoreResult: EnterScoreResult
+  ) => {
+    const firstOrBack = holeIdx < 9 ? "first" : "back";
+    const holeCount = firstOrBack === "first" ? holeIdx - 1 : holeIdx - 1 - 9;
+    const insertData = Object.entries(enterScoreResult.playerScores).map(
+      ([userId, score]) => {
+        return {
+          userId,
+          firstOrBack,
+          holeCount,
+          holeScore: score === 999 ? "" : score,
+        };
+      }
+    );
+    console.log(
+      `EnterScore gameId : ${gameId}, 입력홀: ${holeIdx}, 입력결과: ${insertData}`
+    );
+    //
+    if (enterScoreResult.isAllEnter === false) {
+      socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+        taskName: TASK.ENTER_SCORE,
+        data: {
+          gameId,
+          insertData,
+        },
+      });
+    }
+  };
   // useEffect(() => {
   //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
   //     if (!document.hasFocus()) {
@@ -222,6 +261,7 @@ function SocketsProvider(props: any) {
         exitRoom,
         onReady,
         startGame,
+        enterScore,
       }}
       {...props}
     />

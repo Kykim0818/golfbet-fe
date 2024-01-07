@@ -67,6 +67,7 @@ export function convertSocketDataToUiGameRoomInfo(
 
 // 현재 서버에서 주는 데이터랑 ui에서 주는 데이터가 달라서 서버에서 주는 데이터 타입 선언
 
+// updateRoom
 export function convertUiGameInfoToSocketData(gameInfo: GameInfo) {
   return {
     gameId: gameInfo.gameId, // 참가하려고 하는 game ID

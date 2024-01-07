@@ -110,7 +110,7 @@ export const WaitRoom = ({
     //
     if (gameRoomInfo.gameInfo.gameId) {
       setPreventFlag(false);
-      // moveBack();
+      moveBack();
       console.log("TODO: send GameStart Task to socket");
       startGame(gameRoomInfo.gameInfo.gameId, userInfo.userId);
     } else {
