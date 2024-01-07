@@ -17,14 +17,20 @@ import ProgressBoard from "./ProgressBoard";
 import { usePreventLeave } from "../../../hooks/usePreventLeave";
 import { useAppSelector } from "../../../hooks/redux";
 import { useState } from "react";
+import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
 
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
   exitRoom: () => void;
+  enterScore: (
+    gameId: string,
+    holeIdx: number,
+    enterScoreResult: EnterScoreResult
+  ) => void;
   // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
-export const InGame = ({ gameRoomInfo, exitRoom }: InGameProps) => {
+export const InGame = ({ gameRoomInfo, exitRoom, enterScore }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
@@ -59,9 +65,14 @@ export const InGame = ({ gameRoomInfo, exitRoom }: InGameProps) => {
     : centerInfo.backNineCourse.pars[currentHole - 1];
 
   const handleOpenEnterScore = async () => {
-    const res = await openModal({
+    const res = await openModal<EnterScoreResult>({
       id: "ENTER_HOLE_SCORE",
     });
+    if (res && gameRoomInfo.gameInfo.gameId) {
+      enterScore(gameRoomInfo.gameInfo.gameId, currentHole, res);
+    } else {
+      console.log("gameId is undefined");
+    }
   };
 
   return (

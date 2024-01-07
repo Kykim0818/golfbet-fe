@@ -67,6 +67,7 @@ export const GameRoom = () => {
     exitRoom,
     updateRoom,
     startGame,
+    enterScore,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -129,7 +130,13 @@ export const GameRoom = () => {
     );
   // 게임중
   if (gameRoomInfo.gameInfo.gameState === GAME_STATE.IN_PROGRESS)
-    return <InGame gameRoomInfo={gameRoomInfo} exitRoom={handleExitInGame} />;
+    return (
+      <InGame
+        gameRoomInfo={gameRoomInfo}
+        exitRoom={handleExitInGame}
+        enterScore={enterScore}
+      />
+    );
   // 종료
   if (gameRoomInfo.gameInfo.gameState === GAME_STATE.END)
     return <GameEnd gameRoomInfo={gameRoomInfo} />;

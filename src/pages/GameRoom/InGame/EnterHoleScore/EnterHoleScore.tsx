@@ -10,9 +10,14 @@ import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
 import { deepClone } from "../../../../utils/deepClone";
 
 type EnterHoleScoreProps = {
-  handleModalResult?: (result: any) => void;
+  handleModalResult?: (result: EnterScoreResult) => void;
 };
 
+export type EnterScoreResult = {
+  // 모두 입력 상태인지,
+  isAllEnter: boolean;
+  playerScores: PlayerScores;
+};
 type PlayerScores = Record<string, number>;
 
 export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
@@ -53,9 +58,28 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
     // 기존 입력점수람 같은 버튼을 클릭하면 끄기
     // 다른 버튼 클릭하면 선택 되게 하기
   };
-  const handleGameFinish = () => {
-    //
-    console.log("finish");
+
+  // ###
+  const handleEnterScore = () => {
+    // player 전원 점수 입력 상태인지 확인
+    let isAllPlayerScoreEntered = true;
+    Object.entries(playerScores).forEach(([userId, score]) => {
+      // TODO: 포기한 사람인 경우 처리 고려 필요
+      if (score === UNENTERED_HOLE_SCORE) {
+        isAllPlayerScoreEntered = false;
+      }
+    });
+    // 점수 다입력되었으니 확정으로
+    if (isAllPlayerScoreEntered) {
+    }
+    // 점수 다입력 안되엇으므로 그냥 입력 처리
+    else {
+      console.log("일부 점수 입력");
+      handleModalResult?.({
+        isAllEnter: false,
+        playerScores,
+      });
+    }
   };
 
   useEffect(() => {
@@ -64,14 +88,14 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       scores[player.userId] = player.holeScores[currentHole - 1];
     });
     setPlayerScores(scores);
-  }, []);
+  }, [gameRoomInfo]);
 
   return (
     <S.Wrapper>
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
-          onClick={() => handleModalResult?.(true)}
+          onClick={moveBack}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
           alt="close"
         />
@@ -109,7 +133,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         </S.Section>
       </S.Body>
       <S.Footer>
-        <Button onClick={handleGameFinish}>확인</Button>
+        <Button onClick={handleEnterScore}>확인</Button>
       </S.Footer>
     </S.Wrapper>
   );
