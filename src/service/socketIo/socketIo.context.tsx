@@ -12,11 +12,12 @@ import { usePageRoute } from "../../hooks/usePageRoute";
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { actionGame } from "../../store/gameRoomInfo/gameSlice";
 import { SOCKET_URL } from "./config";
-import { EVENTS, TASK } from "./constant";
+import { EVENTS, SOCKET_RESPONSE, TASK } from "./constant";
 import {
   convertSocketDataToUiGameRoomInfo,
   convertUiGameInfoToSocketData,
 } from "./util";
+import { SocketResponse } from "./type";
 
 const socket = io(SOCKET_URL, {
   // room 네임스페이스
@@ -95,24 +96,26 @@ function SocketsProvider(props: any) {
       setConnectState(true);
     });
     // 게임방정보 업데이트
-    socket.on(EVENTS.FROM_SERVER.BROADCAST_ROOM_MESSAGE, (data) => {
-      console.log(data);
-      if (data.gameRoomInfo === undefined) {
+    socket.on(
+      EVENTS.FROM_SERVER.BROADCAST_ROOM_MESSAGE,
+      (data: SocketResponse) => {
         console.log(data);
-        if (data === "already joined") {
+        if (
+          data.status &&
+          data.statusCode === SOCKET_RESPONSE.CODE.RESULT_SUCCESS
+        ) {
+          console.log(data.responseData.gameRoomInfo);
+          const convertedGameRoomInfo = convertSocketDataToUiGameRoomInfo(
+            data.responseData.gameRoomInfo
+          );
+          console.log(convertedGameRoomInfo);
+          setGameRoomInfo(convertedGameRoomInfo);
+          dispatch(actionGame.setGameRoomInfo(convertedGameRoomInfo));
+        } else {
+          console.log("socket Error Code :", data.statusCode);
         }
-        return;
       }
-      if (data) {
-        console.log(data.gameRoomInfo);
-        const convertedGameRoomInfo = convertSocketDataToUiGameRoomInfo(
-          data.gameRoomInfo
-        );
-        console.log(convertedGameRoomInfo);
-        setGameRoomInfo(convertedGameRoomInfo);
-        dispatch(actionGame.setGameRoomInfo(convertedGameRoomInfo));
-      }
-    });
+    );
   }, [dispatch]);
 
   useEffect(() => {
