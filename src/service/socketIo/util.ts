@@ -1,5 +1,6 @@
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
 import { GameInfo } from "../../pages/MakeGame/MakeGame";
+import { SocketGameRoomInfo } from "./type";
 
 /** 점수 미입력 상태 표시 값 */
 export const UNENTERED_HOLE_SCORE = 999;
@@ -65,68 +66,6 @@ export function convertSocketDataToUiGameRoomInfo(
 }
 
 // 현재 서버에서 주는 데이터랑 ui에서 주는 데이터가 달라서 서버에서 주는 데이터 타입 선언
-interface SocketGameRoomInfo {
-  gameInfo: {
-    gameId: string;
-    betMoney: {
-      perShot: number;
-      deposit: number;
-    };
-    betType: "stroke";
-    centerInfo: {
-      centerId: number;
-      name: string;
-      frontNineCourse: {
-        courseId: number;
-        courseName: string;
-        coursePars: number[];
-      };
-      backNineCourse: {
-        courseId: number;
-        courseName: string;
-        coursePars: number[];
-      };
-    };
-    currentHole: number;
-    createdDate: number;
-    endDate: number;
-    gameRule: {
-      handicapType: "none" | "frontHandicap" | "backHandicap";
-      doubleConditions: (
-        | "none"
-        | "buddy"
-        | "triple"
-        | "twoOrMoreTie"
-        | "threeOrMoreTie"
-      )[];
-      ddang: "none" | "onlyLastPlace";
-      nearest: {
-        type: "includeInGame" | "separateAmount";
-        money: number;
-      };
-    };
-    gameState: string;
-    gameType: "field" | "screen";
-    hostUserId: string;
-    playerCount: number;
-  };
-  players: Player[];
-}
-
-interface Player {
-  userId: string;
-  nickname: string;
-  profileImgSrc: string;
-  avgScore: number;
-  currentScore: number;
-  holeScores: string[];
-  currentMoney: number;
-  readyState: string;
-  handicapInfo: {
-    userId: string;
-    handicaps: any[];
-  };
-}
 
 // updateRoom
 export function convertUiGameInfoToSocketData(gameInfo: GameInfo) {
