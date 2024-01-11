@@ -64,7 +64,7 @@ type ViewRuleParam = {
   args: ViewRuleProps;
 };
 
-//
+// bottom sheet
 type RegionSelectParam = {
   id: "REGION_SELECT";
   args: {};
@@ -72,6 +72,10 @@ type RegionSelectParam = {
 type EnterHoleScoreParam = {
   id: "ENTER_HOLE_SCORE";
 };
+type FixHoleScoreParam = {
+  id : 'FixHoleScore';
+}
+
 
 type SetupCheckParam = {
   id: "SETUP_CHECK";
