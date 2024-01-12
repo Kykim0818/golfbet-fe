@@ -4,10 +4,11 @@ export type InGameInfo = {
   holeInfos: HoleInfo[];
 };
 
-type HoleIdx = number;
 type HoleInfo = {
   /** 땅을 선언한 유저 id 배열, 최초 확정시에만 ddang 이 설정되고 수정 시에는 해당 값 수정 못함 */
   ddang: string[]; //
+  /** 적용되는 배판 조건 */
+  doubleConditions: string[];
   /** 실제 홀 넘버 (index 아님 주의) */
   hole: number;
   par: number; // 해당 홀 Par 수

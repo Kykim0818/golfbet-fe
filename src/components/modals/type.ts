@@ -1,3 +1,5 @@
+import { FixHoleScoreProps } from "../../pages/GameRoom/InGame/FixHoleScore/FixHoleScore";
+import { SelectNearLongProps } from "../../pages/GameRoom/InGame/SelectNearLong/SelectNearLong";
 import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
 import { RoomCenterProps } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQrProps } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
@@ -28,6 +30,8 @@ export type ModalParam =
   //
   | RegionSelectParam
   | EnterHoleScoreParam
+  | FixHoleScoreParam
+  | SelectNearLongParam
   //
   | SetupCheckParam
   | RuleChangeParam
@@ -73,9 +77,13 @@ type EnterHoleScoreParam = {
   id: "ENTER_HOLE_SCORE";
 };
 type FixHoleScoreParam = {
-  id : 'FixHoleScore';
-}
-
+  id: "FIX_HOLE_SCORE";
+  args: FixHoleScoreProps;
+};
+type SelectNearLongParam = {
+  id: "SELECT_NEAR_LONG";
+  args: SelectNearLongProps;
+};
 
 type SetupCheckParam = {
   id: "SETUP_CHECK";
@@ -112,7 +120,7 @@ type RoomQrParam = {
 export const getModalTypeById = (id: ModalParam["id"]) => {
   switch (id) {
     case "EMPTY":
-      return 3;
+      return MODAL_TYPE.EMPTY;
 
     case "RULE_CHANGE":
     case "SETUP_CHECK":
@@ -122,13 +130,15 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
     case "ROOM_CENTER":
     case "ROOM_RULE":
     case "ROOM_QR":
-      return 2;
+      return MODAL_TYPE.PAGE;
 
     case "REGION_SELECT":
     case "ENTER_HOLE_SCORE":
-      return 1;
+    case "FIX_HOLE_SCORE":
+    case "SELECT_NEAR_LONG":
+      return MODAL_TYPE.BOTTOM_SHEET;
 
     default:
-      return 0;
+      return MODAL_TYPE.CENTER;
   }
 };

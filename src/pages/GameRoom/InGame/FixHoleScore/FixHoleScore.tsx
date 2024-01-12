@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../../../components/Button";
+import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
 import { typo } from "../../../../styles/typo";
 import { getCurrentPar } from "../../../../utils/gameInfo";
@@ -11,7 +12,7 @@ import { GameRoomInfo } from "../../GameRoom";
 import { EnterScoreResult } from "../EnterHoleScore/EnterHoleScore";
 import { PlayerRow } from "./PlayerRow";
 
-type FixHoleScoreProps = {
+export type FixHoleScoreProps = {
   handleModalResult?: (result: any) => void;
   playerScores: EnterScoreResult["playerScores"];
   gameRoomInfo: GameRoomInfo;
@@ -23,26 +24,62 @@ export const FixHoleScore = ({
   gameRoomInfo,
 }: FixHoleScoreProps) => {
   const { moveBack } = usePageRoute();
-  const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
+  const { openModal } = useModal();
+  const {
+    gameInfo: {
+      betAmountPerStroke,
+      currentHole,
+      golfCenter: {
+        frontNineCourse: { pars: frontNineCoursePar },
+        backNineCourse: { pars: backNineCoursePar },
+      },
+      gameRule: { nearestType, specialBetRequirements },
+    },
+    players,
+  } = gameRoomInfo;
+
+  // const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
     currentHole,
-    gameRoomInfo!?.gameInfo.golfCenter.frontNineCourse.pars,
-    gameRoomInfo!?.gameInfo.golfCenter.backNineCourse.pars
+    frontNineCoursePar,
+    backNineCoursePar
   );
 
   // TODO : 땅여부 확인을 어
   // 추가 정보 결정 해야함 점수로 배판인지여
   const doubleConditions = checkDoubleCondition(
-    gameRoomInfo.gameInfo.gameRule.specialBetRequirements,
+    specialBetRequirements,
     currentPar,
     playerScores
   );
   const playersMoneyChange = calculateChangeMoney(
     doubleConditions.length === 0 ? true : false,
-    gameRoomInfo.gameInfo.betAmountPerStroke,
+    betAmountPerStroke,
     currentPar,
     playerScores
   );
+
+  const handleEnterScore = async () => {
+    // 니어 롱기 규칙 유무 확인
+    if (currentPar === 3) {
+      openModal({
+        id: "SELECT_NEAR_LONG",
+        args: {
+          players,
+          nearLongType: "nearest",
+        },
+      });
+    } else if (currentPar === 5) {
+      openModal({
+        id: "SELECT_NEAR_LONG",
+        args: {
+          players,
+          nearLongType: "longest",
+        },
+      });
+    }
+  };
+
   return (
     <S.Wrapper>
       <S.ModalHeader>

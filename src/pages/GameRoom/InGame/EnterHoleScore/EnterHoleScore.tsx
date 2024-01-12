@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../components/Button";
 import { useAppSelector } from "../../../../hooks/redux";
+import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
 import { typo } from "../../../../styles/typo";
+import { deepClone } from "../../../../utils/deepClone";
 import { getDisplayEnterScore } from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
-import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
-import { deepClone } from "../../../../utils/deepClone";
 
 type EnterHoleScoreProps = {
   handleModalResult?: (result: EnterScoreResult) => void;
@@ -23,6 +24,7 @@ type PlayerScores = Record<string, number>;
 export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   const [playerScores, setPlayerScores] = useState<PlayerScores>({});
   const { moveBack } = usePageRoute();
+  const { openModal } = useModal();
   // 예외 : par 나 holecount 없을 경우, 닫기
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
   if (gameRoomInfo === undefined) moveBack();
@@ -60,7 +62,11 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   };
 
   // ###
-  const handleEnterScore = () => {
+  const handleEnterScore = async () => {
+    if (gameRoomInfo === undefined) {
+      console.log("gameRoomInfo is undefined");
+      return;
+    }
     // player 전원 점수 입력 상태인지 확인
     let isAllPlayerScoreEntered = true;
     Object.entries(playerScores).forEach(([userId, score]) => {
@@ -71,6 +77,14 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
     });
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
+      const res = await openModal({
+        id: "FIX_HOLE_SCORE",
+        args: {
+          gameRoomInfo,
+          playerScores,
+        },
+      });
+      console.log(res);
     }
     // 점수 다입력 안되엇으므로 그냥 입력 처리
     else {
@@ -88,7 +102,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       scores[player.userId] = player.holeScores[currentHole - 1];
     });
     setPlayerScores(scores);
-  }, [gameRoomInfo]);
+  }, [gameRoomInfo, players, currentHole]);
 
   return (
     <S.Wrapper>

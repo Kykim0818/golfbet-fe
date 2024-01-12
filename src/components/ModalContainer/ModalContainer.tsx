@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import EnterScore from "../../pages/GameRoom/InGame/EnterHoleScore";
+import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
+import FixHoleScore from "../../pages/GameRoom/InGame/FixHoleScore";
+import SelectNearLong from "../../pages/GameRoom/InGame/SelectNearLong";
 import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
 import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
 import { RoomQr } from "../../pages/GameRoom/WaitRoom/RoomQr/RoomQr";
@@ -17,7 +19,6 @@ import Alert from "../modals/Alert";
 import { Confirm } from "../modals/Confirm/Confirm";
 import { Empty } from "../modals/Empty/Empty";
 import { ModalParam, getModalTypeById } from "../modals/type";
-import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 
 export const ModalContainer = () => {
   const modalStatus = useAppSelector((state) => state.modal.status);
@@ -86,6 +87,22 @@ const modalChildrenSelector = (
       return <div>Hello</div>;
     case "ENTER_HOLE_SCORE":
       return <EnterHoleScore handleModalResult={modalParam.handleClose} />;
+    case "FIX_HOLE_SCORE":
+      return (
+        <FixHoleScore
+          gameRoomInfo={modalParam.args.gameRoomInfo}
+          playerScores={modalParam.args.playerScores}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "SELECT_NEAR_LONG":
+      return (
+        <SelectNearLong
+          nearLongType={modalParam.args.nearLongType}
+          players={modalParam.args.players}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
     // modal page
     case "SETUP_CHECK":
       return (
