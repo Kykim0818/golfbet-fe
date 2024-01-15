@@ -9,6 +9,7 @@ import { useSockets } from "../../service/socketIo/socketIo.context";
 import GameEnd from "../GameEnd";
 import { GameInfo } from "../MakeGame/MakeGame";
 import InGame from "./InGame";
+import { InGameInfo } from "./InGame/type";
 import WaitRoom from "./WaitRoom";
 import { GAME_STATE } from "./constant";
 
@@ -29,6 +30,7 @@ export type GameRoomInfo = {
   gameInfo: GameInfo;
   hostUserId: string;
   players: GameRoomUser[];
+  inGameInfo: InGameInfo["holeInfos"];
 };
 
 export type GameRoomUser = {
@@ -68,6 +70,7 @@ export const GameRoom = () => {
     updateRoom,
     startGame,
     enterScore,
+    fixScore,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -135,6 +138,7 @@ export const GameRoom = () => {
         gameRoomInfo={gameRoomInfo}
         exitRoom={handleExitInGame}
         enterScore={enterScore}
+        fixScore={fixScore}
       />
     );
   // 종료

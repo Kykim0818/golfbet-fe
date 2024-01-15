@@ -5,8 +5,8 @@ export type InGameInfo = {
 };
 
 type HoleInfo = {
-  /** 땅을 선언한 유저 id 배열, 최초 확정시에만 ddang 이 설정되고 수정 시에는 해당 값 수정 못함 */
-  ddang: string[]; //
+  /** 땅을 선언 여부, 최초 확정시에만 ddang 이 설정되고 수정 시에는 해당 값 수정 못함 */
+  ddang: boolean; //
   /** 적용되는 배판 조건 */
   doubleConditions: string[];
   /** 실제 홀 넘버 (index 아님 주의) */
@@ -17,7 +17,7 @@ type HoleInfo = {
 };
 
 type PlayerInfo = {
-  /** 해당 홀의 기록 타수 */
+  /** 해당 홀의 점수 */
   strokes: number;
   /** 점수 결과에 따른 금액 변화량 */
   moneyChange: number;

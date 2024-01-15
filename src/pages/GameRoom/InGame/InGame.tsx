@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
+import { useState } from "react";
 import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
 import RankBoard from "../../../components/domain/RankBoard";
+import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
+import { usePreventLeave } from "../../../hooks/usePreventLeave";
 import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
 import {
@@ -13,11 +16,9 @@ import {
   getDisplayCenterTypeText,
 } from "../../../utils/display";
 import { GameRoomInfo } from "../GameRoom";
-import ProgressBoard from "./ProgressBoard";
-import { usePreventLeave } from "../../../hooks/usePreventLeave";
-import { useAppSelector } from "../../../hooks/redux";
-import { useState } from "react";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
+import ProgressBoard from "./ProgressBoard";
+import { InGameInfo } from "./type";
 
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
@@ -27,14 +28,25 @@ export type InGameProps = {
     holeIdx: number,
     enterScoreResult: EnterScoreResult
   ) => void;
+  fixScore: (
+    gameId: string,
+    userId: string,
+    holeInfo: InGameInfo["holeInfos"][number]
+  ) => void;
   // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
-export const InGame = ({ gameRoomInfo, exitRoom, enterScore }: InGameProps) => {
+export const InGame = ({
+  gameRoomInfo,
+  exitRoom,
+  enterScore,
+  fixScore,
+}: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
   const modalStatus = useAppSelector((state) => state.modal.status);
+  const userInfo = useAppSelector((state) => state.users.userInfo);
   const [preventFlag, setPreventFlag] = useState(true);
   // # web socket game info
   // 모달이 떠있으면, 패딩 X && 임의 플래그
@@ -48,16 +60,16 @@ export const InGame = ({ gameRoomInfo, exitRoom, enterScore }: InGameProps) => {
     },
     handleClickOk: exitRoom,
   });
+  const { gameInfo, players } = gameRoomInfo;
+  const {
+    gameType: centerType,
+    golfCenter: centerInfo,
+    betType,
+    betAmountPerStroke,
+    bettingLimit,
+    currentHole,
+  } = gameInfo;
 
-  const centerType = gameRoomInfo.gameInfo.gameType;
-  const name = gameRoomInfo.gameInfo.golfCenter.name;
-  const betType = gameRoomInfo.gameInfo.betType;
-  const betAmountPerStroke = gameRoomInfo.gameInfo.betAmountPerStroke;
-  const bettingLimit = gameRoomInfo.gameInfo.bettingLimit;
-  const centerInfo = gameRoomInfo.gameInfo.golfCenter;
-  const players = gameRoomInfo.players;
-  // TODO
-  const currentHole = gameRoomInfo.gameInfo.currentHole;
   // 전후반 결정 요소
   const isFrontNine = currentHole <= 9;
   const currentPar = isFrontNine
@@ -68,10 +80,20 @@ export const InGame = ({ gameRoomInfo, exitRoom, enterScore }: InGameProps) => {
     const res = await openModal<EnterScoreResult>({
       id: "ENTER_HOLE_SCORE",
     });
-    if (res && gameRoomInfo.gameInfo.gameId) {
-      enterScore(gameRoomInfo.gameInfo.gameId, currentHole, res);
-    } else {
+    if (gameRoomInfo.gameInfo.gameId === undefined) {
       console.log("gameId is undefined");
+      return;
+    }
+    if (res.isAllEnter) {
+      // const holeInfo: InGameInfo["holeInfos"][number] = {
+      //   ddang: false,
+      // };
+      console.log("TODO : InGame - 점수 확정", res);
+      // fixScore();
+    }
+    if (res.isAllEnter === false) {
+      enterScore(gameRoomInfo.gameInfo.gameId, currentHole, res);
+      return;
     }
   };
 
@@ -94,7 +116,7 @@ export const InGame = ({ gameRoomInfo, exitRoom, enterScore }: InGameProps) => {
           {/* 1 */}
           <S.CenterNameSection>
             <S.CenterType>{getDisplayCenterTypeText(centerType)}</S.CenterType>
-            <S.CenterName>{name}</S.CenterName>
+            <S.CenterName>{centerInfo.name}</S.CenterName>
           </S.CenterNameSection>
           {/* 2 */}
           <S.Info>
