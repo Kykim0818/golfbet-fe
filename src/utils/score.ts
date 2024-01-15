@@ -14,11 +14,10 @@ export function divideFrontAndBackScores(holeScores: number[]) {
 //
 export function checkDoubleCondition(
   doubleConditions: GameRule["specialBetRequirements"],
-  parCount: number,
   playerScore: EnterScoreResult["playerScores"]
 ) {
   const playerScoreFromPar = Object.entries(playerScore).map(
-    ([_id, score]) => score - parCount
+    ([_id, score]) => score
   );
   const resultDoubleConditons: string[] = [];
   if (doubleConditions.includes("none")) return resultDoubleConditons;
@@ -45,15 +44,14 @@ export function checkDoubleCondition(
 export function calculateChangeMoney(
   isDouble: boolean,
   betAmountPerStroke: number,
-  parCount: number,
   /** 게임에 참여중인 playerScore만 포함해야함  */
   playerScore: EnterScoreResult["playerScores"]
 ) {
   const playerInfoForMoneyCalculate = Object.entries(playerScore).map(
-    ([userId, score]) => {
+    ([userId, _score]) => {
       let otherPlayerScoreSum = 0;
       let otherPlayerCount = 0;
-      Object.entries(playerScore).map(([id, score]) => {
+      Object.entries(playerScore).forEach(([id, score]) => {
         if (userId !== id) {
           otherPlayerScoreSum += score;
           otherPlayerCount += 1;
@@ -63,7 +61,6 @@ export function calculateChangeMoney(
         userId,
         otherPlayerCount,
         otherPlayerScoreSum,
-        scoreGapFromPar: score - parCount,
       };
     }
   );
@@ -75,7 +72,7 @@ export function calculateChangeMoney(
     changeAmount -=
       betAmountPerStroke *
       playerInfo.otherPlayerCount *
-      (playerScore[playerInfo.userId] - parCount);
+      playerScore[playerInfo.userId];
     // + (1타당 금액 * (나를 제외한 사람들의 점수 합))
     changeAmount += betAmountPerStroke * playerInfo.otherPlayerScoreSum;
     if (isDouble) {
