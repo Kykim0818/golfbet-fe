@@ -9,6 +9,8 @@ import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
 import { getDisplayEnterScore } from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
+import { FixHoleScoreResult } from "../FixHoleScore/FixHoleScore";
+import { InGameInfo } from "../type";
 
 type EnterHoleScoreProps = {
   handleModalResult?: (result: EnterScoreResult) => void;
@@ -17,7 +19,9 @@ type EnterHoleScoreProps = {
 export type EnterScoreResult = {
   // 모두 입력 상태인지,
   isAllEnter: boolean;
+  /** type PlayerScores = Record<string, number>; */
   playerScores: PlayerScores;
+  holeInfo: InGameInfo["holeInfos"][number] | null;
 };
 type PlayerScores = Record<string, number>;
 
@@ -28,7 +32,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   // 예외 : par 나 holecount 없을 경우, 닫기
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
   if (gameRoomInfo === undefined) moveBack();
-
+  const inGameInfo = gameRoomInfo?.inGameInfo ?? [];
   const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
     currentHole,
@@ -69,22 +73,52 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
     }
     // player 전원 점수 입력 상태인지 확인
     let isAllPlayerScoreEntered = true;
+
     Object.entries(playerScores).forEach(([userId, score]) => {
       // TODO: 포기한 사람인 경우 처리 고려 필요
       if (score === UNENTERED_HOLE_SCORE) {
         isAllPlayerScoreEntered = false;
       }
     });
+
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
-      const res = await openModal({
+      const res = await openModal<FixHoleScoreResult>({
         id: "FIX_HOLE_SCORE",
         args: {
           gameRoomInfo,
           playerScores,
         },
       });
-      console.log(res);
+      if (res.result) {
+        console.log("TODO : 점수 확정", res);
+        // player 데이터 만들기,
+        // TODO: Ingame 정보 받아와서 이전홀 정보 확인해야 함
+        const players: InGameInfo["holeInfos"][number]["players"] = {};
+        Object.entries(playerScores).forEach(([userId, score]) => {
+          players[userId] = {
+            strokes: score,
+            moneyChange: res.playersMoneyChange[userId],
+            previousMoney:
+              inGameInfo[currentHole]?.players[userId].remainingMoney ??
+              gameRoomInfo.gameInfo.bettingLimit,
+            remainingMoney:
+              gameRoomInfo.gameInfo.bettingLimit +
+              res.playersMoneyChange[userId],
+          };
+        });
+        handleModalResult?.({
+          isAllEnter: true,
+          playerScores,
+          holeInfo: {
+            players,
+            doubleConditions: [],
+            ddang: res.ddang,
+            hole: currentHole,
+            par: currentPar,
+          },
+        });
+      }
     }
     // 점수 다입력 안되엇으므로 그냥 입력 처리
     else {
@@ -92,6 +126,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       handleModalResult?.({
         isAllEnter: false,
         playerScores,
+        holeInfo: null,
       });
     }
   };

@@ -8,14 +8,28 @@ import {
   calculateChangeMoney,
   checkDoubleCondition,
 } from "../../../../utils/score";
-import { GameRoomInfo } from "../../GameRoom";
+import { GameRoomInfo, GameRoomUser } from "../../GameRoom";
 import { EnterScoreResult } from "../EnterHoleScore/EnterHoleScore";
+import { findLastRankPlayer } from "../util";
 import { PlayerRow } from "./PlayerRow";
 
 export type FixHoleScoreProps = {
-  handleModalResult?: (result: any) => void;
+  handleModalResult?: (result: FixHoleScoreResult) => void;
   playerScores: EnterScoreResult["playerScores"];
   gameRoomInfo: GameRoomInfo;
+};
+
+export type FixHoleScoreResult = {
+  result: boolean;
+  /**
+   * 니어리스트 , 롱기스트 선택 유저 id
+   */
+  nearLong: string[];
+  /**
+   * 땅 적용 여부
+   */
+  ddang: boolean;
+  playersMoneyChange: Record<string, number>;
 };
 
 export const FixHoleScore = ({
@@ -33,7 +47,7 @@ export const FixHoleScore = ({
         frontNineCourse: { pars: frontNineCoursePar },
         backNineCourse: { pars: backNineCoursePar },
       },
-      gameRule: { nearestType, specialBetRequirements },
+      gameRule: { ddang, specialBetRequirements },
     },
     players,
   } = gameRoomInfo;
@@ -49,20 +63,20 @@ export const FixHoleScore = ({
   // 추가 정보 결정 해야함 점수로 배판인지여
   const doubleConditions = checkDoubleCondition(
     specialBetRequirements,
-    currentPar,
     playerScores
   );
   const playersMoneyChange = calculateChangeMoney(
     doubleConditions.length === 0 ? true : false,
     betAmountPerStroke,
-    currentPar,
     playerScores
   );
 
   const handleEnterScore = async () => {
-    // 니어 롱기 규칙 유무 확인
+    const nearLong: string[] = [];
+    // string | boolean 인 이유는 뒤로가기로 modal 닫힐 경우에는 false 를 리턴하기 때문.
+    let nearLongRes: string | boolean = false;
     if (currentPar === 3) {
-      openModal({
+      nearLongRes = await openModal<string>({
         id: "SELECT_NEAR_LONG",
         args: {
           players,
@@ -70,7 +84,7 @@ export const FixHoleScore = ({
         },
       });
     } else if (currentPar === 5) {
-      openModal({
+      nearLongRes = await openModal<string>({
         id: "SELECT_NEAR_LONG",
         args: {
           players,
@@ -78,6 +92,37 @@ export const FixHoleScore = ({
         },
       });
     }
+    if (typeof nearLongRes === "string" && nearLongRes !== "") {
+      nearLong.push(nearLongRes);
+    }
+
+    // #2 땅 확인
+    let isDdangDeclare = false;
+    const [ddangRuleValue] = ddang;
+    if (ddangRuleValue === "onlyLastPlace") {
+      // 꼴등 식별
+      const lastRankPlayers: GameRoomUser[] = [];
+      findLastRankPlayer(playerScores).forEach((userId) => {
+        players.forEach((player) => {
+          if (player.userId === userId) {
+            lastRankPlayers.push(player);
+          }
+        });
+      });
+      // 모달 오픈
+      isDdangDeclare = await openModal({
+        id: "DECLARE_DDANG_PARAM",
+        args: {
+          lastPlayers: lastRankPlayers,
+        },
+      });
+    }
+    handleModalResult?.({
+      result: true,
+      nearLong,
+      ddang: isDdangDeclare,
+      playersMoneyChange,
+    });
   };
 
   return (
@@ -85,7 +130,7 @@ export const FixHoleScore = ({
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
-          onClick={() => handleModalResult?.(true)}
+          onClick={moveBack}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
           alt="close"
         />
@@ -94,7 +139,7 @@ export const FixHoleScore = ({
         {currentHole} H | 파 {currentPar}
       </S.HoleInfo>
       <S.Body>
-        <S.HoleBetInfo>{}</S.HoleBetInfo>
+        <S.HoleBetInfo>테스트 배판!</S.HoleBetInfo>
         <S.Players>
           {gameRoomInfo.players.map((player) => {
             return (
@@ -109,8 +154,10 @@ export const FixHoleScore = ({
         </S.Players>
       </S.Body>
       <S.Footer>
-        <Button onClick={moveBack}>확정하기</Button>
-        <Button onClick={moveBack}>수정하기</Button>
+        <Button onClick={handleEnterScore}>확정하기</Button>
+        <Button variants="outlined" onClick={moveBack}>
+          수정하기
+        </Button>
       </S.Footer>
     </S.Wrapper>
   );
@@ -154,18 +201,34 @@ const S = {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    padding: 0px 15px;
   `,
-  HoleBetInfo: styled.span``,
+  HoleBetInfo: styled.span`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 11.25px;
+
+    ${typo.s14w500}
+    background-color: var(--color-main-light-hover, '#d9f3f6');
+    color: var(--color-main-dark, #008395);
+    padding: 10px 0px;
+  `,
 
   Players: styled.div`
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    margin-top: 25px;
+    margin-bottom: 25px;
   `,
 
   //
   Footer: styled.footer`
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 0px 20px 20px 20px;
   `,
 };
