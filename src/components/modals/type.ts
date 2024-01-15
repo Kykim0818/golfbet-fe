@@ -1,3 +1,4 @@
+import { DeclareDdangProps } from "../../pages/GameRoom/InGame/DeclareDdang/DelcareDdang";
 import { FixHoleScoreProps } from "../../pages/GameRoom/InGame/FixHoleScore/FixHoleScore";
 import { SelectNearLongProps } from "../../pages/GameRoom/InGame/SelectNearLong/SelectNearLong";
 import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
@@ -26,6 +27,7 @@ export type ModalParam =
   //
   | AlertParam
   | ConfirmParam
+  | DeclareDdangParam
   | ViewRuleParam
   //
   | RegionSelectParam
@@ -60,6 +62,11 @@ type ConfirmParam = {
     cancelBtnLabel?: string;
   };
 };
+type DeclareDdangParam = {
+  id: "DECLARE_DDANG_PARAM";
+  args: DeclareDdangProps;
+};
+
 type EmptyParam = {
   id: "EMPTY";
 };

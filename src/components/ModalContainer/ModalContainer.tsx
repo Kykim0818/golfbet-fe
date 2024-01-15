@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import DeclareDdang from "../../pages/GameRoom/InGame/DeclareDdang";
 import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 import FixHoleScore from "../../pages/GameRoom/InGame/FixHoleScore";
 import SelectNearLong from "../../pages/GameRoom/InGame/SelectNearLong";
@@ -82,6 +83,13 @@ const modalChildrenSelector = (
       );
     case "VIEW_RULE":
       return <ViewRule gameRoomInfo={modalParam.args.gameRoomInfo} />;
+    case "DECLARE_DDANG_PARAM":
+      return (
+        <DeclareDdang
+          lastPlayers={modalParam.args.lastPlayers}
+          handleModalResult={modalParam.handleClose}
+        />
+      );
     // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
