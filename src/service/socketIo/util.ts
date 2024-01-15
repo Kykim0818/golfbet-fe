@@ -62,6 +62,7 @@ export function convertSocketDataToUiGameRoomInfo(
         handicaps: [],
       };
     }),
+    inGameInfo: gameRoomInfo.inGameInfo,
   };
 }
 

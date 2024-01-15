@@ -1,3 +1,5 @@
+import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+
 export type SocketResponse = {
   status: boolean;
   statusCode: number;
@@ -52,6 +54,7 @@ export interface SocketGameRoomInfo {
     playerCount: number;
   };
   players: Player[];
+  inGameInfo: GameRoomInfo["inGameInfo"];
 }
 
 interface Player {

@@ -25,6 +25,12 @@ export const getDisplayMoney = (value: number) => {
   return new Intl.NumberFormat().format(value);
 };
 
+/** Fix Score 돈 변화량 표시 UI 용 함수  */
+export const getDisplayChangeMoney = (value: number) => {
+  let prefix = value < 0 ? "" : "+";
+  return `${prefix}${new Intl.NumberFormat().format(value)}`;
+};
+
 export const getDisplayDate = (date: string) => {
   const pattern = /^\d{4}-\d{2}-\d{2}$/;
   if (pattern.test(date)) {

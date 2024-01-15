@@ -10,15 +10,16 @@ import { useAppDispatch } from "../../hooks/redux";
 import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { GameRoomInfo } from "../../pages/GameRoom/GameRoom";
+import { EnterScoreResult } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
+import { InGameInfo } from "../../pages/GameRoom/InGame/type";
 import { actionGame } from "../../store/gameRoomInfo/gameSlice";
 import { SOCKET_URL } from "./config";
 import { EVENTS, SOCKET_RESPONSE, TASK } from "./constant";
+import { SocketResponse } from "./type";
 import {
   convertSocketDataToUiGameRoomInfo,
   convertUiGameInfoToSocketData,
 } from "./util";
-import { SocketResponse } from "./type";
-import { EnterScoreResult } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 
 const socket = io(SOCKET_URL, {
   // room 네임스페이스
@@ -50,6 +51,11 @@ interface Context {
     holeIdx: number,
     enterScoreResult: EnterScoreResult
   ) => void;
+  fixScore: (
+    gameId: string,
+    userId: string,
+    holeInfo: InGameInfo["holeInfos"][number]
+  ) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -62,6 +68,7 @@ const SocketContext = createContext<Context>({
   onReady: () => {},
   startGame: () => {},
   enterScore: () => {},
+  fixScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -229,7 +236,13 @@ function SocketsProvider(props: any) {
     console.log(
       `EnterScore gameId : ${gameId}, 입력홀: ${holeIdx}, 입력결과: ${insertData}`
     );
-    //
+    console.log({
+      taskName: TASK.ENTER_SCORE,
+      data: {
+        gameId,
+        insertData,
+      },
+    });
     if (enterScoreResult.isAllEnter === false) {
       socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
         taskName: TASK.ENTER_SCORE,
@@ -240,6 +253,23 @@ function SocketsProvider(props: any) {
       });
     }
   };
+
+  const fixScore = (
+    gameId: string,
+    userId: string,
+    holeInfo: InGameInfo["holeInfos"][number]
+  ) => {
+    console.log(`FixScore gameId : ${gameId}, 입력홀정보: ${holeInfo}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.FIX_SCORE,
+      data: {
+        gameId,
+        userId,
+        holeInfo,
+      },
+    });
+  };
+
   // useEffect(() => {
   //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
   //     if (!document.hasFocus()) {
@@ -262,6 +292,7 @@ function SocketsProvider(props: any) {
         onReady,
         startGame,
         enterScore,
+        fixScore,
       }}
       {...props}
     />

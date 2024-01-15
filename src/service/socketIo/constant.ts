@@ -20,6 +20,7 @@ export const TASK = {
   ROOM_UPDATE: "update",
   START_GAME: "start",
   ENTER_SCORE: "insert",
+  FIX_SCORE: "next",
 } as const;
 
 export const SOCKET_RESPONSE = {

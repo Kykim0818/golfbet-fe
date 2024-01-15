@@ -9,15 +9,31 @@ interface Props {
 
 export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
   return (
-    <S.Background modalType={modalType}>
-      <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>
-        {children}
-      </S.Sheet>
-    </S.Background>
+    <>
+      {modalType === 0 && <S.Screen />}
+      <S.Background modalType={modalType}>
+        <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>
+          {children}
+        </S.Sheet>
+      </S.Background>
+    </>
   );
 };
 
 const S = {
+  // 뒷 배경 가리기용
+  Screen: styled.div`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg, "#f6f8fc");
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  `,
   Background: styled.div<{ modalType: ModalType }>`
     ${(props) =>
       props.modalType === 3 &&
@@ -35,6 +51,7 @@ const S = {
   `,
   Sheet: styled.div<{ modalType: ModalType; sheetStyle?: CSSProp }>`
     position: fixed;
+    z-index: 3;
     // 일반 modal
     ${(props) =>
       props.modalType === 0 &&
