@@ -27,7 +27,7 @@ export const SelectNearLong = ({
   };
 
   return (
-    <S.Wrapper>
+    <>
       <S.ModalHeader>
         <div className="modalheader__title">{`${
           nearLongType === "nearest" ? "니어리스트" : "롱기스트"
@@ -60,12 +60,11 @@ export const SelectNearLong = ({
         </Button>
         <Button onClick={moveBack}>SKIP</Button>
       </S.Footer>
-    </S.Wrapper>
+    </>
   );
 };
 
 const S = {
-  Wrapper: styled.div``,
   ModalHeader: styled.div`
     display: flex;
     justify-content: center;
@@ -86,10 +85,13 @@ const S = {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    overflow: auto;
   `,
   //
   Footer: styled.footer`
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 0px 20px 20px 20px;
   `,
 };

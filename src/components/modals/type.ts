@@ -19,6 +19,8 @@ const MODAL_TYPE = {
   PAGE: 2,
   /** 패딩 */
   EMPTY: 3,
+  /** 기본인데 뒤에 내용이 가려지는 모달 */
+  BACKGROUND_CNETER: 4,
 } as const;
 
 export type ModalType = (typeof MODAL_TYPE)[keyof typeof MODAL_TYPE];
@@ -144,6 +146,9 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
     case "FIX_HOLE_SCORE":
     case "SELECT_NEAR_LONG":
       return MODAL_TYPE.BOTTOM_SHEET;
+
+    case "DECLARE_DDANG_PARAM":
+      return MODAL_TYPE.BACKGROUND_CNETER;
 
     default:
       return MODAL_TYPE.CENTER;

@@ -140,7 +140,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   }, [gameRoomInfo, players, currentHole]);
 
   return (
-    <S.Wrapper>
+    <>
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
@@ -184,15 +184,11 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       <S.Footer>
         <Button onClick={handleEnterScore}>확인</Button>
       </S.Footer>
-    </S.Wrapper>
+    </>
   );
 };
 
 const S = {
-  Wrapper: styled.div`
-    display: flex;
-    flex-direction: column;
-  `,
   ModalHeader: styled.div`
     display: flex;
     justify-content: center;
@@ -224,6 +220,7 @@ const S = {
   Body: styled.main`
     display: flex;
     flex-grow: 1;
+    overflow: auto;
   `,
   Section: styled.section`
     display: flex;
@@ -232,6 +229,7 @@ const S = {
     gap: 20px;
     background-color: white;
     padding: 25px 20px;
+    height: 80%;
     overflow: auto;
   `,
   UserSection: styled.div`
