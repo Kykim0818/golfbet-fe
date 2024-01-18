@@ -110,6 +110,8 @@ export const InGame = ({
           display: "flex",
           flexDirection: "column",
           flex: "1",
+          overflow: "auto",
+          paddingBottom: "15px",
         }}
       >
         <S.Top>

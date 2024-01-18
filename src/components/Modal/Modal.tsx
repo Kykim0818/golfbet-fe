@@ -10,7 +10,7 @@ interface Props {
 export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
   return (
     <>
-      {modalType === 0 && <S.Screen />}
+      {modalType === 4 && <S.Opaque />}
       <S.Background modalType={modalType}>
         <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>
           {children}
@@ -22,7 +22,7 @@ export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
 
 const S = {
   // 뒷 배경 가리기용
-  Screen: styled.div`
+  Opaque: styled.div`
     position: fixed;
     top: 0;
     bottom: 0;
@@ -64,6 +64,9 @@ const S = {
     ${(props) =>
       props.modalType === 1 &&
       css`
+        display: flex;
+        flex-direction: column;
+
         padding-top: 55px;
         bottom: 0;
         background-color: white;
@@ -71,7 +74,6 @@ const S = {
         width: 100%;
         border-radius: 25px 25px 0px 0px;
         animation: slideUp 0.3s ease-in-out;
-
         @keyframes slideUp {
           0% {
             transform: translateY(100%); /* 초기 위치: 아래에서 위로 이동 */

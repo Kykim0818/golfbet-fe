@@ -95,6 +95,8 @@ export const FixHoleScore = ({
     if (typeof nearLongRes === "string" && nearLongRes !== "") {
       nearLong.push(nearLongRes);
     }
+    // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
+    if (nearLongRes === false) return;
 
     // #2 땅 확인
     let isDdangDeclare = false;
@@ -126,7 +128,7 @@ export const FixHoleScore = ({
   };
 
   return (
-    <S.Wrapper>
+    <>
       <S.ModalHeader>
         <div className="modalheader__title">스코어 입력하기</div>
         <img
@@ -159,15 +161,11 @@ export const FixHoleScore = ({
           수정하기
         </Button>
       </S.Footer>
-    </S.Wrapper>
+    </>
   );
 };
 
 const S = {
-  Wrapper: styled.div`
-    display: flex;
-    flex-direction: column;
-  `,
   ModalHeader: styled.div`
     display: flex;
     justify-content: center;
@@ -202,6 +200,8 @@ const S = {
     flex-direction: column;
     flex-grow: 1;
     padding: 0px 15px;
+
+    overflow: auto;
   `,
   HoleBetInfo: styled.span`
     display: flex;

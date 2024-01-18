@@ -179,6 +179,8 @@ const S = {
     flex-direction: column;
     flex-grow: 1;
     padding: 0px 15px;
+
+    overflow: auto;
   `,
   Footer: styled.footer`
     display: flex;
