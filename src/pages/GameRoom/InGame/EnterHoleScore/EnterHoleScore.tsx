@@ -115,7 +115,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           playerScores,
           holeInfo: {
             players,
-            ddang: res.ddang,
+            ddang: false, // 일단 default return
             doubleConditions: res.doubleConditions,
             hole: currentHole,
             par: currentPar,

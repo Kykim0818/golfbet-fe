@@ -26,10 +26,6 @@ export type FixHoleScoreResult = {
    * 니어리스트 , 롱기스트 선택 유저 id
    */
   nearLong: string[];
-  /**
-   * 땅 적용 여부
-   */
-  ddang: boolean;
   doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
 };
@@ -106,33 +102,12 @@ export const FixHoleScore = ({
       // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
       if (nearLongRes === false) return;
     }
-    // #2 땅 확인
-    let isDdangDeclare = false;
-    const [ddangRuleValue] = ddang;
-    if (ddangRuleValue === "onlyLastPlace") {
-      // 꼴등 식별
-      const lastRankPlayers: GameRoomUser[] = [];
-      findLastRankPlayer(playerScores).forEach((userId) => {
-        players.forEach((player) => {
-          if (player.userId === userId) {
-            lastRankPlayers.push(player);
-          }
-        });
-      });
-      // 모달 오픈
-      isDdangDeclare = await openModal({
-        id: "DECLARE_DDANG_PARAM",
-        args: {
-          lastPlayers: lastRankPlayers,
-        },
-      });
-    }
     handleModalResult?.({
       nearLong,
       doubleConditions,
       playersMoneyChange,
       result: true,
-      ddang: isDdangDeclare,
+      // ddang: isDdangDeclare,
     });
   };
 

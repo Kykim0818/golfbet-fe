@@ -15,10 +15,11 @@ import {
   getDisplayBetTypeText,
   getDisplayCenterTypeText,
 } from "../../../utils/display";
-import { GameRoomInfo } from "../GameRoom";
+import { GameRoomInfo, GameRoomUser } from "../GameRoom";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
 import ProgressBoard from "./ProgressBoard";
 import { InGameInfo } from "./type";
+import { findLastRankPlayer } from "./util";
 
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
@@ -69,6 +70,7 @@ export const InGame = ({
     betAmountPerStroke,
     bettingLimit,
     currentHole,
+    gameRule: { ddang },
   } = gameInfo;
 
   // 전후반 결정 요소
@@ -87,6 +89,30 @@ export const InGame = ({
     }
     if (res.isAllEnter) {
       if (gameId && res.holeInfo) {
+        // #2 땅 확인
+        // TODO : type 수정 필요
+        let isDdangDeclare: false | "yes" | "no" = "no";
+        const [ddangRuleValue] = ddang;
+        if (ddangRuleValue === "onlyLastPlace") {
+          // 꼴등 식별
+          const lastRankPlayers: GameRoomUser[] = [];
+          findLastRankPlayer(res.playerScores).forEach((userId) => {
+            players.forEach((player) => {
+              if (player.userId === userId) {
+                lastRankPlayers.push(player);
+              }
+            });
+          });
+          // 모달 오픈
+          isDdangDeclare = await openModal<"yes" | "no" | false>({
+            id: "DECLARE_DDANG",
+            args: {
+              lastPlayers: lastRankPlayers,
+            },
+          });
+          if (isDdangDeclare === false) return;
+          res.holeInfo.ddang = isDdangDeclare === "yes" ? true : false;
+        }
         // 점수 확정
         fixScore(gameId, userInfo.userId, res.holeInfo);
       }
