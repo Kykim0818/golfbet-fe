@@ -62,6 +62,7 @@ export const InGame = ({
   });
   const { gameInfo, players } = gameRoomInfo;
   const {
+    gameId,
     gameType: centerType,
     golfCenter: centerInfo,
     betType,
@@ -85,11 +86,10 @@ export const InGame = ({
       return;
     }
     if (res.isAllEnter) {
-      // const holeInfo: InGameInfo["holeInfos"][number] = {
-      //   ddang: false,
-      // };
-      console.log("TODO : InGame - 점수 확정", res);
-      // fixScore();
+      if (gameId && res.holeInfo) {
+        // 점수 확정
+        fixScore(gameId, userInfo.userId, res.holeInfo);
+      }
     }
     if (res.isAllEnter === false) {
       enterScore(gameRoomInfo.gameInfo.gameId, currentHole, res);

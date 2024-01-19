@@ -30,6 +30,7 @@ export type FixHoleScoreResult = {
    * 땅 적용 여부
    */
   ddang: boolean;
+  doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
 };
 
@@ -127,10 +128,11 @@ export const FixHoleScore = ({
       });
     }
     handleModalResult?.({
-      result: true,
       nearLong,
-      ddang: isDdangDeclare,
+      doubleConditions,
       playersMoneyChange,
+      result: true,
+      ddang: isDdangDeclare,
     });
   };
 
