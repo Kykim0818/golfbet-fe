@@ -91,7 +91,6 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         },
       });
       if (res.result) {
-        console.log("TODO : 점수 확정", res);
         // player 데이터 만들기,
         // TODO: Ingame 정보 받아와서 이전홀 정보 확인해야 함
         const players: InGameInfo["holeInfos"][number]["players"] = {};

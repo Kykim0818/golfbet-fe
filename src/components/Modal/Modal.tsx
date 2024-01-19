@@ -54,7 +54,7 @@ const S = {
     z-index: 3;
     // 일반 modal
     ${(props) =>
-      props.modalType === 0 &&
+      (props.modalType === 0 || props.modalType === 4) &&
       css`
         left: 50%;
         top: 50%;

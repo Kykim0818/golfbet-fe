@@ -58,7 +58,7 @@ export const SelectNearLong = ({
         >
           선택완료
         </Button>
-        <Button onClick={moveBack}>SKIP</Button>
+        <Button onClick={() => handleSelectNearLong(NO_SELECT)}>SKIP</Button>
       </S.Footer>
     </>
   );

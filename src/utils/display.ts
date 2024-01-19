@@ -45,3 +45,23 @@ export const getDisplayDate = (date: string) => {
   }
   throw Error("date format Invalid");
 };
+
+const DOUBLE_CONDITION_DISPLAY: Record<string, string> = {
+  ddang: "땅",
+  buddy: "버디 이상",
+  triple: "트리플 이상",
+  double: "더블 이상",
+  qudraple: "쿼드러플 이상",
+  twoOrMoreTie: "2명 이상 동타",
+  threeOrMoreTie: "3명 이상 동타",
+};
+
+// TODO
+export const getDisplayDoubleText = (
+  doubleConditions: string[],
+  parCount: number
+) => {
+  if (doubleConditions.length === 0) return "홀판";
+  // TODO: 기획 컨펌 후, 순서 설정
+  return `${DOUBLE_CONDITION_DISPLAY[doubleConditions[0]]} 배판`;
+};

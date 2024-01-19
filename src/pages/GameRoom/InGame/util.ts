@@ -1,4 +1,5 @@
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
+import { InGameInfo } from "./type";
 
 /** 꼴등 찾기 */
 export const findLastRankPlayer = (
@@ -14,4 +15,12 @@ export const findLastRankPlayer = (
     if (maxStroke === score) lastRankPlayers.push(userId);
   });
   return lastRankPlayers;
+};
+
+export const isApplyDdang = (
+  holeIdx: number,
+  holeInfo: InGameInfo["holeInfos"]
+) => {
+  if (holeIdx === 0 || holeIdx > 17) return false;
+  return holeInfo[holeIdx - 1].ddang ?? false;
 };

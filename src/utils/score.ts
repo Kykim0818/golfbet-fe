@@ -13,22 +13,66 @@ export function divideFrontAndBackScores(holeScores: number[]) {
 
 //
 export function checkDoubleCondition(
+  currentPar: number,
   doubleConditions: GameRule["specialBetRequirements"],
   playerScore: EnterScoreResult["playerScores"]
 ) {
-  const playerScoreFromPar = Object.entries(playerScore).map(
+  const playerScoresArr = Object.entries(playerScore).map(
     ([_id, score]) => score
   );
   const resultDoubleConditons: string[] = [];
+  // 배판 조건 없음
   if (doubleConditions.includes("none")) return resultDoubleConditons;
-  if (doubleConditions.includes("buddy") && playerScoreFromPar.includes(-2)) {
+  // 버디
+  if (doubleConditions.includes("buddy") && playerScoresArr.includes(-2)) {
     resultDoubleConditons.push("buddy");
   }
   // 트리플 이상 처리
   if (doubleConditions.includes("triple")) {
-    //
+    // Par 기준 절반 초과 타수 Par 3 -> 2타 , Par 4,5 -> 3타, Par 6 -> 4타
+    const overHalfPar = Math.floor(currentPar / 2) + 1;
+    if (playerScoresArr.some((score) => score >= overHalfPar)) {
+      resultDoubleConditons.push("triple");
+    }
   }
-  // 과반 이상 동타 확인
+
+  // 1. 두번(2명이상 동타, 3명이상 동타) 반복 인데 이후 용어 통일 될 수 있어서 우선 중복 코드로 작성
+  if (doubleConditions.includes("twoOrMoreTie")) {
+    const overHalfPlayerCount = Math.floor(playerScoresArr.length / 2) + 1;
+    const scoreMap = new Map<number, number>();
+    playerScoresArr.forEach((score) => {
+      if (scoreMap.has(score)) {
+        scoreMap.set(score, (scoreMap.get(score) ?? 0) + 1);
+        return;
+      }
+      scoreMap.set(score, 1);
+    });
+
+    let isOverHalfPlayerTie = false;
+    scoreMap.forEach((score, userCount) => {
+      if (overHalfPlayerCount <= userCount) isOverHalfPlayerTie = true;
+    });
+
+    if (isOverHalfPlayerTie) resultDoubleConditons.push("twoOrMoreTie");
+  }
+  // 2. 동일 로직
+  if (doubleConditions.includes("threeOrMoreTie")) {
+    const overHalfPlayerCount = Math.floor(playerScoresArr.length / 2) + 1;
+    const scoreMap = new Map<number, number>();
+    playerScoresArr.forEach((score) => {
+      if (scoreMap.has(score)) {
+        scoreMap.set(score, (scoreMap.get(score) ?? 0) + 1);
+        return;
+      }
+      scoreMap.set(score, 1);
+    });
+    let isOverHalfPlayerTie = false;
+    scoreMap.forEach((userCount, score) => {
+      if (overHalfPlayerCount <= userCount) isOverHalfPlayerTie = true;
+    });
+
+    if (isOverHalfPlayerTie) resultDoubleConditons.push("threeOrMoreTie");
+  }
 
   return resultDoubleConditons;
 }
