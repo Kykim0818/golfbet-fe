@@ -1,5 +1,7 @@
 import { EnterScoreResult } from "../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
+import { GameInfo } from "../pages/MakeGame/MakeGame";
 import { GameRule } from "../pages/MakeGame/Rule/type";
+import { deepClone } from "./deepClone";
 
 export function divideFrontAndBackScores(holeScores: number[]) {
   const FRONT_FIRST_INDEX = 0;
@@ -125,4 +127,34 @@ export function calculateChangeMoney(
     usersChangeMoney[playerInfo.userId] = changeAmount;
   });
   return usersChangeMoney;
+}
+
+/**
+ * 니어,롱기 규칙으로 인한 돈 변화량 계산 하는 함수
+ * @param isDouble 배판 인지 확인 
+ * @param nearLong 니어리스트,롱기스트로 선택된 유저 id  
+ * @param playersMoneyChange 배판이나 땅 규칙 반영된 돈 변화량 
+ * @param gameInfo 게임방 정보 
+ * */
+export function applyNearLongRule(isDouble: boolean, nearLong : string[] , playersMoneyChange : Record<string, number>, gameInfo : GameInfo){
+  const {betAmountPerStroke, nearestAmount, gameRule : { nearestType } } = gameInfo
+  const [nearLongRule] = nearestType;
+  const [targetUserId] = nearLong;
+
+  // 룰에 따라 적용할 nearLong 금액
+  const nearLongMoney = nearLongRule === 'includeInGame' ? 
+    // 게임에 포함일 경우 배판이면 2배, 아니면 타당 금액
+    isDouble ? (betAmountPerStroke * 2) : betAmountPerStroke 
+    :
+    // 별도 지정이면 지정 금액으로 처리 
+    nearestAmount  
+  const appliedNearLong = deepClone(playersMoneyChange); 
+  Object.entries(playersMoneyChange).forEach(([userId, moneyChange]) => {
+    if(userId === targetUserId) return;
+    if(userId !== targetUserId){
+      appliedNearLong[userId] = moneyChange - nearLongMoney; 
+    }
+    appliedNearLong[targetUserId] = appliedNearLong[targetUserId] + nearLongMoney; 
+  })
+  return appliedNearLong
 }
