@@ -119,7 +119,7 @@ export const GameRoom = () => {
 
   // 3 웹 소켓 연결
   if (socket.connected === false || gameRoomInfo === undefined)
-    return <Loading />;
+    return <Loading onTest={handleExitInGame} />;
   // 대기실
   if (gameRoomInfo.gameInfo.gameState === GAME_STATE.WAIT)
     return (

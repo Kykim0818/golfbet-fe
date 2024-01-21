@@ -21,7 +21,7 @@ export type EnterScoreResult = {
   isAllEnter: boolean;
   /** type PlayerScores = Record<string, number>; */
   playerScores: PlayerScores;
-  holeInfo: InGameInfo["holeInfos"][number] | null;
+  holeInfo?: InGameInfo["holeInfos"][number];
 };
 type PlayerScores = Record<string, number>;
 
@@ -83,6 +83,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
 
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
+      // TODO : 여기서 입력제어
       const res = await openModal<FixHoleScoreResult>({
         id: "FIX_HOLE_SCORE",
         args: {
@@ -95,15 +96,18 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         // TODO: Ingame 정보 받아와서 이전홀 정보 확인해야 함
         const players: InGameInfo["holeInfos"][number]["players"] = {};
         Object.entries(playerScores).forEach(([userId, score]) => {
+          // 현재홀 idx = 현재홀 - 1,로 이전홀의 idx = 현재홀 - 2
+          const previousHoleIndex = currentHole - 2;
+          // 1홀(이전 홀 idx = -1) 일때 는 베팅 준비금,
+          const previousMoney =
+            previousHoleIndex < 0
+              ? gameRoomInfo.gameInfo.bettingLimit
+              : inGameInfo[previousHoleIndex]?.players[userId].remainingMoney;
           players[userId] = {
             strokes: score,
             moneyChange: res.playersMoneyChange[userId],
-            previousMoney:
-              inGameInfo[currentHole]?.players[userId].remainingMoney ??
-              gameRoomInfo.gameInfo.bettingLimit,
-            remainingMoney:
-              gameRoomInfo.gameInfo.bettingLimit +
-              res.playersMoneyChange[userId],
+            previousMoney,
+            remainingMoney: previousMoney + res.playersMoneyChange[userId],
           };
         });
         handleModalResult?.({
@@ -111,8 +115,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           playerScores,
           holeInfo: {
             players,
-            doubleConditions: [],
-            ddang: res.ddang,
+            ddang: false, // 일단 default return
+            doubleConditions: res.doubleConditions,
             hole: currentHole,
             par: currentPar,
           },
@@ -125,7 +129,6 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       handleModalResult?.({
         isAllEnter: false,
         playerScores,
-        holeInfo: null,
       });
     }
   };

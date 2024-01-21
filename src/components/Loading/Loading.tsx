@@ -1,11 +1,14 @@
 import styled from "styled-components";
 
-export const Loading = () => {
+export const Loading = ({ onTest }: any) => {
   return (
     <S.PageBackground>
       <S.Background>
         <S.Body>
-          <S.Img src={process.env.PUBLIC_URL + "/assets/gif/loading.gif"} />
+          <S.Img
+            src={process.env.PUBLIC_URL + "/assets/gif/loading.gif"}
+            onClick={onTest}
+          />
         </S.Body>
       </S.Background>
     </S.PageBackground>

@@ -83,7 +83,7 @@ const modalChildrenSelector = (
       );
     case "VIEW_RULE":
       return <ViewRule gameRoomInfo={modalParam.args.gameRoomInfo} />;
-    case "DECLARE_DDANG_PARAM":
+    case "DECLARE_DDANG":
       return (
         <DeclareDdang
           lastPlayers={modalParam.args.lastPlayers}

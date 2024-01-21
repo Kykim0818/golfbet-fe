@@ -65,7 +65,7 @@ type ConfirmParam = {
   };
 };
 type DeclareDdangParam = {
-  id: "DECLARE_DDANG_PARAM";
+  id: "DECLARE_DDANG";
   args: DeclareDdangProps;
 };
 
@@ -147,7 +147,7 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
     case "SELECT_NEAR_LONG":
       return MODAL_TYPE.BOTTOM_SHEET;
 
-    case "DECLARE_DDANG_PARAM":
+    case "DECLARE_DDANG":
       return MODAL_TYPE.BACKGROUND_CNETER;
 
     default:

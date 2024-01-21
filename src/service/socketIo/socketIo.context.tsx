@@ -259,7 +259,9 @@ function SocketsProvider(props: any) {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => {
-    console.log(`FixScore gameId : ${gameId}, 입력홀정보: ${holeInfo}`);
+    console.log(
+      `FixScore gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
+    );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.FIX_SCORE,
       data: {

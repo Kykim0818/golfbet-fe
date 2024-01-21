@@ -3,7 +3,8 @@ import Button from "../../../../components/Button";
 import { GameRoomUser } from "../../GameRoom";
 
 export type DeclareDdangProps = {
-  handleModalResult?: (result: boolean) => void;
+  // 뒤로가기가 false 를 반환해서 아니오를 누른 것과 뒤로가기를 누른 것을 구분하기 위해서  'yes' | 'no' 를 씀
+  handleModalResult?: (result: "yes" | "no") => void;
   lastPlayers: GameRoomUser[];
 };
 
@@ -31,11 +32,11 @@ export const DeclareDdang = ({
       </S.Body>
       <S.HorizontalSeperator />
       <S.Footer>
-        <S.ModalBtn onClick={() => handleModalResult?.(false)}>
+        <S.ModalBtn onClick={() => handleModalResult?.("no")}>
           <span className="confirm__cancel">아니요</span>
         </S.ModalBtn>
         <S.VerticalSeperator />
-        <S.ModalBtn onClick={() => handleModalResult?.(true)}>
+        <S.ModalBtn onClick={() => handleModalResult?.("yes")}>
           땅선언
         </S.ModalBtn>
       </S.Footer>
