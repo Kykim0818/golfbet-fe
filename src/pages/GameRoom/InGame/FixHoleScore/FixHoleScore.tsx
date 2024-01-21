@@ -6,12 +6,13 @@ import { typo } from "../../../../styles/typo";
 import { getDisplayDoubleText } from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
 import {
+  applyNearLongRule,
   calculateChangeMoney,
   checkDoubleCondition,
 } from "../../../../utils/score";
-import { GameRoomInfo, GameRoomUser } from "../../GameRoom";
+import { GameRoomInfo } from "../../GameRoom";
 import { EnterScoreResult } from "../EnterHoleScore/EnterHoleScore";
-import { findLastRankPlayer, isApplyDdang } from "../util";
+import { isApplyDdang } from "../util";
 import { PlayerRow } from "./PlayerRow";
 
 export type FixHoleScoreProps = {
@@ -37,19 +38,16 @@ export const FixHoleScore = ({
 }: FixHoleScoreProps) => {
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
+  const { gameInfo, players, inGameInfo } = gameRoomInfo;
   const {
-    gameInfo: {
-      betAmountPerStroke,
-      currentHole,
-      golfCenter: {
-        frontNineCourse: { pars: frontNineCoursePar },
-        backNineCourse: { pars: backNineCoursePar },
-      },
-      gameRule: { ddang, specialBetRequirements },
+    betAmountPerStroke,
+    currentHole,
+    golfCenter: {
+      frontNineCourse: { pars: frontNineCoursePar },
+      backNineCourse: { pars: backNineCoursePar },
     },
-    players,
-    inGameInfo,
-  } = gameRoomInfo;
+    gameRule: { ddang, specialBetRequirements },
+  } = gameInfo;
 
   // const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
@@ -63,12 +61,12 @@ export const FixHoleScore = ({
     playerScores
   );
   // TODO : 땅여부 확인을 해야함
-  const isDdang = isApplyDdang(currentHole - 1, inGameInfo);
+  const isDdang = isApplyDdang(currentHole - 1, inGameInfo.holeInfos);
   // 추가 정보 결정 해야함 점수로 배판인지여
   if (isDdang) doubleConditions.push("ddang");
 
-  const playersMoneyChange = calculateChangeMoney(
-    doubleConditions.length === 0 ? true : false,
+  let playersMoneyChange = calculateChangeMoney(
+    doubleConditions.length === 0 ? false : true,
     betAmountPerStroke,
     playerScores
   );
@@ -96,12 +94,21 @@ export const FixHoleScore = ({
           },
         });
       }
+
       if (typeof nearLongRes === "string" && nearLongRes !== "") {
         nearLong.push(nearLongRes);
       }
+      // playersMoneyChange
+      playersMoneyChange = applyNearLongRule(
+        doubleConditions.length !== 0,
+        nearLong,
+        playersMoneyChange,
+        gameInfo
+      );
       // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
       if (nearLongRes === false) return;
     }
+
     handleModalResult?.({
       nearLong,
       doubleConditions,
@@ -114,7 +121,7 @@ export const FixHoleScore = ({
   return (
     <>
       <S.ModalHeader>
-        <div className="modalheader__title">스코어 입력하기</div>
+        <div className="modalheader__title">결과</div>
         <img
           onClick={moveBack}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
@@ -126,7 +133,7 @@ export const FixHoleScore = ({
       </S.HoleInfo>
       <S.Body>
         <S.HoleBetInfo>
-          {getDisplayDoubleText(doubleConditions, currentPar)}
+          {getDisplayDoubleText(doubleConditions, currentPar, players.length)}
         </S.HoleBetInfo>
         <S.Players>
           {gameRoomInfo.players.map((player) => {

@@ -146,7 +146,9 @@ export const testGameRoomInfo: {
         holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ],
-    inGameInfo: [],
+    inGameInfo: {
+      holeInfos: [],
+    },
   },
 };
 

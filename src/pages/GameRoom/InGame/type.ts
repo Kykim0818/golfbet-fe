@@ -1,6 +1,5 @@
 // 진행중인 게임 정보
 export type InGameInfo = {
-  userEventHistory: [];
   holeInfos: HoleInfo[];
 };
 

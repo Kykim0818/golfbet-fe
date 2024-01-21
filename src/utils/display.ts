@@ -54,14 +54,59 @@ const DOUBLE_CONDITION_DISPLAY: Record<string, string> = {
   qudraple: "쿼드러플 이상",
   twoOrMoreTie: "2명 이상 동타",
   threeOrMoreTie: "3명 이상 동타",
+} as const;
+
+const displayOrder: Record<string, number> = {
+  buddy: 1,
+  double: 2,
+  triple: 2,
+  qudraple: 2,
+  twoOrMoreTie: 3,
+  threeOrMoreTie: 3,
+  ddang: 4,
 };
 
-// TODO
 export const getDisplayDoubleText = (
   doubleConditions: string[],
-  parCount: number
+  parCount: number,
+  playerCount: number
 ) => {
+  // 배판이 아니면 "홀판" 으로 표시
   if (doubleConditions.length === 0) return "홀판";
-  // TODO: 기획 컨펌 후, 순서 설정
-  return `${DOUBLE_CONDITION_DISPLAY[doubleConditions[0]]} 배판`;
+  // 해당 조건이 1개면 그대로 표시 (par 3 -> 더블 , par 4~5 -> 트리플 , par 6 이상 -> 쿼드러플)
+  if (doubleConditions.length === 1) {
+    const [doubleCondition] = doubleConditions;
+    let result = "";
+    if (doubleCondition === "triple") {
+      if (parCount === 3) result = DOUBLE_CONDITION_DISPLAY["double"];
+      else if (parCount >= 4 && parCount <= 5)
+        result = DOUBLE_CONDITION_DISPLAY["triple"];
+      else if (parCount >= 6) result = DOUBLE_CONDITION_DISPLAY["qudraple"];
+    } else if (
+      doubleCondition === "twoOrMoreTie" ||
+      doubleCondition === "threeOrMoreTie"
+    ) {
+      if (playerCount === 3) result = DOUBLE_CONDITION_DISPLAY["twoOrMoreTie"];
+      else if (playerCount === 4)
+        result = DOUBLE_CONDITION_DISPLAY["threeOrMoreTie"];
+    } else {
+      result = DOUBLE_CONDITION_DISPLAY[doubleCondition];
+    }
+    return `${result} 배판`;
+  }
+  /**
+   * 표시 우선 순위
+   * 1 버디
+   * 2 더블 ,트리플, 쿼드러플
+   * 3 과반수 이상 동타
+   * 4 땅
+   * 땅이 안겹치면 ~~외 로 표시
+   * 땅이 겹치면 ~~외(땅) 표시
+   */
+  doubleConditions.sort((a, b) => displayOrder[a] - displayOrder[b]);
+  const isDdangInclude = doubleConditions.includes("ddang");
+
+  return `${DOUBLE_CONDITION_DISPLAY[doubleConditions[0]]} 배판 외${
+    isDdangInclude ? "(땅)" : ""
+  }`;
 };

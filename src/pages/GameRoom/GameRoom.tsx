@@ -30,7 +30,7 @@ export type GameRoomInfo = {
   gameInfo: GameInfo;
   hostUserId: string;
   players: GameRoomUser[];
-  inGameInfo: InGameInfo["holeInfos"];
+  inGameInfo: InGameInfo;
 };
 
 export type GameRoomUser = {
