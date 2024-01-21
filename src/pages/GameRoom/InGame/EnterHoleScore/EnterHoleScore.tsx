@@ -31,8 +31,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   const { openModal } = useModal();
   // 예외 : par 나 holecount 없을 경우, 닫기
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
-  if (gameRoomInfo === undefined) moveBack();
-  const inGameInfo = gameRoomInfo?.inGameInfo ?? [];
+  if (gameRoomInfo === undefined) throw Error("gameRoomInfo is undefined");
+  const { inGameInfo } = gameRoomInfo;
   const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
     currentHole,
@@ -102,7 +102,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           const previousMoney =
             previousHoleIndex < 0
               ? gameRoomInfo.gameInfo.bettingLimit
-              : inGameInfo[previousHoleIndex]?.players[userId].remainingMoney;
+              : inGameInfo.holeInfos?.[previousHoleIndex]?.players[userId]
+                  .remainingMoney;
           players[userId] = {
             strokes: score,
             moneyChange: res.playersMoneyChange[userId],

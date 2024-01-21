@@ -61,12 +61,12 @@ export const FixHoleScore = ({
     playerScores
   );
   // TODO : 땅여부 확인을 해야함
-  const isDdang = isApplyDdang(currentHole - 1, inGameInfo);
+  const isDdang = isApplyDdang(currentHole - 1, inGameInfo.holeInfos);
   // 추가 정보 결정 해야함 점수로 배판인지여
   if (isDdang) doubleConditions.push("ddang");
 
   let playersMoneyChange = calculateChangeMoney(
-    doubleConditions.length === 0 ? true : false,
+    doubleConditions.length === 0 ? false : true,
     betAmountPerStroke,
     playerScores
   );
@@ -121,7 +121,7 @@ export const FixHoleScore = ({
   return (
     <>
       <S.ModalHeader>
-        <div className="modalheader__title">스코어 aaaa</div>
+        <div className="modalheader__title">결과</div>
         <img
           onClick={moveBack}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
@@ -133,7 +133,7 @@ export const FixHoleScore = ({
       </S.HoleInfo>
       <S.Body>
         <S.HoleBetInfo>
-          {getDisplayDoubleText(doubleConditions, currentPar)}
+          {getDisplayDoubleText(doubleConditions, currentPar, players.length)}
         </S.HoleBetInfo>
         <S.Players>
           {gameRoomInfo.players.map((player) => {
