@@ -24,18 +24,18 @@ const StyledButton = styled.button<{
   variantStyle: CSSProp;
   sizeStyle: CSSProp;
 }>`
-  ${(props) => props.variantStyle}
-  ${(props) => props.sizeStyle}
-  
   display: flex;
   justify-content: center;
+  padding: 12px 0px;
   width: 100%;
-
   outline: none;
 
   &:hover {
     cursor: pointer;
   }
+
+  ${(props) => props.sizeStyle}
+  ${(props) => props.variantStyle}
 `;
 
 const VARAIANTS = {
@@ -66,7 +66,7 @@ const VARAIANTS = {
     color: var(--color-main, #009eb2);
     background-color: transparent;
     border-radius: 15px;
-
+    padding: 11px 0px;
     &:hover {
       background-color: #e6f7f9;
     }

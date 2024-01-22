@@ -100,6 +100,7 @@ const modalChildrenSelector = (
         <FixHoleScore
           gameRoomInfo={modalParam.args.gameRoomInfo}
           playerScores={modalParam.args.playerScores}
+          nearLong={modalParam.args.nearLong}
           handleModalResult={modalParam.handleClose}
         />
       );

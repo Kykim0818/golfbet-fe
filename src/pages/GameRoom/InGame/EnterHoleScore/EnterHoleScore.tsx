@@ -36,8 +36,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
   const currentPar = getCurrentPar(
     currentHole,
-    gameRoomInfo!?.gameInfo.golfCenter.frontNineCourse.pars,
-    gameRoomInfo!?.gameInfo.golfCenter.backNineCourse.pars
+    gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars,
+    gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars
   );
   const inputScores = useMemo(() => {
     if (currentPar) {
@@ -83,12 +83,43 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
 
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
+      // #1 니어 롱기 처리
+      const isNearLong = currentPar === 3 || currentPar === 5;
+      const nearLong: string[] = [];
+      if (isNearLong) {
+        // string | boolean 인 이유는 뒤로가기로 modal 닫힐 경우에는 false 를 리턴하기 때문.
+        let nearLongRes: string | boolean = false;
+        if (currentPar === 3) {
+          nearLongRes = await openModal<string>({
+            id: "SELECT_NEAR_LONG",
+            args: {
+              players,
+              nearLongType: "nearest",
+            },
+          });
+        } else if (currentPar === 5) {
+          nearLongRes = await openModal<string>({
+            id: "SELECT_NEAR_LONG",
+            args: {
+              players,
+              nearLongType: "longest",
+            },
+          });
+        }
+
+        if (typeof nearLongRes === "string" && nearLongRes !== "") {
+          nearLong.push(nearLongRes);
+        }
+        // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
+        if (nearLongRes === false) return;
+      }
       // TODO : 여기서 입력제어
       const res = await openModal<FixHoleScoreResult>({
         id: "FIX_HOLE_SCORE",
         args: {
           gameRoomInfo,
           playerScores,
+          nearLong,
         },
       });
       if (res.result) {

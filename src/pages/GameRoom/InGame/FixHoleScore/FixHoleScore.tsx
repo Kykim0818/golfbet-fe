@@ -19,14 +19,14 @@ export type FixHoleScoreProps = {
   handleModalResult?: (result: FixHoleScoreResult) => void;
   playerScores: EnterScoreResult["playerScores"];
   gameRoomInfo: GameRoomInfo;
-};
-
-export type FixHoleScoreResult = {
-  result: boolean;
   /**
    * 니어리스트 , 롱기스트 선택 유저 id
    */
   nearLong: string[];
+};
+
+export type FixHoleScoreResult = {
+  result: boolean;
   doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
 };
@@ -35,6 +35,7 @@ export const FixHoleScore = ({
   handleModalResult,
   playerScores,
   gameRoomInfo,
+  nearLong,
 }: FixHoleScoreProps) => {
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
@@ -70,47 +71,18 @@ export const FixHoleScore = ({
     betAmountPerStroke,
     playerScores
   );
+  // near long 계산
+  if (nearLong.length !== 0) {
+    playersMoneyChange = applyNearLongRule(
+      doubleConditions.length !== 0,
+      nearLong,
+      playersMoneyChange,
+      gameInfo
+    );
+  }
 
   const handleEnterScore = async () => {
-    const isNearLong = currentPar === 3 || currentPar === 5;
-    const nearLong: string[] = [];
-    if (isNearLong) {
-      // string | boolean 인 이유는 뒤로가기로 modal 닫힐 경우에는 false 를 리턴하기 때문.
-      let nearLongRes: string | boolean = false;
-      if (currentPar === 3) {
-        nearLongRes = await openModal<string>({
-          id: "SELECT_NEAR_LONG",
-          args: {
-            players,
-            nearLongType: "nearest",
-          },
-        });
-      } else if (currentPar === 5) {
-        nearLongRes = await openModal<string>({
-          id: "SELECT_NEAR_LONG",
-          args: {
-            players,
-            nearLongType: "longest",
-          },
-        });
-      }
-
-      if (typeof nearLongRes === "string" && nearLongRes !== "") {
-        nearLong.push(nearLongRes);
-      }
-      // playersMoneyChange
-      playersMoneyChange = applyNearLongRule(
-        doubleConditions.length !== 0,
-        nearLong,
-        playersMoneyChange,
-        gameInfo
-      );
-      // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
-      if (nearLongRes === false) return;
-    }
-
     handleModalResult?.({
-      nearLong,
       doubleConditions,
       playersMoneyChange,
       result: true,

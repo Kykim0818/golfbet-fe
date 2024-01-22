@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { typo } from "../../../../styles/typo";
 
 type PlayerRowButtonProps = {
@@ -9,12 +9,13 @@ type PlayerRowButtonProps = {
 };
 
 export const PlayerRowButton = ({
+  selected,
   imgSrc,
   nickName,
   handleOnClick,
 }: PlayerRowButtonProps) => {
   return (
-    <S.Wrapper onClick={handleOnClick}>
+    <S.Wrapper onClick={handleOnClick} selected={selected}>
       <S.Profile src={imgSrc} />
       <S.NickName>{nickName}</S.NickName>
     </S.Wrapper>
@@ -22,13 +23,21 @@ export const PlayerRowButton = ({
 };
 
 const S = {
-  Wrapper: styled.div`
+  Wrapper: styled.div<{ selected: boolean }>`
     display: flex;
     align-items: center;
-
     border-radius: 15px;
     background-color: #fff;
+
+    box-sizing: border-box;
     padding: 8px 15px;
+    border: 1px solid #fff;
+    ${(props) =>
+      props.selected &&
+      css`
+        background-color: #e1f4ff;
+        border-color: var(--color-sub-blue, #3181ae);
+      `}
   `,
   //
   Profile: styled.img`
