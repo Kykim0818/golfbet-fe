@@ -58,7 +58,12 @@ export const SelectNearLong = ({
         >
           선택완료
         </Button>
-        <Button onClick={() => handleSelectNearLong(NO_SELECT)}>SKIP</Button>
+        <Button
+          variants={"outlined"}
+          onClick={() => handleSelectNearLong(NO_SELECT)}
+        >
+          SKIP
+        </Button>
       </S.Footer>
     </>
   );
@@ -84,8 +89,12 @@ const S = {
   Body: styled.main`
     display: flex;
     flex-direction: column;
+    gap: 15px;
     flex-grow: 1;
+    padding: 0px 15px;
     overflow: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
   `,
   //
   Footer: styled.footer`
