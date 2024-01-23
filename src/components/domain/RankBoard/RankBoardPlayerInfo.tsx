@@ -116,25 +116,26 @@ const S = {
   `,
   ScoreSection: styled.div`
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 
     div {
-      padding: 3px 5px;
-      border-radius: 10px;
-      background: #f8f9fd;
-      ${typo.s8w500}
-      color: #3181AE;
+      padding: 0px 4px;
+      border-radius: 9px;
+      background: var(--color-main-light-02, #f8f9fd);
+      ${typo.s10w500}
+      color: var(--color-sub-blue,#3181AE)
     }
 
     span {
-      ${typo.s16w700}
-      color: var(--color_main_darker, #003D45);
+      ${typo.s16w500}
+      color: var(--color-main, #009eb2);
     }
   `,
 
   Money: styled.span`
     ${typo.s12w700}
-    color: var(--color-main-dark, #008395);
+    color: var(--color_main_darker, #003D45);
   `,
 };
