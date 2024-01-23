@@ -1,4 +1,5 @@
 import { GameInfo } from "../pages/MakeGame/MakeGame";
+import { UNENTERED_HOLE_SCORE } from "../service/socketIo/util";
 
 export const getDisplayBetTypeText = (value: string) => {
   if (value === "stroke") return "스트로크";
@@ -110,3 +111,8 @@ export const getDisplayDoubleText = (
     isDdangInclude ? "(땅)" : ""
   }`;
 };
+
+export function getDisplayScore(score: number) {
+  if (score === UNENTERED_HOLE_SCORE) return "-";
+  return score;
+}
