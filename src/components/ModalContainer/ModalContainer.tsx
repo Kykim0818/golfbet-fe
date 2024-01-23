@@ -3,6 +3,7 @@ import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import DeclareDdang from "../../pages/GameRoom/InGame/DeclareDdang";
 import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
+import { ModifyEnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
 import FinalizeHoleScore from "../../pages/GameRoom/InGame/FinalizeHoleScore";
 import SelectNearLong from "../../pages/GameRoom/InGame/SelectNearLong";
 import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
@@ -95,6 +96,13 @@ const modalChildrenSelector = (
       return <div>Hello</div>;
     case "ENTER_HOLE_SCORE":
       return <EnterHoleScore handleModalResult={modalParam.handleClose} />;
+    case "MODIFY_ENTER_HOLE_SCORE":
+      return (
+        <ModifyEnterHoleScore
+          handleModalResult={modalParam.handleClose}
+          modifyTargetHole={modalParam.args.modifyTargetHole}
+        />
+      );
     case "FINALIZE_HOLE_SCORE":
       return (
         <FinalizeHoleScore

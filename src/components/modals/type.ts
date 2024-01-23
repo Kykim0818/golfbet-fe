@@ -1,4 +1,5 @@
 import { DeclareDdangProps } from "../../pages/GameRoom/InGame/DeclareDdang/DelcareDdang";
+import { ModifyEnterHoleScoreProps } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
 import { FinalizeHoleScoreProps } from "../../pages/GameRoom/InGame/FinalizeHoleScore/FinalizeHoleScore";
 import { SelectNearLongProps } from "../../pages/GameRoom/InGame/SelectNearLong/SelectNearLong";
 import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
@@ -34,6 +35,7 @@ export type ModalParam =
   //
   | RegionSelectParam
   | EnterHoleScoreParam
+  | ModifyEnterHoleScoreParam
   | FinalizeHoleScoreParam
   | SelectNearLongParam
   //
@@ -84,6 +86,10 @@ type RegionSelectParam = {
 };
 type EnterHoleScoreParam = {
   id: "ENTER_HOLE_SCORE";
+};
+type ModifyEnterHoleScoreParam = {
+  id: "MODIFY_ENTER_HOLE_SCORE";
+  args: ModifyEnterHoleScoreProps;
 };
 type FinalizeHoleScoreParam = {
   id: "FINALIZE_HOLE_SCORE";
@@ -143,6 +149,7 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
 
     case "REGION_SELECT":
     case "ENTER_HOLE_SCORE":
+    case "MODIFY_ENTER_HOLE_SCORE":
     case "FINALIZE_HOLE_SCORE":
     case "SELECT_NEAR_LONG":
       return MODAL_TYPE.BOTTOM_SHEET;
