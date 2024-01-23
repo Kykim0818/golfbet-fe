@@ -51,7 +51,7 @@ interface Context {
     holeIdx: number,
     enterScoreResult: EnterScoreResult
   ) => void;
-  fixScore: (
+  finalizeScore: (
     gameId: string,
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
@@ -68,7 +68,7 @@ const SocketContext = createContext<Context>({
   onReady: () => {},
   startGame: () => {},
   enterScore: () => {},
-  fixScore: () => {},
+  finalizeScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -254,13 +254,13 @@ function SocketsProvider(props: any) {
     }
   };
 
-  const fixScore = (
+  const finalizeScore = (
     gameId: string,
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => {
     console.log(
-      `FixScore gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
+      `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
     );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.FIX_SCORE,
@@ -294,7 +294,7 @@ function SocketsProvider(props: any) {
         onReady,
         startGame,
         enterScore,
-        fixScore,
+        finalizeScore,
       }}
       {...props}
     />
