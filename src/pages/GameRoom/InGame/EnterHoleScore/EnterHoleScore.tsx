@@ -9,7 +9,7 @@ import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
 import { getDisplayEnterScore } from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
-import { FixHoleScoreResult } from "../FixHoleScore/FixHoleScore";
+import { FinalizeHoleScoreResult } from "../FinalizeHoleScore/FinalizeHoleScore";
 import { InGameInfo } from "../type";
 
 type EnterHoleScoreProps = {
@@ -114,8 +114,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         if (nearLongRes === false) return;
       }
       // TODO : 여기서 입력제어
-      const res = await openModal<FixHoleScoreResult>({
-        id: "FIX_HOLE_SCORE",
+      const res = await openModal<FinalizeHoleScoreResult>({
+        id: "FINALIZE_HOLE_SCORE",
         args: {
           gameRoomInfo,
           playerScores,
