@@ -2,7 +2,6 @@ import styled, { css } from "styled-components";
 
 import { useState } from "react";
 import TitleAsset from "../../../components/TitleAsset";
-import RankBoard from "../../../components/domain/RankBoard";
 import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
@@ -16,6 +15,7 @@ import {
 } from "../../../utils/display";
 import { GameRoomInfo, GameRoomUser } from "../GameRoom";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
+import LeaderBoardTab from "./LeaderBoardTab";
 import ProgressTab from "./ProgressTab";
 import { InGameInfo } from "./type";
 import { findLastRankPlayer } from "./util";
@@ -212,10 +212,11 @@ export const InGame = ({
                 handleOpenEnterScore={handleOpenEnterScore}
               />
             ) : (
-              <div>
-                <S.RankBoardHeader>순위</S.RankBoardHeader>
-                <RankBoard players={players} />
-              </div>
+              <LeaderBoardTab
+                centerInfo={centerInfo}
+                players={players}
+                userId={userInfo.userId}
+              />
             )}
           </S.TabContent>
         </S.Mid>
@@ -344,9 +345,5 @@ const S = {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-  `,
-  RankBoardHeader: styled.div`
-    ${typo.s14w700}
-    color : #00AFC6;
   `,
 };
