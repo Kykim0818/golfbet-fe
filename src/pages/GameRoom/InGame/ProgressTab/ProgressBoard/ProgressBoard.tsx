@@ -1,16 +1,20 @@
 import styled from "styled-components";
-import { GameInfo } from "../../../MakeGame/MakeGame";
+import { typo } from "../../../../../styles/typo";
+import { GameInfo } from "../../../../MakeGame/MakeGame";
 import { ParBlock, STATUS } from "./ParBlock";
-import { typo } from "../../../../styles/typo";
 
 type ProgressBoardProps = {
+  selectHole: number;
   currentHole: number;
   centerInfo: GameInfo["golfCenter"];
+  handleHoleClick: (hole: number) => void;
 };
 
 export const ProgressBoard = ({
+  selectHole,
   currentHole,
   centerInfo,
+  handleHoleClick,
 }: ProgressBoardProps) => {
   return (
     <S.Wrapper>
@@ -19,9 +23,10 @@ export const ProgressBoard = ({
         return (
           <ParBlock
             key={`${index + 1}`}
-            holeIndex={index + 1}
+            hole={index + 1}
             parCount={par}
-            status={getHoleStatus(index + 1, currentHole)}
+            status={getHoleStatus(index + 1, currentHole, selectHole)}
+            handleHoleClick={handleHoleClick}
           />
         );
       })}
@@ -30,9 +35,10 @@ export const ProgressBoard = ({
         return (
           <ParBlock
             key={`${index + 1}`}
-            holeIndex={index + 1}
+            hole={index + 1}
             parCount={par}
-            status={getHoleStatus(index + 1 + 9, currentHole)}
+            status={getHoleStatus(index + 1 + 9, currentHole, selectHole)}
+            handleHoleClick={handleHoleClick}
           />
         );
       })}
@@ -57,8 +63,13 @@ const S = {
   `,
 };
 
-function getHoleStatus(targetHole: number, currentHole: number) {
+function getHoleStatus(
+  targetHole: number,
+  currentHole: number,
+  selectHole: number
+) {
   if (targetHole === currentHole) return STATUS.IN_PROGRESS;
   if (targetHole > currentHole) return STATUS.NOT_STARTED;
+  if (targetHole === selectHole) return STATUS.COMPLETED_FOCUS;
   return STATUS.COMPLETED;
 }

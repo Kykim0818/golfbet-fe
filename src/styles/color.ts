@@ -4,6 +4,7 @@ export const color = css`
   // color
   --color-main: #009eb2;
   --color-main-light-light: #e6f7f9;
+  --color-main-light-02: #c5f9ff;
   --color-main-light-hover: #d9f3f6;
   --color-bg: #f6f8fc;
   --color-sub-main: #0c795c;

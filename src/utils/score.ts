@@ -25,8 +25,8 @@ export function checkDoubleCondition(
   const resultDoubleConditons: string[] = [];
   // 배판 조건 없음
   if (doubleConditions.includes("none")) return resultDoubleConditons;
-  // 버디
-  if (doubleConditions.includes("buddy") && playerScoresArr.includes(-2)) {
+  // 버디 (Par 기준 -1 )
+  if (doubleConditions.includes("buddy") && playerScoresArr.includes(-1)) {
     resultDoubleConditons.push("buddy");
   }
   // 트리플 이상 처리

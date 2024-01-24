@@ -117,7 +117,10 @@ export const testGameRoomInfo: {
         // parScores 의 합
         currentScore: 0,
         // 각 Hole별 점수
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        holeScores: [
+          999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999,
+          999, 999, 999, 999,
+        ],
       },
       {
         userId: "user1",
@@ -130,7 +133,10 @@ export const testGameRoomInfo: {
         // parScores 의 합
         currentScore: 0,
         // 각 Hole별 점수
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        holeScores: [
+          999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999,
+          999, 999, 999, 999,
+        ],
       },
       {
         userId: "user2",
@@ -143,7 +149,10 @@ export const testGameRoomInfo: {
         // parScores 의 합
         currentScore: 0,
         // 각 Hole별 점수
-        holeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        holeScores: [
+          999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999, 999,
+          999, 999, 999, 999,
+        ],
       },
     ],
     inGameInfo: {

@@ -1,9 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { useState } from "react";
-import Button from "../../../components/Button";
 import TitleAsset from "../../../components/TitleAsset";
-import RankBoard from "../../../components/domain/RankBoard";
 import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
@@ -17,9 +15,22 @@ import {
 } from "../../../utils/display";
 import { GameRoomInfo, GameRoomUser } from "../GameRoom";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
-import ProgressBoard from "./ProgressBoard";
+import LeaderBoardTab from "./LeaderBoardTab";
+import ProgressTab from "./ProgressTab";
 import { InGameInfo } from "./type";
 import { findLastRankPlayer } from "./util";
+
+const TABS = [
+  {
+    value: "progressBoard",
+    display: "진행 현황",
+  } as const,
+  {
+    value: "leaderBoard",
+    display: "리더 보드",
+  } as const,
+];
+type TabValue = (typeof TABS)[number]["value"];
 
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
@@ -49,6 +60,7 @@ export const InGame = ({
   const modalStatus = useAppSelector((state) => state.modal.status);
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const [preventFlag, setPreventFlag] = useState(true);
+  const [currentTab, setCurrentTab] = useState<TabValue>("progressBoard");
   // # web socket game info
   // 모달이 떠있으면, 패딩 X && 임의 플래그
   usePreventLeave({
@@ -176,19 +188,39 @@ export const InGame = ({
               </S.BetMoneyInfo>
             </div>
           </S.Info>
-          <div>
-            <Button size="small">땅하기</Button>
-          </div>
-          <ProgressBoard currentHole={currentHole} centerInfo={centerInfo} />
         </S.Top>
         <S.Mid>
-          <S.RankBoardHeader>순위</S.RankBoardHeader>
-          <RankBoard players={players} />
+          <S.Tabs>
+            {TABS.map((tab) => {
+              return (
+                <S.Tab
+                  key={tab.value}
+                  selected={currentTab === tab.value}
+                  onClick={() => setCurrentTab(tab.value)}
+                >
+                  {tab.display}
+                </S.Tab>
+              );
+            })}
+          </S.Tabs>
+          <S.TabContent>
+            {currentTab === "progressBoard" ? (
+              <ProgressTab
+                centerInfo={centerInfo}
+                currentHole={currentHole}
+                players={players}
+                handleOpenEnterScore={handleOpenEnterScore}
+              />
+            ) : (
+              <LeaderBoardTab
+                centerInfo={centerInfo}
+                players={players}
+                userId={userInfo.userId}
+              />
+            )}
+          </S.TabContent>
         </S.Mid>
       </div>
-      <S.Footer>
-        <Button onClick={handleOpenEnterScore}>+스코어 입력하기</Button>
-      </S.Footer>
     </PageStyle.Wrapper>
   );
 };
@@ -286,22 +318,32 @@ const S = {
     ${typo.s12w700}
     color: #008395;
   `,
+
   // # Rank
   Mid: styled.div`
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     gap: 15px;
 
     margin-top: 20px;
   `,
-  RankBoardHeader: styled.div`
-    ${typo.s14w700}
-    color : #00AFC6;
-  `,
-
-  //
-  Footer: styled.footer`
+  Tabs: styled.div`
     display: flex;
-    padding: 0px 20px 20px 20px;
+    gap: 20px;
+    padding-left: 10px;
+  `,
+  Tab: styled.span<{ selected: boolean }>`
+    ${typo.s15w500}
+    ${(props) =>
+      props.selected &&
+      css`
+        font-weight: 700;
+      `}
+  `,
+  TabContent: styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
   `,
 };
