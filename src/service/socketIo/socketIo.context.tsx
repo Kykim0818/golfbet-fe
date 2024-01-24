@@ -263,7 +263,7 @@ function SocketsProvider(props: any) {
       `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
     );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
-      taskName: TASK.FIX_SCORE,
+      taskName: TASK.FINALIZE_SCORE,
       data: {
         gameId,
         userId,
