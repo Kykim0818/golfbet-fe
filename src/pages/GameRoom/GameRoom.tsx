@@ -70,7 +70,7 @@ export const GameRoom = () => {
     updateRoom,
     startGame,
     enterScore,
-    fixScore,
+    finalizeScore,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -138,7 +138,7 @@ export const GameRoom = () => {
         gameRoomInfo={gameRoomInfo}
         exitRoom={handleExitInGame}
         enterScore={enterScore}
-        fixScore={fixScore}
+        finalizeScore={finalizeScore}
       />
     );
   // 종료

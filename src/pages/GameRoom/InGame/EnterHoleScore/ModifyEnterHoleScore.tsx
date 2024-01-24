@@ -12,20 +12,22 @@ import { getCurrentPar } from "../../../../utils/gameInfo";
 import { FinalizeHoleScoreResult } from "../FinalizeHoleScore/FinalizeHoleScore";
 import { InGameInfo } from "../type";
 
-type EnterHoleScoreProps = {
-  handleModalResult?: (result: EnterScoreResult) => void;
+export type ModifyEnterHoleScoreProps = {
+  modifyTargetHole: number;
+  handleModalResult?: (result: ModifyEnterScoreResult) => void;
 };
 
-export type EnterScoreResult = {
-  // 모두 입력 상태인지,
-  isAllEnter: boolean;
+export type ModifyEnterScoreResult = {
   /** type PlayerScores = Record<string, number>; */
   playerScores: PlayerScores;
-  holeInfo?: InGameInfo["holeInfos"][number];
+  holeInfo?: Omit<InGameInfo["holeInfos"][number], "ddang">;
 };
 type PlayerScores = Record<string, number>;
 
-export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
+export const ModifyEnterHoleScore = ({
+  modifyTargetHole,
+  handleModalResult,
+}: ModifyEnterHoleScoreProps) => {
   const [playerScores, setPlayerScores] = useState<PlayerScores>({});
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
@@ -33,24 +35,24 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
   if (gameRoomInfo === undefined) throw Error("gameRoomInfo is undefined");
   const { inGameInfo } = gameRoomInfo;
-  const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
-  const currentPar = getCurrentPar(
-    currentHole,
+  const modifyTargetPar = getCurrentPar(
+    modifyTargetHole,
     gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars,
     gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars
   );
   const inputScores = useMemo(() => {
-    if (currentPar) {
+    if (modifyTargetPar) {
       const scores = [];
-      const maxScore = currentPar;
-      const minScore = currentPar * -1 + 1;
+      const maxScore = modifyTargetPar;
+      const minScore = modifyTargetPar * -1 + 1;
       for (let i = minScore; i <= maxScore; i++) {
         scores.push(i);
       }
       return scores;
     }
     return [];
-  }, [currentPar]);
+  }, [modifyTargetPar]);
+
   const players = gameRoomInfo?.players ?? [];
 
   const handleClickScoreBtn = (playerId: string, clickedValue: number) => {
@@ -66,7 +68,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   };
 
   // ###
-  const handleEnterScore = async () => {
+  const handleModifyEnterScore = async () => {
     if (gameRoomInfo === undefined) {
       console.log("gameRoomInfo is undefined");
       return;
@@ -84,12 +86,12 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
       // #1 니어 롱기 처리
-      const isNearLong = currentPar === 3 || currentPar === 5;
+      const isNearLong = modifyTargetPar === 3 || modifyTargetPar === 5;
       const nearLong: string[] = [];
       if (isNearLong) {
         // string | boolean 인 이유는 뒤로가기로 modal 닫힐 경우에는 false 를 리턴하기 때문.
         let nearLongRes: string | boolean = false;
-        if (currentPar === 3) {
+        if (modifyTargetPar === 3) {
           nearLongRes = await openModal<string>({
             id: "SELECT_NEAR_LONG",
             args: {
@@ -97,7 +99,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
               nearLongType: "nearest",
             },
           });
-        } else if (currentPar === 5) {
+        } else if (modifyTargetPar === 5) {
           nearLongRes = await openModal<string>({
             id: "SELECT_NEAR_LONG",
             args: {
@@ -127,14 +129,10 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         // TODO: Ingame 정보 받아와서 이전홀 정보 확인해야 함
         const players: InGameInfo["holeInfos"][number]["players"] = {};
         Object.entries(playerScores).forEach(([userId, score]) => {
-          // 현재홀 idx = 현재홀 - 1,로 이전홀의 idx = 현재홀 - 2
-          const previousHoleIndex = currentHole - 2;
-          // 1홀(이전 홀 idx = -1) 일때 는 베팅 준비금,
+          // 수정 이전의 돈은 변하지 않으므로 그대로 사용
           const previousMoney =
-            previousHoleIndex < 0
-              ? gameRoomInfo.gameInfo.bettingLimit
-              : inGameInfo.holeInfos?.[previousHoleIndex]?.players[userId]
-                  .remainingMoney;
+            inGameInfo.holeInfos[modifyTargetHole - 1].players[userId]
+              .previousMoney;
           players[userId] = {
             strokes: score,
             moneyChange: res.playersMoneyChange[userId],
@@ -143,24 +141,25 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           };
         });
         handleModalResult?.({
-          isAllEnter: true,
           playerScores,
           holeInfo: {
             players,
-            ddang: false, // 일단 default return
             doubleConditions: res.doubleConditions,
-            hole: currentHole,
-            par: currentPar,
+            hole: modifyTargetHole,
+            par: modifyTargetPar,
           },
         });
       }
     }
     // 점수 다입력 안되엇으므로 그냥 입력 처리
     else {
-      console.log("일부 점수 입력");
-      handleModalResult?.({
-        isAllEnter: false,
-        playerScores,
+      openModal({
+        id: "ALERT",
+        args: {
+          title: "점수 수정",
+          msg: "모든 유저의 점수가 입력되어야 합니다.",
+          okBtnLabel: "확인",
+        },
       });
     }
   };
@@ -168,15 +167,15 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
   useEffect(() => {
     const scores: PlayerScores = {};
     players.forEach((player) => {
-      scores[player.userId] = player.holeScores[currentHole - 1];
+      scores[player.userId] = player.holeScores[modifyTargetHole - 1];
     });
     setPlayerScores(scores);
-  }, [gameRoomInfo, players, currentHole]);
+  }, [gameRoomInfo, players, modifyTargetHole]);
 
   return (
     <>
       <S.ModalHeader>
-        <div className="modalheader__title">스코어 입력하기</div>
+        <div className="modalheader__title">스코어 수정하기</div>
         <img
           onClick={moveBack}
           src={process.env.PUBLIC_URL + "/assets/svg/ic_x.svg"}
@@ -184,7 +183,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         />
       </S.ModalHeader>
       <S.HoleInfo>
-        {currentHole} H | 파 {currentPar}
+        {modifyTargetHole} H | 파 {modifyTargetPar}
       </S.HoleInfo>
       <S.Body>
         <S.Section>
@@ -216,7 +215,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         </S.Section>
       </S.Body>
       <S.Footer>
-        <Button onClick={handleEnterScore}>확인</Button>
+        <Button onClick={handleModifyEnterScore}>확인</Button>
       </S.Footer>
     </>
   );

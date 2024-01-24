@@ -3,7 +3,8 @@ import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import DeclareDdang from "../../pages/GameRoom/InGame/DeclareDdang";
 import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
-import FixHoleScore from "../../pages/GameRoom/InGame/FixHoleScore";
+import { ModifyEnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
+import FinalizeHoleScore from "../../pages/GameRoom/InGame/FinalizeHoleScore";
 import SelectNearLong from "../../pages/GameRoom/InGame/SelectNearLong";
 import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
 import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
@@ -95,9 +96,16 @@ const modalChildrenSelector = (
       return <div>Hello</div>;
     case "ENTER_HOLE_SCORE":
       return <EnterHoleScore handleModalResult={modalParam.handleClose} />;
-    case "FIX_HOLE_SCORE":
+    case "MODIFY_ENTER_HOLE_SCORE":
       return (
-        <FixHoleScore
+        <ModifyEnterHoleScore
+          handleModalResult={modalParam.handleClose}
+          modifyTargetHole={modalParam.args.modifyTargetHole}
+        />
+      );
+    case "FINALIZE_HOLE_SCORE":
+      return (
+        <FinalizeHoleScore
           gameRoomInfo={modalParam.args.gameRoomInfo}
           playerScores={modalParam.args.playerScores}
           nearLong={modalParam.args.nearLong}

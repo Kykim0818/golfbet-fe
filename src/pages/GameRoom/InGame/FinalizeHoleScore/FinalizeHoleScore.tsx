@@ -15,8 +15,8 @@ import { EnterScoreResult } from "../EnterHoleScore/EnterHoleScore";
 import { isApplyDdang } from "../util";
 import { PlayerRow } from "./PlayerRow";
 
-export type FixHoleScoreProps = {
-  handleModalResult?: (result: FixHoleScoreResult) => void;
+export type FinalizeHoleScoreProps = {
+  handleModalResult?: (result: FinalizeHoleScoreResult) => void;
   playerScores: EnterScoreResult["playerScores"];
   gameRoomInfo: GameRoomInfo;
   /**
@@ -25,18 +25,18 @@ export type FixHoleScoreProps = {
   nearLong: string[];
 };
 
-export type FixHoleScoreResult = {
+export type FinalizeHoleScoreResult = {
   result: boolean;
   doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
 };
 
-export const FixHoleScore = ({
+export const FinalizeHoleScore = ({
   handleModalResult,
   playerScores,
   gameRoomInfo,
   nearLong,
-}: FixHoleScoreProps) => {
+}: FinalizeHoleScoreProps) => {
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
   const { gameInfo, players, inGameInfo } = gameRoomInfo;

@@ -29,7 +29,7 @@ export type InGameProps = {
     holeIdx: number,
     enterScoreResult: EnterScoreResult
   ) => void;
-  fixScore: (
+  finalizeScore: (
     gameId: string,
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
@@ -41,7 +41,7 @@ export const InGame = ({
   gameRoomInfo,
   exitRoom,
   enterScore,
-  fixScore,
+  finalizeScore,
 }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
@@ -114,7 +114,7 @@ export const InGame = ({
           res.holeInfo.ddang = isDdangDeclare === "yes" ? true : false;
         }
         // 점수 확정
-        fixScore(gameId, userInfo.userId, res.holeInfo);
+        finalizeScore(gameId, userInfo.userId, res.holeInfo);
       }
     }
     if (res.isAllEnter === false) {
