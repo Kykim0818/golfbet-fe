@@ -56,6 +56,11 @@ interface Context {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
+  modifyScore: (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -69,6 +74,7 @@ const SocketContext = createContext<Context>({
   startGame: () => {},
   enterScore: () => {},
   finalizeScore: () => {},
+  modifyScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -272,15 +278,26 @@ function SocketsProvider(props: any) {
     });
   };
 
-  // useEffect(() => {
-  //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
-  //     if (!document.hasFocus()) {
-  //       document.title = "New message...";
-  //     }
-
-  //     setMessages((messages) => [...messages, { message, username, time }]);
-  //   });
-  // }, [socket]);
+  const modifyScore = (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => {
+    console.log(
+      `modifyScore gameId : ${gameId} \n 유저Id : ${userId} \n 수정 홀정보: ${JSON.stringify(
+        modifyHoleInfo
+      )}`
+    );
+    // TODO : 백엔드 완료시 해제
+    // socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+    //   taskName: TASK.MODIFY_SCORE,
+    //   data: {
+    //     gameId,
+    //     userId,
+    //     modifyHoleInfo,
+    //   },
+    // });
+  };
 
   return (
     <SocketContext.Provider
@@ -295,6 +312,7 @@ function SocketsProvider(props: any) {
         startGame,
         enterScore,
         finalizeScore,
+        modifyScore,
       }}
       {...props}
     />

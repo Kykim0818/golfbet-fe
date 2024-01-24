@@ -20,7 +20,7 @@ export type ModifyEnterHoleScoreProps = {
 export type ModifyEnterScoreResult = {
   /** type PlayerScores = Record<string, number>; */
   playerScores: PlayerScores;
-  holeInfo?: Omit<InGameInfo["holeInfos"][number], "ddang">;
+  holeInfo: Omit<InGameInfo["holeInfos"][number], "ddang">;
 };
 type PlayerScores = Record<string, number>;
 
