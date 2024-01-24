@@ -1,5 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { UNENTERED_HOLE_SCORE } from "../../../service/socketIo/util";
 import { typo } from "../../../styles/typo";
+import { getDisplayScore } from "../../../utils/display";
 
 type ScoreBoardProps = {
   pars: number[];
@@ -19,10 +21,10 @@ export const ScoreBoard = ({ pars, holeScores }: ScoreBoardProps) => {
             <S.Block text={index === NAME_COL_INDEX}>
               {index === NAME_COL_INDEX ? "PAR" : pars[index - 1]}
             </S.Block>
-            <S.Block text={index === NAME_COL_INDEX}>
+            <S.Block score text={index === NAME_COL_INDEX}>
               {index === NAME_COL_INDEX
                 ? "SCORE"
-                : holeScores[index - 1] - pars[index - 1]}
+                : getDisplayScore(holeScores[index - 1])}
             </S.Block>
           </S.ColWrapper>
         );
@@ -30,7 +32,7 @@ export const ScoreBoard = ({ pars, holeScores }: ScoreBoardProps) => {
       <S.ColWrapper>
         <S.Block header>Total</S.Block>
         <S.Block>{total.totalPar}</S.Block>
-        <S.Block>{total.totalScore}</S.Block>
+        <S.Block score>{total.totalScore}</S.Block>
       </S.ColWrapper>
     </S.Wrapper>
   );
@@ -46,17 +48,22 @@ const S = {
     flex-grow: 1;
     flex-direction: column;
   `,
-  Block: styled.div<{ header?: boolean; text?: boolean }>`
+  Block: styled.div<{ header?: boolean; text?: boolean; score?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px 8.5px;
 
-    ${typo.s12w700}
+    ${typo.s12w500}
+    ${(props) =>
+      props.score &&
+      css`
+        ${typo.s12w700}
+      `}
     color: ${(props) =>
       props.header || props.text
         ? `var(--color-main-darker, '#003d45')`
-        : `var(--color-sub-blue,3181ae)`};
+        : `var(--color-sub-blue,#3181ae)`};
     background-color: ${(props) => (props.header ? "#B0E6ED;" : "#fff")};
   `,
 };
@@ -68,7 +75,9 @@ function getTotalParAndScore(pars: number[], scores: number[]) {
   for (let i = 0; i < MAX_HOLE_NUMBER; i++) {
     if (pars[i]) {
       totalPar = totalPar + pars[i];
-      totalScore = totalScore + ((scores[i] ?? pars[i] * 2) - pars[i]);
+      if (scores[i] !== UNENTERED_HOLE_SCORE) {
+        totalScore = totalScore + scores[i];
+      }
     } else {
       console.log(`${i}th parCount is undefined`);
       break;
