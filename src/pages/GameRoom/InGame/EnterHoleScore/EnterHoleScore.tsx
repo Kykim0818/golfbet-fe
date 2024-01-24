@@ -7,7 +7,10 @@ import { usePageRoute } from "../../../../hooks/usePageRoute";
 import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
 import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
-import { getDisplayEnterScore } from "../../../../utils/display";
+import {
+  getDisplayEnterScore,
+  getDisplayHole,
+} from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
 import { FinalizeHoleScoreResult } from "../FinalizeHoleScore/FinalizeHoleScore";
 import { InGameInfo } from "../type";
@@ -184,7 +187,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         />
       </S.ModalHeader>
       <S.HoleInfo>
-        {currentHole} H | 파 {currentPar}
+        {getDisplayHole(currentHole)} H | 파 {currentPar}
       </S.HoleInfo>
       <S.Body>
         <S.Section>
