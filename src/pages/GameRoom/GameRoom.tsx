@@ -71,12 +71,19 @@ export const GameRoom = () => {
     startGame,
     enterScore,
     finalizeScore,
+    connect,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const params = useParams();
   const gameId = params.gameId;
   // const [roomState, setRoomState] = useState(gameRoomInfo?.gameInfo);
+
+  // TODO: depenency
+  useEffect(() => {
+    console.log("connect useEffect");
+    connect();
+  }, []);
 
   useEffect(() => {
     if (connectState) {

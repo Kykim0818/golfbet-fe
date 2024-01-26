@@ -31,9 +31,11 @@ import { theme } from "./styles/theme";
 const router = createBrowserRouter([
   {
     element: (
-      <App>
-        <Outlet />
-      </App>
+      <SocketsProvider>
+        <App>
+          <Outlet />
+        </App>
+      </SocketsProvider>
     ),
     children: [
       {
@@ -84,11 +86,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/game_room/:gameId",
-        element: (
-          <SocketsProvider>
-            <GameRoom />
-          </SocketsProvider>
-        ),
+        element: <GameRoom />,
         errorElement: <ErrorPage />,
       },
       {
