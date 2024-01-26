@@ -21,6 +21,7 @@ export const TASK = {
   START_GAME: "start",
   ENTER_SCORE: "insert",
   FIX_SCORE: "next",
+  SET_CAN_ENTER_SCORE: "setCanInputScore",
 } as const;
 
 export const SOCKET_RESPONSE = {
