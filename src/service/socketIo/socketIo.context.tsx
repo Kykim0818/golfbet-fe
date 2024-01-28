@@ -37,6 +37,7 @@ interface Context {
   socket: Socket;
   connectState: boolean;
   gameRoomInfo?: GameRoomInfo;
+  connect: () => void;
   updateRoom: (
     gameId: string,
     userId: string,
@@ -63,6 +64,7 @@ const SocketContext = createContext<Context>({
   socket,
   connectState: false,
   gameRoomInfo: undefined,
+  connect: () => {},
   updateRoom: () => {},
   joinRoom: () => {},
   exitRoom: () => {},
@@ -82,12 +84,7 @@ function SocketsProvider(props: any) {
 
   //
   useEffect(() => {
-    console.log("connect useEffect");
-    console.log("connect", socket.connected);
-    socket.connect();
-    window.onfocus = function () {
-      document.title = "Room app";
-    };
+    // TODO: 이거 안하면 계속 쌓임 리스너가 확인필요
     return () => {
       socket.removeAllListeners();
     };
@@ -97,9 +94,12 @@ function SocketsProvider(props: any) {
     // 기본 설정
     socket.on(EVENTS.FROM_SERVER.CONNECTION, () => {
       console.log("server connected");
+      setConnectState(true);
     });
     socket.on(EVENTS.FROM_SERVER.DISCONNECT, (value) => {
       console.log("server disconnected", value);
+      setConnectState(false);
+      setGameRoomInfo(undefined);
     });
     socket.on(EVENTS.FROM_SERVER.CONNECTION_FAIL, (value) => {
       console.log("server connect fail", value);
@@ -109,7 +109,6 @@ function SocketsProvider(props: any) {
     });
     socket.on(EVENTS.FROM_SERVER.BROADCAST_CONNECT_MESSAGE, (value) => {
       console.log(value); // prints the message associated with the error
-      setConnectState(true);
     });
     // 게임방정보 업데이트
     socket.on(
@@ -148,6 +147,10 @@ function SocketsProvider(props: any) {
       goHome();
     });
   }, [goHome, openModal]);
+
+  const connect = () => {
+    socket.connect();
+  };
 
   //
   const joinRoom = useCallback((gameId: string, userId: string) => {
@@ -302,6 +305,7 @@ function SocketsProvider(props: any) {
         socket,
         connectState,
         gameRoomInfo,
+        connect,
         updateRoom,
         joinRoom,
         exitRoom,
@@ -309,7 +313,7 @@ function SocketsProvider(props: any) {
         startGame,
         enterScore,
         finalizeScore,
-        setCanEnterScore: setCanEnterScore,
+        setCanEnterScore,
       }}
       {...props}
     />
