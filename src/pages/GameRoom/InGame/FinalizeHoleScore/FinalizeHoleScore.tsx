@@ -3,7 +3,10 @@ import Button from "../../../../components/Button";
 import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
 import { typo } from "../../../../styles/typo";
-import { getDisplayDoubleText } from "../../../../utils/display";
+import {
+  getDisplayDoubleText,
+  getDisplayHole,
+} from "../../../../utils/display";
 import { getCurrentPar } from "../../../../utils/gameInfo";
 import {
   applyNearLongRule,
@@ -101,7 +104,7 @@ export const FinalizeHoleScore = ({
         />
       </S.ModalHeader>
       <S.HoleInfo>
-        {currentHole} H | 파 {currentPar}
+        {getDisplayHole(currentHole)} H | 파 {currentPar}
       </S.HoleInfo>
       <S.Body>
         <S.HoleBetInfo>
