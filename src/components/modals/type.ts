@@ -1,6 +1,7 @@
 import { DeclareDdangProps } from "../../pages/GameRoom/InGame/DeclareDdang/DelcareDdang";
 import { ModifyEnterHoleScoreProps } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
 import { FinalizeHoleScoreProps } from "../../pages/GameRoom/InGame/FinalizeHoleScore/FinalizeHoleScore";
+import { InGameResultProps } from "../../pages/GameRoom/InGame/InGameResult/InGameResult";
 import { SelectNearLongProps } from "../../pages/GameRoom/InGame/SelectNearLong/SelectNearLong";
 import { ViewRuleProps } from "../../pages/GameRoom/InGame/ViewRule/ViewRule";
 import { RoomCenterProps } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
@@ -32,6 +33,7 @@ export type ModalParam =
   | ConfirmParam
   | DeclareDdangParam
   | ViewRuleParam
+  | InGameResultParam
   //
   | RegionSelectParam
   | EnterHoleScoreParam
@@ -77,6 +79,10 @@ type EmptyParam = {
 type ViewRuleParam = {
   id: "VIEW_RULE";
   args: ViewRuleProps;
+};
+type InGameResultParam = {
+  id: "IN_GAME_RESULT";
+  args: InGameResultProps;
 };
 
 // bottom sheet
@@ -155,6 +161,7 @@ export const getModalTypeById = (id: ModalParam["id"]) => {
       return MODAL_TYPE.BOTTOM_SHEET;
 
     case "DECLARE_DDANG":
+    case "IN_GAME_RESULT":
       return MODAL_TYPE.BACKGROUND_CNETER;
 
     default:

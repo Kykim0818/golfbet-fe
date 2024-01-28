@@ -5,6 +5,7 @@ import DeclareDdang from "../../pages/GameRoom/InGame/DeclareDdang";
 import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 import { ModifyEnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
 import FinalizeHoleScore from "../../pages/GameRoom/InGame/FinalizeHoleScore";
+import InGameResult from "../../pages/GameRoom/InGame/InGameResult";
 import SelectNearLong from "../../pages/GameRoom/InGame/SelectNearLong";
 import ViewRule from "../../pages/GameRoom/InGame/ViewRule";
 import { RoomCenter } from "../../pages/GameRoom/WaitRoom/RoomCenter/RoomCenter";
@@ -89,6 +90,13 @@ const modalChildrenSelector = (
         <DeclareDdang
           lastPlayers={modalParam.args.lastPlayers}
           handleModalResult={modalParam.handleClose}
+        />
+      );
+    case "IN_GAME_RESULT":
+      return (
+        <InGameResult
+          players={modalParam.args.players}
+          type={modalParam.args.type}
         />
       );
     // modal bottom sheet
