@@ -31,7 +31,7 @@ const TABS = [
   } as const,
 ];
 type TabValue = (typeof TABS)[number]["value"];
-
+const BACK_NINE_START_HOLE = 10;
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
   exitRoom: () => void;
@@ -82,6 +82,7 @@ export const InGame = ({
     betAmountPerStroke,
     bettingLimit,
     currentHole,
+    isBackNineStart,
     gameRule: { ddang },
   } = gameInfo;
 
@@ -90,6 +91,16 @@ export const InGame = ({
   const currentPar = isFrontNine
     ? centerInfo.frontNineCourse.pars[currentHole - 1]
     : centerInfo.backNineCourse.pars[currentHole - 1];
+
+  if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
+    openModal({
+      id: "IN_GAME_RESULT",
+      args: {
+        players,
+        type: "front",
+      },
+    });
+  }
 
   const handleOpenEnterScore = async () => {
     const res = await openModal<EnterScoreResult>({
