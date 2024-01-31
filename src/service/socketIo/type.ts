@@ -49,6 +49,7 @@ export interface SocketGameRoomInfo {
       };
     };
     gameState: string;
+    isBackNineStart: boolean;
     gameType: "field" | "screen";
     hostUserId: string;
     playerCount: number;
@@ -66,6 +67,7 @@ interface Player {
   holeScores: string[];
   currentMoney: number;
   readyState: string;
+  isGameQuit: boolean;
   handicapInfo: {
     userId: string;
     handicaps: any[];

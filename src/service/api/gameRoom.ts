@@ -100,6 +100,7 @@ export const testGameRoomInfo: {
         nearestType: ["separateAmount"],
       },
       gameState: "ready",
+      isBackNineStart: false,
       nearestAmount: 0,
       betAmountPerStroke: 1000,
       bettingLimit: 50000,
@@ -112,6 +113,7 @@ export const testGameRoomInfo: {
         imgSrc: "",
         avgScore: 85,
         readyState: true,
+        isGameQuit: false,
         handicaps: [],
         currentMoney: 0,
         // parScores 의 합
@@ -128,6 +130,7 @@ export const testGameRoomInfo: {
         imgSrc: "",
         avgScore: 80,
         readyState: false,
+        isGameQuit: false,
         handicaps: [],
         currentMoney: 0,
         // parScores 의 합
@@ -144,6 +147,7 @@ export const testGameRoomInfo: {
         imgSrc: "",
         avgScore: 81,
         readyState: true,
+        isGameQuit: false,
         handicaps: [],
         currentMoney: 0,
         // parScores 의 합
