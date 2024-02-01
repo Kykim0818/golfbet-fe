@@ -6,6 +6,7 @@ import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { usePreventLeave } from "../../../hooks/usePreventLeave";
+import { useStrictModeEffectOnce } from "../../../hooks/useStrictModeEffectOnce";
 import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
 import {
@@ -92,15 +93,17 @@ export const InGame = ({
     ? centerInfo.frontNineCourse.pars[currentHole - 1]
     : centerInfo.backNineCourse.pars[currentHole - 1];
 
-  if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
-    openModal({
-      id: "IN_GAME_RESULT",
-      args: {
-        players,
-        type: "front",
-      },
-    });
-  }
+  useStrictModeEffectOnce(() => {
+    if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
+      console.log("open");
+      openModal({
+        id: "IN_GAME_RESULT",
+        args: {
+          type: "front",
+        },
+      });
+    }
+  }, [openModal, currentHole, isBackNineStart, players]);
 
   const handleOpenEnterScore = async () => {
     const res = await openModal<EnterScoreResult>({
