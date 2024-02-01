@@ -4,10 +4,11 @@ import TitleAsset from "../../components/TitleAsset";
 import GameInfoSection from "../../components/domain/GameInfoSection";
 import RankBoard from "../../components/domain/RankBoard";
 import ScoreBoard from "../../components/domain/ScoreBoard";
+import { useAppSelector } from "../../hooks/redux";
 import { usePageRoute } from "../../hooks/usePageRoute";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
-import { getUserId } from "../../utils/getUserId";
+import { getDisplayMoney } from "../../utils/display";
 import { divideFrontAndBackScores } from "../../utils/score";
 import { GameRoomInfo } from "../GameRoom/GameRoom";
 
@@ -18,7 +19,8 @@ type GameEndProps = {
 export const GameEnd = ({ gameRoomInfo }: GameEndProps) => {
   const { goHome } = usePageRoute();
   const players = gameRoomInfo.players;
-  const userId = getUserId();
+  const userInfo = useAppSelector((state) => state.users.userInfo);
+  const userId = userInfo.userId;
   const rank = players.findIndex((player) => player.userId === userId) + 1;
   //
   const me = players[rank - 1];
@@ -42,10 +44,9 @@ export const GameEnd = ({ gameRoomInfo }: GameEndProps) => {
         </S.TitleSection>
         <S.ScoreBoardWrapper>
           <S.Summary>
-            <div>
-              {me.currentScore} | {me.currentMoney}
-            </div>
-            <span>(니어 +10,000원)</span>
+            <S.Score>{me.currentScore}타</S.Score>
+            <S.Money>{getDisplayMoney(me.currentMoney)}원</S.Money>
+            {/* <span>(니어 +10,000원)</span> */}
           </S.Summary>
           <ScoreBoard
             pars={gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars}
@@ -118,18 +119,21 @@ const S = {
     align-items: center;
 
     margin: 16px 0px;
+  `,
+  Score: styled.span`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 10px;
+    background-color: #e6f7f9;
 
-    div {
-      ${typo.s16w700}
-      color: var(--color-main-dark, #008395);
-    }
-    span {
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      color: var(--text-grey, #494949);
-    }
+    ${typo.s12w600}
+    color: var(--color-main-sub-blue, #3181AE)
+  `,
+  Money: styled.span`
+    ${typo.s16w700}
+    color: var(--color-main-dark, #008395);
   `,
   // # Rank
   Mid: styled.div`
