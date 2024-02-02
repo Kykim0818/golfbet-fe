@@ -65,6 +65,14 @@ export const typo = {
     font-weight: 700;
     line-height: normal;
   `,
+  s12w600: css`
+    color: #000;
+    font-family: NotoSans KR;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  `,
   s12w500: css`
     color: #000;
     font-family: NotoSans KR;
