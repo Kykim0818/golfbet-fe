@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import Button from "../../../../components/Button";
+import GameAbandonMark from "../../../../components/domain/GameAbandonMark";
 import { useAppSelector } from "../../../../hooks/redux";
 import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
@@ -76,10 +77,15 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
     }
     // player 전원 점수 입력 상태인지 확인
     let isAllPlayerScoreEntered = true;
-
+    const gameQuitPlayers = players.filter(
+      (player) => player.isGameQuit === true
+    );
+    const gameQuitPlayerIds = new Set(
+      gameQuitPlayers.map((player) => player.userId)
+    );
     Object.entries(playerScores).forEach(([userId, score]) => {
       // TODO: 포기한 사람인 경우 처리 고려 필요
-      if (score === UNENTERED_HOLE_SCORE) {
+      if (score === UNENTERED_HOLE_SCORE && !gameQuitPlayerIds.has(userId)) {
         isAllPlayerScoreEntered = false;
       }
     });
@@ -117,11 +123,17 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         if (nearLongRes === false) return;
       }
       // TODO : 여기서 입력제어
+      const filteredPlayerScores: PlayerScores = {};
+      players.forEach((player) => {
+        if (player.isGameQuit) return;
+        filteredPlayerScores[player.userId] = playerScores[player.userId];
+      });
+
       const res = await openModal<FinalizeHoleScoreResult>({
         id: "FINALIZE_HOLE_SCORE",
         args: {
           gameRoomInfo,
-          playerScores,
+          playerScores: filteredPlayerScores,
           nearLong,
         },
       });
@@ -140,9 +152,10 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
                   .remainingMoney;
           players[userId] = {
             strokes: score,
-            moneyChange: res.playersMoneyChange[userId],
+            moneyChange: res.playersMoneyChange[userId] ?? 0,
             previousMoney,
-            remainingMoney: previousMoney + res.playersMoneyChange[userId],
+            remainingMoney:
+              previousMoney + (res.playersMoneyChange[userId] ?? 0),
           };
         });
         handleModalResult?.({
@@ -194,14 +207,16 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           {players.map((player) => {
             return (
               <div key={player.userId}>
-                <S.UserSection>
+                <S.UserSection isGameQuit={player.isGameQuit}>
                   <img src={player.imgSrc} alt="avatar" />
-                  <span>{player.nickName}</span>
+                  <span className="user__nickname">{player.nickName}</span>
+                  {player.isGameQuit && <GameAbandonMark />}
                 </S.UserSection>
                 <S.ScoreButtons>
                   {inputScores.map((score) => {
                     return (
                       <S.ScoreButton
+                        disabled={player.isGameQuit}
                         key={score}
                         isSelected={playerScores[player.userId] === score}
                         onClick={() =>
@@ -269,7 +284,7 @@ const S = {
     height: 80%;
     overflow: auto;
   `,
-  UserSection: styled.div`
+  UserSection: styled.div<{ isGameQuit: boolean }>`
     display: flex;
     align-items: center;
     gap: 10px;
@@ -280,9 +295,10 @@ const S = {
       min-height: 35px;
       border-radius: 50%;
     }
-    span {
+    .user__nickname {
       ${typo.s14w700}
-      color : #504F4F;
+      color : ${(props) =>
+        props.isGameQuit ? `var(--color-gray-300,#DADCE0)` : "#504F4F"};
     }
     margin-bottom: 15px;
   `,

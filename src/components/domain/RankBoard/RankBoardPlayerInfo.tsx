@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { typo } from "../../../styles/typo";
 import { getDisplayMoney } from "../../../utils/display";
+import GameAbandonMark from "../GameAbandonMark";
 
 type RankBoardPlayerInfoProps = {
   rank: number;
@@ -10,6 +11,7 @@ type RankBoardPlayerInfoProps = {
   currentScore: number;
   currentMoney: number;
   isSelf: boolean;
+  isGameQuit: boolean;
 };
 
 export const RankBoardPlayerInfo = ({
@@ -20,6 +22,7 @@ export const RankBoardPlayerInfo = ({
   currentMoney,
   currentScore,
   isSelf,
+  isGameQuit,
 }: RankBoardPlayerInfoProps) => {
   return (
     <S.Wrapper>
@@ -27,10 +30,11 @@ export const RankBoardPlayerInfo = ({
       <S.ProfileImgSection>
         <S.ProfileImg src={imgSrc} alt="avatar" />
       </S.ProfileImgSection>
-      <S.IdSection>
-        {isSelf && <div>나</div>}
-        <span>{nickName}</span>
-      </S.IdSection>
+      <S.NickNameSection isGameQuit={isGameQuit}>
+        {isSelf && <div className="nickname__self__mark">나</div>}
+        <span className="nickname">{nickName}</span>
+        {isGameQuit && <GameAbandonMark />}
+      </S.NickNameSection>
       <S.MoreInfo>
         <S.ScoreSection>
           <span>{currentScore === 0 ? "-" : currentScore}</span>
@@ -90,10 +94,10 @@ const S = {
   `,
 
   //
-  IdSection: styled.div`
+  NickNameSection: styled.div<{ isGameQuit: boolean }>`
     display: flex;
     flex-grow: 1;
-    div {
+    .nickname__self__mark {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -104,9 +108,15 @@ const S = {
       ${typo.s10w500}
       color: #3181AE;
     }
-    span {
+    .nickname {
       margin-left: 5px;
+      margin-right: 9px;
       ${typo.s14w700}
+      ${(props) =>
+        props.isGameQuit &&
+        css`
+          color: var(--color-gray-300, #dadce0);
+        `}
     }
   `,
 

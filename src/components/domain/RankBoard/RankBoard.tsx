@@ -1,9 +1,8 @@
 import styled from "styled-components";
+import { useAppSelector } from "../../../hooks/redux";
 import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import { deepClone } from "../../../utils/deepClone";
-import { getUserId } from "../../../utils/getUserId";
 import { RankBoardPlayerInfo } from "./RankBoardPlayerInfo";
-import { useAppSelector } from "../../../hooks/redux";
 
 type RankBoardProps = {
   players: GameRoomUser[];
@@ -29,6 +28,7 @@ export const RankBoard = ({ players }: RankBoardProps) => {
             isSelf={player.userId === userId}
             currentMoney={player.currentMoney}
             currentScore={player.currentScore}
+            isGameQuit={player.isGameQuit}
           />
         );
       })}
