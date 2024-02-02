@@ -1,6 +1,7 @@
 // 진행중인 게임 정보
 export type InGameInfo = {
   holeInfos: HoleInfo[];
+  canInputScore: boolean;
 };
 
 type HoleInfo = {
