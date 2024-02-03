@@ -46,6 +46,7 @@ export const SelectNearLong = ({
               key={player.userId}
               imgSrc={player.imgSrc}
               nickName={player.nickName}
+              isGameQuit={player.isGameQuit}
               handleOnClick={() => setSelectUserId(player.userId)}
             />
           );

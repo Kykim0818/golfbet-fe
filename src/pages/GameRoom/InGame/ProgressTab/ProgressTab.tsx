@@ -54,6 +54,7 @@ export const ProgressTab = ({
                 selectHole={selectHole}
                 player={player}
                 isSelf={player.userId === userInfo.userId}
+                isGameQuit={player.isGameQuit}
               />
             );
           })
