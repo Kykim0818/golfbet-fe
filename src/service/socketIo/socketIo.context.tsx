@@ -57,7 +57,7 @@ interface Context {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
-  setCanEnterScore: (gameId: string, state: boolean) => void;
+  setCanEnterScore: (gameId: string, value: string) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -259,14 +259,13 @@ function SocketsProvider(props: any) {
     }
   };
 
-  const setCanEnterScore = (gameId: string, status: boolean) => {
-    console.log(`setCanEnterScore gameId : ${gameId}, state : ${status}`);
-
+  const setCanEnterScore = (gameId: string, value: string) => {
+    console.log(`setCanEnterScore gameId : ${gameId}, value : ${value}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.SET_CAN_ENTER_SCORE,
       data: {
         gameId,
-        state: status,
+        value,
       },
     });
   };
