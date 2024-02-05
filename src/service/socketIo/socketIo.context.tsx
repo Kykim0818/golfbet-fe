@@ -47,6 +47,7 @@ interface Context {
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   startGame: (gameId: string, userId: string) => void;
+  startBackNine: (gameId: string) => void;
   enterScore: (
     gameId: string,
     holeIdx: number,
@@ -70,6 +71,7 @@ const SocketContext = createContext<Context>({
   exitRoom: () => {},
   onReady: () => {},
   startGame: () => {},
+  startBackNine: () => {},
   enterScore: () => {},
   finalizeScore: () => {},
   setCanEnterScore: () => {},
@@ -221,6 +223,16 @@ function SocketsProvider(props: any) {
     });
   };
 
+  const startBackNine = (gameId: string) => {
+    console.log(`socket startBackNine Game gameId : ${gameId}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.BACK_NINE_START,
+      data: {
+        gameId,
+      },
+    });
+  };
+
   const enterScore = (
     gameId: string,
     holeIdx: number,
@@ -311,6 +323,7 @@ function SocketsProvider(props: any) {
         exitRoom,
         onReady,
         startGame,
+        startBackNine,
         enterScore,
         finalizeScore,
         setCanEnterScore,

@@ -22,6 +22,7 @@ export const TASK = {
   ENTER_SCORE: "insert",
   FIX_SCORE: "next",
   SET_CAN_ENTER_SCORE: "setCanInputScore",
+  BACK_NINE_START: "start_back_nine",
 } as const;
 
 export const SOCKET_RESPONSE = {

@@ -13,6 +13,7 @@ export function convertSocketDataToUiGameRoomInfo(
       gameId: gameRoomInfo.gameInfo.gameId,
       gameType: gameRoomInfo.gameInfo.gameType,
       gameState: gameRoomInfo.gameInfo.gameState,
+      isBackNineStart: gameRoomInfo.gameInfo.isBackNineStart ?? false,
       startDate: `${gameRoomInfo.gameInfo.createdDate}`,
       golfCenter: {
         id: `${gameRoomInfo.gameInfo.centerInfo.centerId}`,
@@ -62,6 +63,7 @@ export function convertSocketDataToUiGameRoomInfo(
         }),
         currentMoney: player.currentMoney,
         readyState: player.readyState === "true" ? true : false,
+        isGameQuit: player.isGameQuit ?? false,
         handicaps: [],
       };
     }),
