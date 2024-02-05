@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import styled, { CSSProp, css } from "styled-components";
 import { ModalType } from "../modals/type";
 
@@ -8,11 +9,23 @@ interface Props {
 }
 
 export const Modal = ({ children, sheetStyle, modalType = 0 }: Props) => {
+  const sheetRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (sheetRef.current) {
+      sheetRef.current.focus();
+    }
+  }, []);
+
   return (
     <>
       {modalType === 4 && <S.Opaque />}
       <S.Background modalType={modalType}>
-        <S.Sheet sheetStyle={sheetStyle} modalType={modalType}>
+        <S.Sheet
+          sheetStyle={sheetStyle}
+          modalType={modalType}
+          tabIndex={-1}
+          ref={sheetRef}
+        >
           {children}
         </S.Sheet>
       </S.Background>
@@ -91,5 +104,8 @@ const S = {
         height: 100%;
       `}
     ${(props) => props.sheetStyle}
+    &:focus {
+      outline: none;
+    }
   `,
 };

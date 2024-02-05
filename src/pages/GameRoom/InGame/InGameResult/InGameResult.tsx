@@ -53,6 +53,7 @@ export const InGameResult = ({ players, type }: InGameResultProps) => {
                 isSelf={player.userId === userInfo.userId}
                 currentMoney={player.currentMoney}
                 currentScore={player.currentScore}
+                isGameQuit={player.isGameQuit}
               />
             );
           })}

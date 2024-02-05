@@ -42,6 +42,7 @@ export type GameRoomUser = {
   holeScores: number[];
   currentMoney: number;
   readyState: boolean;
+  isGameQuit: boolean;
   handicaps: {
     to: string;
     money: number;

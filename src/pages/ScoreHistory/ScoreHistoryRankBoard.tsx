@@ -49,6 +49,7 @@ export const ScoreHistroyRankBoard = ({
               isSelf={player.userId === userId}
               currentMoney={player.currentMoney}
               currentScore={player.currentScore}
+              isGameQuit={player.isGameQuit}
             />
             {selectUser === index && (
               <>
