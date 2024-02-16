@@ -161,6 +161,7 @@ export const testGameRoomInfo: {
     ],
     inGameInfo: {
       holeInfos: [],
+      canInputScore: "",
     },
   },
 };

@@ -58,7 +58,7 @@ interface Context {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
-  setCanEnterScore: (gameId: string, state: boolean) => void;
+  setCanEnterScore: (gameId: string, value: string) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -83,14 +83,6 @@ function SocketsProvider(props: any) {
   const dispatch = useAppDispatch();
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
-
-  //
-  useEffect(() => {
-    // TODO: 이거 안하면 계속 쌓임 리스너가 확인필요
-    return () => {
-      socket.removeAllListeners();
-    };
-  }, []);
 
   useEffect(() => {
     // 기본 설정
@@ -133,6 +125,9 @@ function SocketsProvider(props: any) {
         }
       }
     );
+    return () => {
+      socket.removeAllListeners();
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -271,17 +266,16 @@ function SocketsProvider(props: any) {
     }
   };
 
-  const setCanEnterScore = (gameId: string, status: boolean) => {
-    console.log(`setCanEnterScore gameId : ${gameId}, state : ${status}`);
-
+  const setCanEnterScore = useCallback((gameId: string, value: string) => {
+    console.log(`setCanEnterScore gameId : ${gameId}, value : ${value}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.SET_CAN_ENTER_SCORE,
       data: {
         gameId,
-        state: status,
+        value,
       },
     });
-  };
+  }, []);
 
   const finalizeScore = (
     gameId: string,
