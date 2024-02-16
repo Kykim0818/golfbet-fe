@@ -49,6 +49,7 @@ export interface SocketGameRoomInfo {
       };
     };
     gameState: string;
+    isBackNineStart: boolean;
     gameType: "field" | "screen";
     hostUserId: string;
     playerCount: number;

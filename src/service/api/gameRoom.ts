@@ -100,6 +100,7 @@ export const testGameRoomInfo: {
         nearestType: ["separateAmount"],
       },
       gameState: "ready",
+      isBackNineStart: false,
       nearestAmount: 0,
       betAmountPerStroke: 1000,
       bettingLimit: 50000,

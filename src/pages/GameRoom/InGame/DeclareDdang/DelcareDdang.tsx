@@ -22,8 +22,10 @@ export const DeclareDdang = ({
       <S.Body>
         <S.Title>땅 선언하기</S.Title>
         <S.ContentImgSection>
-          {lastPlayerImgSrc.map((imgSrc) => {
-            return <img src={imgSrc} alt="user_profile_img" key={imgSrc} />;
+          {lastPlayerImgSrc.map((imgSrc, index) => {
+            return (
+              <img key={`${index + 1}`} src={imgSrc} alt="user_profile_img" />
+            );
           })}
         </S.ContentImgSection>
         <S.ContentTxt>{`${lastPlayerNickName.join(

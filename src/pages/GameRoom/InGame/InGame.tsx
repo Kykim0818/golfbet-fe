@@ -6,6 +6,7 @@ import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { usePreventLeave } from "../../../hooks/usePreventLeave";
+import { useStrictModeEffectOnce } from "../../../hooks/useStrictModeEffectOnce";
 import { useSockets } from "../../../service/socketIo/socketIo.context";
 import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
@@ -32,7 +33,7 @@ const TABS = [
   } as const,
 ];
 type TabValue = (typeof TABS)[number]["value"];
-
+const BACK_NINE_START_HOLE = 10;
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
   exitRoom: () => void;
@@ -84,6 +85,7 @@ export const InGame = ({
     betAmountPerStroke,
     bettingLimit,
     currentHole,
+    isBackNineStart,
     gameRule: { ddang },
   } = gameInfo;
   const { canInputScore } = inGameInfo;
@@ -106,6 +108,17 @@ export const InGame = ({
       setCanEnterScore(gameId ?? "", "");
     }
   }, [setCanEnterScore, gameId, userInfo.userId]);
+
+  useStrictModeEffectOnce(() => {
+    if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
+      openModal({
+        id: "IN_GAME_RESULT",
+        args: {
+          type: "front",
+        },
+      });
+    }
+  }, [openModal, currentHole, isBackNineStart, players]);
 
   const handleOpenEnterScore = async () => {
     const res = await openModal<EnterScoreResult>({
