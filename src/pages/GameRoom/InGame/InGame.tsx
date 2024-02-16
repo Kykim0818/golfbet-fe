@@ -108,7 +108,7 @@ export const InGame = ({
       setCanEnterScore(gameId ?? "", "");
     }
   }, [setCanEnterScore, gameId, userInfo.userId]);
-
+  // 전반 종료
   useStrictModeEffectOnce(() => {
     if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
       openModal({
