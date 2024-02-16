@@ -82,14 +82,6 @@ function SocketsProvider(props: any) {
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
 
-  //
-  useEffect(() => {
-    // TODO: 이거 안하면 계속 쌓임 리스너가 확인필요
-    return () => {
-      socket.removeAllListeners();
-    };
-  }, []);
-
   useEffect(() => {
     // 기본 설정
     socket.on(EVENTS.FROM_SERVER.CONNECTION, () => {
@@ -131,6 +123,9 @@ function SocketsProvider(props: any) {
         }
       }
     );
+    return () => {
+      socket.removeAllListeners();
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -259,7 +254,7 @@ function SocketsProvider(props: any) {
     }
   };
 
-  const setCanEnterScore = (gameId: string, value: string) => {
+  const setCanEnterScore = useCallback((gameId: string, value: string) => {
     console.log(`setCanEnterScore gameId : ${gameId}, value : ${value}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.SET_CAN_ENTER_SCORE,
@@ -268,7 +263,7 @@ function SocketsProvider(props: any) {
         value,
       },
     });
-  };
+  }, []);
 
   const finalizeScore = (
     gameId: string,

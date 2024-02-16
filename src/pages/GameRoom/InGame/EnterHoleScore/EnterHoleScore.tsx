@@ -155,7 +155,10 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
           nearLong.push(nearLongRes);
         }
         // 니어,롱기 선택창에서 취소를 눌럿다면 땅 진행이 아니고 진행 취소
-        if (nearLongRes === false) return;
+        if (nearLongRes === false) {
+          setCanEnterScore(gameId, "");
+          return;
+        }
       }
       // TODO : 여기서 입력제어
       const filteredPlayerScores: PlayerScores = {};
@@ -173,11 +176,6 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         },
       });
       if (res.result) {
-        console.log("canInputScore", canInputScore);
-        if (isCanInputScore === false) {
-          console.log("입력 불가");
-          return;
-        }
         // player 데이터 만들기,
         // TODO: Ingame 정보 받아와서 이전홀 정보 확인해야 함
         const players: InGameInfo["holeInfos"][number]["players"] = {};
@@ -208,6 +206,8 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
             par: currentPar,
           },
         });
+      } else {
+        setCanEnterScore(gameId, "");
       }
     }
     // 점수 다입력 안되엇으므로 그냥 입력 처리
