@@ -20,6 +20,8 @@ export const TASK = {
   ROOM_UPDATE: "update",
   START_GAME: "start",
   ENTER_SCORE: "insert",
+  FINALIZE_SCORE: "next",
+  MODIFY_SCORE: "fix_score",
   FIX_SCORE: "next",
   SET_CAN_ENTER_SCORE: "setCanInputScore",
   BACK_NINE_START: "start_back_nine",

@@ -14,12 +14,14 @@ type ProgressTabProps = {
   players: GameRoomUser[];
   isCanInputScore: boolean;
   handleOpenEnterScore: () => Promise<void>;
+  handleOpenModifyEnterScore: (modifyTargetHole: number) => Promise<void>;
 };
 export const ProgressTab = ({
   currentHole,
   centerInfo,
   players,
   handleOpenEnterScore,
+  handleOpenModifyEnterScore,
   isCanInputScore,
 }: ProgressTabProps) => {
   const [selectHole, setSelectHole] = useState(currentHole);
@@ -70,9 +72,7 @@ export const ProgressTab = ({
         ) : (
           <Button
             disabled={!isCanInputScore}
-            onClick={() => {
-              alert("수정하기 미 구현");
-            }}
+            onClick={() => handleOpenModifyEnterScore(selectHole)}
           >
             {isCanInputScore ? "+스코어 수정하기" : "점수 계산 중 입니다."}
           </Button>

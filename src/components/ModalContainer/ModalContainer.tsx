@@ -112,6 +112,7 @@ const modalChildrenSelector = (
           gameRoomInfo={modalParam.args.gameRoomInfo}
           playerScores={modalParam.args.playerScores}
           nearLong={modalParam.args.nearLong}
+          modifyTargetHole={modalParam.args.modifyTargetHole}
           handleModalResult={modalParam.handleClose}
         />
       );

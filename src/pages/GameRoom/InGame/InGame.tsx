@@ -17,6 +17,7 @@ import {
 } from "../../../utils/display";
 import { GameRoomInfo, GameRoomUser } from "../GameRoom";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
+import { ModifyEnterScoreResult } from "./EnterHoleScore/ModifyEnterHoleScore";
 import LeaderBoardTab from "./LeaderBoardTab";
 import ProgressTab from "./ProgressTab";
 import { InGameInfo } from "./type";
@@ -47,6 +48,11 @@ export type InGameProps = {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
+  modifyScore: (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => void;
   // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
@@ -55,6 +61,7 @@ export const InGame = ({
   exitRoom,
   enterScore,
   finalizeScore,
+  modifyScore,
 }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
@@ -168,6 +175,20 @@ export const InGame = ({
     }
   };
 
+  const handleOpenModifyEnterScore = async (modifyTargetHole: number) => {
+    const res = await openModal<ModifyEnterScoreResult>({
+      id: "MODIFY_ENTER_HOLE_SCORE",
+      args: {
+        modifyTargetHole,
+      },
+    });
+    if (gameId === undefined) {
+      console.log("gameId is undefined");
+      return;
+    }
+    modifyScore(gameId, userInfo.userId, res.holeInfo);
+    setCanEnterScore(gameId, "");
+  };
   return (
     <PageStyle.Wrapper>
       <TitleAsset
@@ -243,6 +264,7 @@ export const InGame = ({
                 currentHole={currentHole}
                 players={players}
                 handleOpenEnterScore={handleOpenEnterScore}
+                handleOpenModifyEnterScore={handleOpenModifyEnterScore}
                 isCanInputScore={isCanInputScore}
               />
             ) : (

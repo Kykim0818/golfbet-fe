@@ -58,6 +58,11 @@ interface Context {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
+  modifyScore: (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => void;
   setCanEnterScore: (gameId: string, value: string) => void;
 }
 
@@ -74,6 +79,7 @@ const SocketContext = createContext<Context>({
   startBackNine: () => {},
   enterScore: () => {},
   finalizeScore: () => {},
+  modifyScore: () => {},
   setCanEnterScore: () => {},
 });
 
@@ -286,7 +292,7 @@ function SocketsProvider(props: any) {
       `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
     );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
-      taskName: TASK.FIX_SCORE,
+      taskName: TASK.FINALIZE_SCORE,
       data: {
         gameId,
         userId,
@@ -295,15 +301,26 @@ function SocketsProvider(props: any) {
     });
   };
 
-  // useEffect(() => {
-  //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
-  //     if (!document.hasFocus()) {
-  //       document.title = "New message...";
-  //     }
-
-  //     setMessages((messages) => [...messages, { message, username, time }]);
-  //   });
-  // }, [socket]);
+  const modifyScore = (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => {
+    console.log(
+      `modifyScore gameId : ${gameId} \n 유저Id : ${userId} \n 수정 홀정보: ${JSON.stringify(
+        modifyHoleInfo
+      )}`
+    );
+    // TODO : 백엔드 완료시 해제
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.MODIFY_SCORE,
+      data: {
+        gameId,
+        userId,
+        modifyHoleInfo,
+      },
+    });
+  };
 
   return (
     <SocketContext.Provider
@@ -320,6 +337,7 @@ function SocketsProvider(props: any) {
         startBackNine,
         enterScore,
         finalizeScore,
+        modifyScore,
         setCanEnterScore,
       }}
       {...props}

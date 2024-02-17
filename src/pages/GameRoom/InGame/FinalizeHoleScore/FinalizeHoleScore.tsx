@@ -26,6 +26,10 @@ export type FinalizeHoleScoreProps = {
    * 니어리스트 , 롱기스트 선택 유저 id
    */
   nearLong: string[];
+  /**
+   * 점수 수정 처리 구분
+   */
+  modifyTargetHole?: number;
 };
 
 export type FinalizeHoleScoreResult = {
@@ -39,6 +43,7 @@ export const FinalizeHoleScore = ({
   playerScores,
   gameRoomInfo,
   nearLong,
+  modifyTargetHole,
 }: FinalizeHoleScoreProps) => {
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
@@ -52,20 +57,19 @@ export const FinalizeHoleScore = ({
     },
     gameRule: { ddang, specialBetRequirements },
   } = gameInfo;
-
-  // const currentHole = gameRoomInfo?.gameInfo.currentHole ?? 1;
-  const currentPar = getCurrentPar(
-    currentHole,
+  const targetHole = modifyTargetHole ?? currentHole;
+  const targetPar = getCurrentPar(
+    targetHole,
     frontNineCoursePar,
     backNineCoursePar
   );
   const doubleConditions = checkDoubleCondition(
-    currentPar,
+    targetPar,
     specialBetRequirements,
     playerScores
   );
   // TODO : 땅여부 확인을 해야함
-  const isDdang = isApplyDdang(currentHole - 1, inGameInfo.holeInfos);
+  const isDdang = isApplyDdang(targetHole - 1, inGameInfo.holeInfos);
   // 추가 정보 결정 해야함 점수로 배판인지여
   if (isDdang) doubleConditions.push("ddang");
 
@@ -104,11 +108,11 @@ export const FinalizeHoleScore = ({
         />
       </S.ModalHeader>
       <S.HoleInfo>
-        {getDisplayHole(currentHole)} H | 파 {currentPar}
+        {getDisplayHole(targetHole)} H | 파 {targetPar}
       </S.HoleInfo>
       <S.Body>
         <S.HoleBetInfo>
-          {getDisplayDoubleText(doubleConditions, currentPar, players.length)}
+          {getDisplayDoubleText(doubleConditions, targetPar, players.length)}
         </S.HoleBetInfo>
         <S.Players>
           {gameRoomInfo.players.map((player) => {
