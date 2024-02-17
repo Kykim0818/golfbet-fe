@@ -1,7 +1,9 @@
 import styled, { css } from "styled-components";
+import GameAbandonMark from "../../../../components/domain/GameAbandonMark";
 import { typo } from "../../../../styles/typo";
 
 type PlayerRowButtonProps = {
+  isGameQuit: boolean;
   selected: boolean;
   imgSrc: string;
   nickName: string;
@@ -13,17 +15,25 @@ export const PlayerRowButton = ({
   imgSrc,
   nickName,
   handleOnClick,
+  isGameQuit,
 }: PlayerRowButtonProps) => {
   return (
-    <S.Wrapper onClick={handleOnClick} selected={selected}>
+    <S.Wrapper
+      disabled={isGameQuit}
+      onClick={handleOnClick}
+      selected={selected}
+    >
       <S.Profile src={imgSrc} />
-      <S.NickName>{nickName}</S.NickName>
+      <S.NameSection>
+        <S.NickName isGameQuit={isGameQuit}>{nickName}</S.NickName>
+        {isGameQuit && <GameAbandonMark />}
+      </S.NameSection>
     </S.Wrapper>
   );
 };
 
 const S = {
-  Wrapper: styled.div<{ selected: boolean }>`
+  Wrapper: styled.button<{ selected: boolean }>`
     display: flex;
     align-items: center;
     border-radius: 15px;
@@ -45,11 +55,20 @@ const S = {
     height: 54px;
     border-radius: 50%;
   `,
+  NameSection: styled.div`
+    display: flex;
+    gap: 9px;
+  `,
   //
-  NickName: styled.span`
+  NickName: styled.span<{ isGameQuit: boolean }>`
     display: flex;
     flex-grow: 1;
     margin-left: 17px;
     ${typo.s14w700}
+    ${(props) =>
+      props.isGameQuit &&
+      css`
+        color: var(--color-gray-300, #dadce0);
+      `}
   `,
 };

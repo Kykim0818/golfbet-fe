@@ -80,6 +80,7 @@ export interface GameInfo {
   };
   currentHole: number;
   gameState: string;
+  isBackNineStart: boolean;
   betType: "stroke";
   playerCount: number;
   gameRule: GameRule;

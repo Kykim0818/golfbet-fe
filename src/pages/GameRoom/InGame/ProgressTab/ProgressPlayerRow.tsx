@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import GameAbandonMark from "../../../../components/domain/GameAbandonMark";
 import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
 import { typo } from "../../../../styles/typo";
 import { GameRoomUser } from "../../GameRoom";
@@ -7,12 +8,14 @@ type ProgressPlayerRowProps = {
   isSelf: boolean;
   player: GameRoomUser;
   selectHole: number;
+  isGameQuit: boolean;
 };
 
 export const ProgressPlayerRow = ({
   isSelf,
   player,
   selectHole,
+  isGameQuit,
 }: ProgressPlayerRowProps) => {
   const { imgSrc, nickName, holeScores } = player;
   return (
@@ -20,15 +23,18 @@ export const ProgressPlayerRow = ({
       <S.ProfileImgSection>
         <S.ProfileImg src={imgSrc} alt="avatar" />
       </S.ProfileImgSection>
-      <S.NickNameSection>
-        {isSelf && <div>나</div>}
-        <span>{nickName}</span>
+      <S.NickNameSection isGameQuit={isGameQuit}>
+        {isSelf && <div className="nickname__self__mark">나</div>}
+        <span className="nickname">{nickName}</span>
+        {isGameQuit && <GameAbandonMark />}
       </S.NickNameSection>
-      <S.Score>
-        {holeScores[selectHole - 1] === UNENTERED_HOLE_SCORE
-          ? "입력 중"
-          : `${holeScores[selectHole - 1]}타`}
-      </S.Score>
+      {isGameQuit === false && (
+        <S.Score>
+          {holeScores[selectHole - 1] === UNENTERED_HOLE_SCORE
+            ? "입력 중"
+            : `${holeScores[selectHole - 1]}타`}
+        </S.Score>
+      )}
     </S.Wrapper>
   );
 };
@@ -62,10 +68,11 @@ const S = {
   `,
 
   //
-  NickNameSection: styled.div`
+  NickNameSection: styled.div<{ isGameQuit: boolean }>`
     display: flex;
+    gap: 9px;
     flex-grow: 1;
-    div {
+    .nickname__self__mark {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -76,9 +83,14 @@ const S = {
       ${typo.s10w500}
       color: #3181AE;
     }
-    span {
+    .nickname {
       margin-left: 5px;
       ${typo.s14w700}
+      ${(props) =>
+        props.isGameQuit &&
+        css`
+          color: var(--color-gray-300, #dadce0);
+        `}
     }
   `,
 

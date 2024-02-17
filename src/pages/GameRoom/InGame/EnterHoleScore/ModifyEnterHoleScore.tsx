@@ -4,6 +4,7 @@ import Button from "../../../../components/Button";
 import { useAppSelector } from "../../../../hooks/redux";
 import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { useSockets } from "../../../../service/socketIo/socketIo.context";
 import { UNENTERED_HOLE_SCORE } from "../../../../service/socketIo/util";
 import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
@@ -31,15 +32,23 @@ export const ModifyEnterHoleScore = ({
   const [playerScores, setPlayerScores] = useState<PlayerScores>({});
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
+  const { setCanEnterScore } = useSockets();
   // 예외 : par 나 holecount 없을 경우, 닫기
   const gameRoomInfo = useAppSelector((state) => state.game.gameRoomInfo);
+  const userInfo = useAppSelector((state) => state.users.userInfo);
   if (gameRoomInfo === undefined) throw Error("gameRoomInfo is undefined");
-  const { inGameInfo } = gameRoomInfo;
+  const { gameInfo, inGameInfo, players } = gameRoomInfo;
+  const { gameId, golfCenter } = gameInfo;
+  const { canInputScore } = inGameInfo;
+  const isCanInputScore =
+    canInputScore === "" || canInputScore === userInfo.userId;
+
   const modifyTargetPar = getCurrentPar(
     modifyTargetHole,
-    gameRoomInfo.gameInfo.golfCenter.frontNineCourse.pars,
-    gameRoomInfo.gameInfo.golfCenter.backNineCourse.pars
+    golfCenter.frontNineCourse.pars,
+    golfCenter.backNineCourse.pars
   );
+
   const inputScores = useMemo(() => {
     if (modifyTargetPar) {
       const scores = [];
@@ -53,8 +62,6 @@ export const ModifyEnterHoleScore = ({
     return [];
   }, [modifyTargetPar]);
 
-  const players = gameRoomInfo?.players ?? [];
-
   const handleClickScoreBtn = (playerId: string, clickedValue: number) => {
     const scores: PlayerScores = deepClone(playerScores);
     if (playerScores[playerId] === clickedValue) {
@@ -67,7 +74,7 @@ export const ModifyEnterHoleScore = ({
     // 다른 버튼 클릭하면 선택 되게 하기
   };
 
-  // ###
+  // ### TODO 재확인
   const handleModifyEnterScore = async () => {
     if (gameRoomInfo === undefined) {
       console.log("gameRoomInfo is undefined");
@@ -85,6 +92,13 @@ export const ModifyEnterHoleScore = ({
 
     // 점수 다입력되었으니 확정으로
     if (isAllPlayerScoreEntered) {
+      // 여기서 입력제어
+      if (gameId === undefined) return;
+      if (userInfo.userId === undefined) {
+        console.log("userInfo.userId is undefined");
+        return;
+      }
+      setCanEnterScore(gameId, userInfo.userId);
       // #1 니어 롱기 처리
       const isNearLong = modifyTargetPar === 3 || modifyTargetPar === 5;
       const nearLong: string[] = [];
@@ -163,6 +177,21 @@ export const ModifyEnterHoleScore = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (isCanInputScore === false) {
+      openModal({
+        id: "ALERT",
+        args: {
+          title: "점수 입력",
+          msg: "다른 사용자가 점수 계산 중입니다.",
+          okBtnLabel: "확인",
+        },
+      }).then(() => {
+        moveBack();
+      });
+    }
+  }, [isCanInputScore, moveBack]);
 
   useEffect(() => {
     const scores: PlayerScores = {};

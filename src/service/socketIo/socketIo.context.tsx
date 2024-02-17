@@ -37,6 +37,7 @@ interface Context {
   socket: Socket;
   connectState: boolean;
   gameRoomInfo?: GameRoomInfo;
+  connect: () => void;
   updateRoom: (
     gameId: string,
     userId: string,
@@ -46,6 +47,7 @@ interface Context {
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   startGame: (gameId: string, userId: string) => void;
+  startBackNine: (gameId: string) => void;
   enterScore: (
     gameId: string,
     holeIdx: number,
@@ -61,20 +63,24 @@ interface Context {
     userId: string,
     modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
   ) => void;
+  setCanEnterScore: (gameId: string, value: string) => void;
 }
 
 const SocketContext = createContext<Context>({
   socket,
   connectState: false,
   gameRoomInfo: undefined,
+  connect: () => {},
   updateRoom: () => {},
   joinRoom: () => {},
   exitRoom: () => {},
   onReady: () => {},
   startGame: () => {},
+  startBackNine: () => {},
   enterScore: () => {},
   finalizeScore: () => {},
   modifyScore: () => {},
+  setCanEnterScore: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -84,26 +90,16 @@ function SocketsProvider(props: any) {
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
 
-  //
-  useEffect(() => {
-    console.log("connect useEffect");
-    console.log("connect", socket.connected);
-    socket.connect();
-    window.onfocus = function () {
-      document.title = "Room app";
-    };
-    return () => {
-      socket.removeAllListeners();
-    };
-  }, []);
-
   useEffect(() => {
     // 기본 설정
     socket.on(EVENTS.FROM_SERVER.CONNECTION, () => {
       console.log("server connected");
+      setConnectState(true);
     });
     socket.on(EVENTS.FROM_SERVER.DISCONNECT, (value) => {
       console.log("server disconnected", value);
+      setConnectState(false);
+      setGameRoomInfo(undefined);
     });
     socket.on(EVENTS.FROM_SERVER.CONNECTION_FAIL, (value) => {
       console.log("server connect fail", value);
@@ -113,7 +109,6 @@ function SocketsProvider(props: any) {
     });
     socket.on(EVENTS.FROM_SERVER.BROADCAST_CONNECT_MESSAGE, (value) => {
       console.log(value); // prints the message associated with the error
-      setConnectState(true);
     });
     // 게임방정보 업데이트
     socket.on(
@@ -136,6 +131,9 @@ function SocketsProvider(props: any) {
         }
       }
     );
+    return () => {
+      socket.removeAllListeners();
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -152,6 +150,10 @@ function SocketsProvider(props: any) {
       goHome();
     });
   }, [goHome, openModal]);
+
+  const connect = () => {
+    socket.connect();
+  };
 
   //
   const joinRoom = useCallback((gameId: string, userId: string) => {
@@ -222,6 +224,16 @@ function SocketsProvider(props: any) {
     });
   };
 
+  const startBackNine = (gameId: string) => {
+    console.log(`socket startBackNine Game gameId : ${gameId}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.BACK_NINE_START,
+      data: {
+        gameId,
+      },
+    });
+  };
+
   const enterScore = (
     gameId: string,
     holeIdx: number,
@@ -259,6 +271,17 @@ function SocketsProvider(props: any) {
       });
     }
   };
+
+  const setCanEnterScore = useCallback((gameId: string, value: string) => {
+    console.log(`setCanEnterScore gameId : ${gameId}, value : ${value}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.SET_CAN_ENTER_SCORE,
+      data: {
+        gameId,
+        value,
+      },
+    });
+  }, []);
 
   const finalizeScore = (
     gameId: string,
@@ -305,14 +328,17 @@ function SocketsProvider(props: any) {
         socket,
         connectState,
         gameRoomInfo,
+        connect,
         updateRoom,
         joinRoom,
         exitRoom,
         onReady,
         startGame,
+        startBackNine,
         enterScore,
         finalizeScore,
         modifyScore,
+        setCanEnterScore,
       }}
       {...props}
     />

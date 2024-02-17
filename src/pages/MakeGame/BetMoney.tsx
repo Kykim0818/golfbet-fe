@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { useModal } from "../../hooks/useModal";
 import { isNumeric } from "../../utils/isNumeric";
 
 type BetMoneyProps = {
@@ -21,7 +22,7 @@ export const BetMoney = ({
   onChange,
 }: BetMoneyProps) => {
   const [money, setMoney] = useState(value ?? 0);
-
+  const { openModal } = useModal();
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (disable) return;
     if (isNumeric(e.target.value)) {
@@ -29,8 +30,29 @@ export const BetMoney = ({
       onChange?.(Number(e.target.value) >= 0 ? Number(e.target.value) : 0);
       return;
     }
-    alert("숫자만 입력 가능합니다.");
+    openModal({
+      id: "ALERT",
+      args: {
+        title: "금액 설정",
+        msg: "숫자를 입력해주세요",
+        okBtnLabel: "확인",
+      },
+    });
     e.target.value = "";
+  };
+
+  const validateMoney = () => {
+    if (money === 0) return;
+    if (money >= 1000 && money % 1000 === 0) return;
+    openModal({
+      id: "ALERT",
+      args: {
+        title: "금액 설정",
+        msg: "1000원 단위의 금액만 설정 가능합니다.",
+        okBtnLabel: "확인",
+      },
+    });
+    setMoney(0);
   };
 
   const handlePlusMoneyButtonClick = (plusMoney: number) => {
@@ -44,10 +66,9 @@ export const BetMoney = ({
       <div style={{ position: "relative" }}>
         <Styled.InputFixedText>{fixedText}</Styled.InputFixedText>
         <Styled.Input
-          type="number"
           inputMode="numeric"
-          pattern="[0-9]*"
           onChange={handleOnChange}
+          onBlur={validateMoney}
           value={money === 0 ? "" : money}
           placeholder={placeHolder}
         />

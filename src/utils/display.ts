@@ -116,3 +116,12 @@ export function getDisplayScore(score: number) {
   if (score === UNENTERED_HOLE_SCORE) return "-";
   return score;
 }
+
+const GOLF_MAX_HOLE = 9;
+/**
+ * 데이터 홀 값 (1 ~ 18) 을 전반 1 ~ 9 , 후반 1~9로 변환 
+ * @param holeNumber 
+ */
+export function getDisplayHole(holeNumber: number){
+  return holeNumber <= GOLF_MAX_HOLE ? holeNumber : holeNumber - GOLF_MAX_HOLE;
+}

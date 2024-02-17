@@ -2,10 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import { RankBoardPlayerInfo } from "../../../../components/domain/RankBoard/RankBoardPlayerInfo";
 import ScoreBoard from "../../../../components/domain/ScoreBoard";
+import { deepClone } from "../../../../utils/deepClone";
 import { divideFrontAndBackScores } from "../../../../utils/score";
 import { GameInfo } from "../../../MakeGame/MakeGame";
 import { GameRoomUser } from "../../GameRoom";
-import { deepClone } from "../../../../utils/deepClone";
 
 type LeaderBoardTabProps = {
   players: GameRoomUser[];
@@ -54,6 +54,7 @@ export const LeaderBoardTab = ({
               isSelf={player.userId === userId}
               currentMoney={player.currentMoney}
               currentScore={player.currentScore}
+              isGameQuit={player.isGameQuit}
             />
             {selectUser === index && (
               <>

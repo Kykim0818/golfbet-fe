@@ -39,6 +39,7 @@ export const defaultGameInfo: GameInfo = {
     nearestType: ["separateAmount"],
   },
   gameState: "",
+  isBackNineStart: false,
   nearestAmount: 0,
   betAmountPerStroke: 0,
   bettingLimit: 0,

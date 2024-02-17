@@ -12,6 +12,7 @@ type ProgressTabProps = {
   currentHole: number;
   centerInfo: GameInfo["golfCenter"];
   players: GameRoomUser[];
+  isCanInputScore: boolean;
   handleOpenEnterScore: () => Promise<void>;
   handleOpenModifyEnterScore: (modifyTargetHole: number) => Promise<void>;
 };
@@ -21,6 +22,7 @@ export const ProgressTab = ({
   players,
   handleOpenEnterScore,
   handleOpenModifyEnterScore,
+  isCanInputScore,
 }: ProgressTabProps) => {
   const [selectHole, setSelectHole] = useState(currentHole);
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -56,6 +58,7 @@ export const ProgressTab = ({
                 selectHole={selectHole}
                 player={player}
                 isSelf={player.userId === userInfo.userId}
+                isGameQuit={player.isGameQuit}
               />
             );
           })
@@ -63,10 +66,15 @@ export const ProgressTab = ({
       </S.Players>
       <S.Footer>
         {selectHole === currentHole ? (
-          <Button onClick={handleOpenEnterScore}>+스코어 입력하기</Button>
+          <Button disabled={!isCanInputScore} onClick={handleOpenEnterScore}>
+            {isCanInputScore ? "+스코어 입력하기" : "점수 계산 중 입니다."}
+          </Button>
         ) : (
-          <Button onClick={() => handleOpenModifyEnterScore(selectHole)}>
-            +스코어 수정하기
+          <Button
+            disabled={!isCanInputScore}
+            onClick={() => handleOpenModifyEnterScore(selectHole)}
+          >
+            {isCanInputScore ? "+스코어 수정하기" : "점수 계산 중 입니다."}
           </Button>
         )}
       </S.Footer>
