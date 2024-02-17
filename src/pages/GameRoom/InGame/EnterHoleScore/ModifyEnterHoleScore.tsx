@@ -136,6 +136,7 @@ export const ModifyEnterHoleScore = ({
           gameRoomInfo,
           playerScores,
           nearLong,
+          modifyTargetHole,
         },
       });
       if (res.result) {

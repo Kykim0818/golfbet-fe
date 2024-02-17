@@ -187,6 +187,7 @@ export const InGame = ({
       return;
     }
     modifyScore(gameId, userInfo.userId, res.holeInfo);
+    setCanEnterScore(gameId, "");
   };
   return (
     <PageStyle.Wrapper>

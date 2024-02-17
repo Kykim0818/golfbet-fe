@@ -312,14 +312,14 @@ function SocketsProvider(props: any) {
       )}`
     );
     // TODO : 백엔드 완료시 해제
-    // socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
-    //   taskName: TASK.MODIFY_SCORE,
-    //   data: {
-    //     gameId,
-    //     userId,
-    //     modifyHoleInfo,
-    //   },
-    // });
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.MODIFY_SCORE,
+      data: {
+        gameId,
+        userId,
+        modifyHoleInfo,
+      },
+    });
   };
 
   return (
