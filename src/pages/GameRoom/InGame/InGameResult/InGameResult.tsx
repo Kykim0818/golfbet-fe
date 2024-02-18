@@ -42,8 +42,9 @@ export const InGameResult = ({ type }: InGameResultProps) => {
       return;
     }
     if (type === "back") {
-      console.log("TODO: 게임 종료");
-      return;
+      moveBack();
+      setPreventBackFlag(false);
+      moveBack();
     }
   };
 
