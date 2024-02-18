@@ -93,12 +93,7 @@ const modalChildrenSelector = (
         />
       );
     case "IN_GAME_RESULT":
-      return (
-        <InGameResult
-          players={modalParam.args.players}
-          type={modalParam.args.type}
-        />
-      );
+      return <InGameResult type={modalParam.args.type} />;
     // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
@@ -117,6 +112,7 @@ const modalChildrenSelector = (
           gameRoomInfo={modalParam.args.gameRoomInfo}
           playerScores={modalParam.args.playerScores}
           nearLong={modalParam.args.nearLong}
+          modifyTargetHole={modalParam.args.modifyTargetHole}
           handleModalResult={modalParam.handleClose}
         />
       );

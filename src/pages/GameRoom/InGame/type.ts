@@ -1,6 +1,8 @@
 // 진행중인 게임 정보
 export type InGameInfo = {
   holeInfos: HoleInfo[];
+  // 기본 값 '' , 확정 단계에 들어간 유저 id로 value 값 둘 예정
+  canInputScore: string;
 };
 
 type HoleInfo = {

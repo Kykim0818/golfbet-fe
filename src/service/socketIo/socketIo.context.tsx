@@ -47,6 +47,7 @@ interface Context {
   exitRoom: (gameId: string, userId: string) => void;
   onReady: (gameId: string, userId: string, readyState: boolean) => void;
   startGame: (gameId: string, userId: string) => void;
+  startBackNine: (gameId: string) => void;
   enterScore: (
     gameId: string,
     holeIdx: number,
@@ -57,7 +58,12 @@ interface Context {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
-  setCanEnterScore: (gameId: string, state: boolean) => void;
+  modifyScore: (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => void;
+  setCanEnterScore: (gameId: string, value: string) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -70,8 +76,10 @@ const SocketContext = createContext<Context>({
   exitRoom: () => {},
   onReady: () => {},
   startGame: () => {},
+  startBackNine: () => {},
   enterScore: () => {},
   finalizeScore: () => {},
+  modifyScore: () => {},
   setCanEnterScore: () => {},
 });
 
@@ -81,14 +89,6 @@ function SocketsProvider(props: any) {
   const dispatch = useAppDispatch();
   const { openModal } = useModal();
   const { goHome } = usePageRoute();
-
-  //
-  useEffect(() => {
-    // TODO: 이거 안하면 계속 쌓임 리스너가 확인필요
-    return () => {
-      socket.removeAllListeners();
-    };
-  }, []);
 
   useEffect(() => {
     // 기본 설정
@@ -131,6 +131,9 @@ function SocketsProvider(props: any) {
         }
       }
     );
+    return () => {
+      socket.removeAllListeners();
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -221,6 +224,16 @@ function SocketsProvider(props: any) {
     });
   };
 
+  const startBackNine = (gameId: string) => {
+    console.log(`socket startBackNine Game gameId : ${gameId}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.BACK_NINE_START,
+      data: {
+        gameId,
+      },
+    });
+  };
+
   const enterScore = (
     gameId: string,
     holeIdx: number,
@@ -259,17 +272,16 @@ function SocketsProvider(props: any) {
     }
   };
 
-  const setCanEnterScore = (gameId: string, status: boolean) => {
-    console.log(`setCanEnterScore gameId : ${gameId}, state : ${status}`);
-
+  const setCanEnterScore = useCallback((gameId: string, value: string) => {
+    console.log(`setCanEnterScore gameId : ${gameId}, value : ${value}`);
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
       taskName: TASK.SET_CAN_ENTER_SCORE,
       data: {
         gameId,
-        state: status,
+        value,
       },
     });
-  };
+  }, []);
 
   const finalizeScore = (
     gameId: string,
@@ -280,7 +292,7 @@ function SocketsProvider(props: any) {
       `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
     );
     socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
-      taskName: TASK.FIX_SCORE,
+      taskName: TASK.FINALIZE_SCORE,
       data: {
         gameId,
         userId,
@@ -289,15 +301,26 @@ function SocketsProvider(props: any) {
     });
   };
 
-  // useEffect(() => {
-  //   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
-  //     if (!document.hasFocus()) {
-  //       document.title = "New message...";
-  //     }
-
-  //     setMessages((messages) => [...messages, { message, username, time }]);
-  //   });
-  // }, [socket]);
+  const modifyScore = (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => {
+    console.log(
+      `modifyScore gameId : ${gameId} \n 유저Id : ${userId} \n 수정 홀정보: ${JSON.stringify(
+        modifyHoleInfo
+      )}`
+    );
+    // TODO : 백엔드 완료시 해제
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.MODIFY_SCORE,
+      data: {
+        gameId,
+        userId,
+        modifyHoleInfo,
+      },
+    });
+  };
 
   return (
     <SocketContext.Provider
@@ -311,8 +334,10 @@ function SocketsProvider(props: any) {
         exitRoom,
         onReady,
         startGame,
+        startBackNine,
         enterScore,
         finalizeScore,
+        modifyScore,
         setCanEnterScore,
       }}
       {...props}

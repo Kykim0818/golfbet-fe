@@ -1,11 +1,13 @@
 import styled, { css } from "styled-components";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TitleAsset from "../../../components/TitleAsset";
 import { useAppSelector } from "../../../hooks/redux";
 import { useModal } from "../../../hooks/useModal";
 import { usePageRoute } from "../../../hooks/usePageRoute";
 import { usePreventLeave } from "../../../hooks/usePreventLeave";
+import { useStrictModeEffectOnce } from "../../../hooks/useStrictModeEffectOnce";
+import { useSockets } from "../../../service/socketIo/socketIo.context";
 import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
 import {
@@ -15,6 +17,7 @@ import {
 } from "../../../utils/display";
 import { GameRoomInfo, GameRoomUser } from "../GameRoom";
 import { EnterScoreResult } from "./EnterHoleScore/EnterHoleScore";
+import { ModifyEnterScoreResult } from "./EnterHoleScore/ModifyEnterHoleScore";
 import LeaderBoardTab from "./LeaderBoardTab";
 import ProgressTab from "./ProgressTab";
 import { InGameInfo } from "./type";
@@ -31,7 +34,7 @@ const TABS = [
   } as const,
 ];
 type TabValue = (typeof TABS)[number]["value"];
-
+const BACK_NINE_START_HOLE = 10;
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
   exitRoom: () => void;
@@ -45,6 +48,11 @@ export type InGameProps = {
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number]
   ) => void;
+  modifyScore: (
+    gameId: string,
+    userId: string,
+    modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
+  ) => void;
   // onReady: (gameId: string, userId: string, readyState: boolean) => void;
 };
 
@@ -53,10 +61,12 @@ export const InGame = ({
   exitRoom,
   enterScore,
   finalizeScore,
+  modifyScore,
 }: InGameProps) => {
   // # bottom sheet
   const { openModal } = useModal();
   const { moveBack } = usePageRoute();
+  const { setCanEnterScore } = useSockets();
   const modalStatus = useAppSelector((state) => state.modal.status);
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const [preventFlag, setPreventFlag] = useState(true);
@@ -73,7 +83,7 @@ export const InGame = ({
     },
     handleClickOk: exitRoom,
   });
-  const { gameInfo, players } = gameRoomInfo;
+  const { gameInfo, players, inGameInfo } = gameRoomInfo;
   const {
     gameId,
     gameType: centerType,
@@ -82,14 +92,40 @@ export const InGame = ({
     betAmountPerStroke,
     bettingLimit,
     currentHole,
+    isBackNineStart,
     gameRule: { ddang },
   } = gameInfo;
+  const { canInputScore } = inGameInfo;
+  const isCanInputScore =
+    canInputScore === "" || canInputScore === userInfo.userId;
 
   // 전후반 결정 요소
   const isFrontNine = currentHole <= 9;
   const currentPar = isFrontNine
     ? centerInfo.frontNineCourse.pars[currentHole - 1]
     : centerInfo.backNineCourse.pars[currentHole - 1];
+
+  // 목적 : 진행화면에 입장 했을 경우에, 비정상 시나리오로 점수 입력에 제한이 걸려있을 때 풀어주기 위함
+  // dependency에서 canInputScore를 넣지 않은 이유 : 입장했을 초기에만 처리하기 위함
+  useEffect(() => {
+    if (gameId === undefined) return;
+    if (userInfo.userId === undefined) return;
+    if (canInputScore === "") return;
+    if (canInputScore === userInfo.userId) {
+      setCanEnterScore(gameId ?? "", "");
+    }
+  }, [setCanEnterScore, gameId, userInfo.userId]);
+
+  useStrictModeEffectOnce(() => {
+    if (currentHole === BACK_NINE_START_HOLE && isBackNineStart === false) {
+      openModal({
+        id: "IN_GAME_RESULT",
+        args: {
+          type: "front",
+        },
+      });
+    }
+  }, [openModal, currentHole, isBackNineStart, players]);
 
   const handleOpenEnterScore = async () => {
     const res = await openModal<EnterScoreResult>({
@@ -122,11 +158,15 @@ export const InGame = ({
               lastPlayers: lastRankPlayers,
             },
           });
-          if (isDdangDeclare === false) return;
+          if (isDdangDeclare === false) {
+            setCanEnterScore(gameId, "");
+            return;
+          }
           res.holeInfo.ddang = isDdangDeclare === "yes" ? true : false;
         }
         // 점수 확정
         finalizeScore(gameId, userInfo.userId, res.holeInfo);
+        setCanEnterScore(gameId, "");
       }
     }
     if (res.isAllEnter === false) {
@@ -135,6 +175,20 @@ export const InGame = ({
     }
   };
 
+  const handleOpenModifyEnterScore = async (modifyTargetHole: number) => {
+    const res = await openModal<ModifyEnterScoreResult>({
+      id: "MODIFY_ENTER_HOLE_SCORE",
+      args: {
+        modifyTargetHole,
+      },
+    });
+    if (gameId === undefined) {
+      console.log("gameId is undefined");
+      return;
+    }
+    modifyScore(gameId, userInfo.userId, res.holeInfo);
+    setCanEnterScore(gameId, "");
+  };
   return (
     <PageStyle.Wrapper>
       <TitleAsset
@@ -210,6 +264,8 @@ export const InGame = ({
                 currentHole={currentHole}
                 players={players}
                 handleOpenEnterScore={handleOpenEnterScore}
+                handleOpenModifyEnterScore={handleOpenModifyEnterScore}
+                isCanInputScore={isCanInputScore}
               />
             ) : (
               <LeaderBoardTab
