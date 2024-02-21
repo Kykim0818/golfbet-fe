@@ -1,8 +1,10 @@
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
 import { typo } from "../../../../styles/typo";
+import { deepClone } from "../../../../utils/deepClone";
 import {
   getDisplayDoubleText,
   getDisplayHole,
@@ -36,6 +38,7 @@ export type FinalizeHoleScoreResult = {
   result: boolean;
   doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
+  chargeOrSurrender: Record<string, "charge" | "surrender">;
 };
 
 export const FinalizeHoleScore = ({
@@ -50,6 +53,7 @@ export const FinalizeHoleScore = ({
   const { gameInfo, players, inGameInfo } = gameRoomInfo;
   const {
     betAmountPerStroke,
+    bettingLimit,
     currentHole,
     golfCenter: {
       frontNineCourse: { pars: frontNineCoursePar },
@@ -57,6 +61,11 @@ export const FinalizeHoleScore = ({
     },
     gameRule: { ddang, specialBetRequirements },
   } = gameInfo;
+  const { holeInfos } = inGameInfo;
+  // 게임 포기했을 경우 포기 확정의 경우는 마지막에 단계를 지나야 이뤄지기 때문에
+  // UI상에서 포기정보를 보여주기 위해 필요함
+  const [uiPlayers, setUiPlayers] = useState(deepClone(players));
+  const chargeOrSurrender = useRef<Record<string, "charge" | "surrender">>({});
   const targetHole = modifyTargetHole ?? currentHole;
   const targetPar = getCurrentPar(
     targetHole,
@@ -87,6 +96,25 @@ export const FinalizeHoleScore = ({
       gameInfo
     );
   }
+  // 금액 부족한 유저 찾기
+  const previousPlayersMoneyInfo = holeInfos[currentHole - 2]?.players ?? {};
+  const inSufficientBalanceUsers = Object.entries(playersMoneyChange).filter(
+    ([userId, changeMoney]) => {
+      const previousMoney =
+        previousPlayersMoneyInfo[userId]?.previousMoney ?? bettingLimit;
+
+      if (previousMoney + changeMoney < 0) return true;
+      return false;
+    }
+  );
+
+  useEffect(() => {
+    // 수정 홀이 아니면 변화량에 잔액이 부족한지 확인해야함
+    if (modifyTargetHole) return;
+    if (inSufficientBalanceUsers.length <= 0) return;
+    // openModal 하고 결과에 따라 chargeOrSurrender 값 반영
+    console.log("잔액 부족 발생");
+  }, [modifyTargetHole, inSufficientBalanceUsers.length]);
 
   const handleEnterScore = async () => {
     handleModalResult?.({
@@ -94,6 +122,7 @@ export const FinalizeHoleScore = ({
       playersMoneyChange,
       result: true,
       // ddang: isDdangDeclare,
+      chargeOrSurrender: chargeOrSurrender.current,
     });
   };
 
@@ -115,7 +144,7 @@ export const FinalizeHoleScore = ({
           {getDisplayDoubleText(doubleConditions, targetPar, players.length)}
         </S.HoleBetInfo>
         <S.Players>
-          {gameRoomInfo.players.map((player) => {
+          {uiPlayers.map((player) => {
             return (
               <PlayerRow
                 key={player.userId}
