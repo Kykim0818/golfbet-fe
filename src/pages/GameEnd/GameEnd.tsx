@@ -5,7 +5,9 @@ import GameInfoSection from "../../components/domain/GameInfoSection";
 import RankBoard from "../../components/domain/RankBoard";
 import ScoreBoard from "../../components/domain/ScoreBoard";
 import { useAppSelector } from "../../hooks/redux";
+import { useModal } from "../../hooks/useModal";
 import { usePageRoute } from "../../hooks/usePageRoute";
+import { useStrictModeEffectOnce } from "../../hooks/useStrictModeEffectOnce";
 import { PageStyle } from "../../styles/page";
 import { typo } from "../../styles/typo";
 import { getDisplayMoney } from "../../utils/display";
@@ -18,6 +20,7 @@ type GameEndProps = {
 
 export const GameEnd = ({ gameRoomInfo }: GameEndProps) => {
   const { goHome } = usePageRoute();
+  const { openModal } = useModal();
   const players = gameRoomInfo.players;
   const userInfo = useAppSelector((state) => state.users.userInfo);
   const userId = userInfo.userId;
@@ -26,6 +29,17 @@ export const GameEnd = ({ gameRoomInfo }: GameEndProps) => {
   const me = players[rank - 1];
   // 본인 점수 픽
   const scores = divideFrontAndBackScores(me.holeScores);
+
+  // 게임 종료
+  useStrictModeEffectOnce(() => {
+    openModal({
+      id: "IN_GAME_RESULT",
+      args: {
+        type: "back",
+      },
+    });
+  }, [openModal]);
+
   return (
     <PageStyle.Wrapper>
       <TitleAsset title="게임종료" />
