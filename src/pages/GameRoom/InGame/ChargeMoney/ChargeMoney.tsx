@@ -1,34 +1,72 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import { typo } from "../../../../styles/typo";
+import { deepClone } from "../../../../utils/deepClone";
 import { GameRoomUser } from "../../GameRoom";
+import { PlayerOption } from "./PlayerOption";
 
-type ChargeMoneyProps = {
-  handleModalResult?: (result: any) => void;
+export type ChargeMoneyProps = {
+  handleModalResult?: (result: TPlayersSelect) => void;
   chargeRequiredPlayers: GameRoomUser[];
   chargeMoney: number;
 };
 
+type TPlayersSelect = Record<string, "charge" | "surrender">;
+
 export const ChargeMoney = ({
   chargeRequiredPlayers,
   chargeMoney,
+  handleModalResult,
 }: ChargeMoneyProps) => {
+  const [playersSelect, setPlayersSelect] = useState<TPlayersSelect>(() => {
+    const playersDefaultSelect: TPlayersSelect = {};
+    chargeRequiredPlayers.forEach((player) => {
+      playersDefaultSelect[player.userId] = "charge";
+    });
+    return playersDefaultSelect;
+  });
+
   const chargePlayerNickNames = chargeRequiredPlayers.map(
     (player) => `${player.nickName}님`
   );
+
+  const handleSelectUserOption = (value: string, userId: string) => {
+    if (value === "surrender" || value === "charge") {
+      const currentSelect = deepClone(playersSelect);
+      currentSelect[userId] = value;
+      setPlayersSelect(currentSelect);
+    }
+    return;
+  };
+
+  const handleConfirm = () => {
+    handleModalResult?.(playersSelect);
+  };
 
   return (
     <S.Wrapper>
       <S.Header>게임 준비금 증액하기</S.Header>
       <S.Main>
         <S.Title>충전금액: {chargeMoney}원</S.Title>
-        <S.SubTitle>{`${chargePlayerNickNames.join(
-          ","
-        )}이 준비금을 모두 소진했어요.\n
-        게임 금액 증액 시,게임을 계속 할 수 있습니다.`}</S.SubTitle>
+        <S.SubTitle>
+          {`${chargePlayerNickNames.join(",")}이 준비금을 모두 소진했어요.\n
+        게임 금액 증액 시,게임을 계속 할 수 있습니다.`}
+        </S.SubTitle>
+        <S.PlayerSection>
+          {chargeRequiredPlayers.map((player) => (
+            <PlayerOption
+              key={player.userId}
+              imgSrc={player.imgSrc}
+              nickName={player.nickName}
+              value={playersSelect[player.userId]}
+              onChange={(value) => handleSelectUserOption(value, player.userId)}
+            />
+          ))}
+        </S.PlayerSection>
       </S.Main>
       <S.Footer>
-        <S.ModalBtn>확인</S.ModalBtn>
+        <S.ModalBtn onClick={handleConfirm}>확인</S.ModalBtn>
       </S.Footer>
     </S.Wrapper>
   );
@@ -66,6 +104,11 @@ const S = {
   SubTitle: styled.p`
     color: #5f6368;
     ${typo.s12w500}
+  `,
+
+  PlayerSection: styled.section`
+    display: flex;
+    flex-direction: column;
   `,
   ContentImgSection: styled.div`
     display: flex;

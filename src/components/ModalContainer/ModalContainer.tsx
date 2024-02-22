@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { history } from "../..";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import ChargeMoney from "../../pages/GameRoom/InGame/ChargeMoney";
 import DeclareDdang from "../../pages/GameRoom/InGame/DeclareDdang";
 import { EnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/EnterHoleScore";
 import { ModifyEnterHoleScore } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
@@ -94,6 +95,14 @@ const modalChildrenSelector = (
       );
     case "IN_GAME_RESULT":
       return <InGameResult type={modalParam.args.type} />;
+
+    case "CHARGE_MONEY":
+      return (
+        <ChargeMoney
+          chargeMoney={modalParam.args.chargeMoney}
+          chargeRequiredPlayers={modalParam.args.chargeRequiredPlayers}
+        />
+      );
     // modal bottom sheet
     case "REGION_SELECT":
       return <div>Hello</div>;
