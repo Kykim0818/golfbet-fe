@@ -27,6 +27,8 @@ export type EnterScoreResult = {
   /** type PlayerScores = Record<string, number>; */
   playerScores: PlayerScores;
   holeInfo?: InGameInfo["holeInfos"][number];
+  // 기권자들
+  surrenders: string[];
 };
 type PlayerScores = Record<string, number>;
 
@@ -192,9 +194,12 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
             moneyChange: res.playersMoneyChange[userId] ?? 0,
             previousMoney,
             remainingMoney:
-              previousMoney + (res.playersMoneyChange[userId] ?? 0),
+              previousMoney +
+              (res.playersMoneyChange[userId] ?? 0) +
+              res.plusMoney,
           };
         });
+
         handleModalResult?.({
           isAllEnter: true,
           playerScores,
@@ -205,6 +210,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
             hole: currentHole,
             par: currentPar,
           },
+          surrenders: res.surrenders,
         });
       } else {
         setCanEnterScore(gameId, "");
@@ -216,6 +222,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
       handleModalResult?.({
         isAllEnter: false,
         playerScores,
+        surrenders: [],
       });
     }
   };
