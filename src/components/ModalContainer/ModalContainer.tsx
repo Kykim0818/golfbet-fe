@@ -101,6 +101,7 @@ const modalChildrenSelector = (
         <ChargeMoney
           chargeMoney={modalParam.args.chargeMoney}
           chargeRequiredPlayers={modalParam.args.chargeRequiredPlayers}
+          handleModalResult={modalParam.handleClose}
         />
       );
     // modal bottom sheet

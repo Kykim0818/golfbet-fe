@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
+import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { usePreventBackInModal } from "../../../../hooks/usePreventBackInModal";
 import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
 import { GameRoomUser } from "../../GameRoom";
@@ -12,13 +14,14 @@ export type ChargeMoneyProps = {
   chargeMoney: number;
 };
 
-type TPlayersSelect = Record<string, "charge" | "surrender">;
+export type TPlayersSelect = Record<string, "charge" | "surrender">;
 
 export const ChargeMoney = ({
   chargeRequiredPlayers,
   chargeMoney,
   handleModalResult,
 }: ChargeMoneyProps) => {
+  const { moveBack } = usePageRoute();
   const [playersSelect, setPlayersSelect] = useState<TPlayersSelect>(() => {
     const playersDefaultSelect: TPlayersSelect = {};
     chargeRequiredPlayers.forEach((player) => {
@@ -26,6 +29,8 @@ export const ChargeMoney = ({
     });
     return playersDefaultSelect;
   });
+  const [preventBackFlag, setPreventBackFlag] = useState(true);
+  usePreventBackInModal({ confirmTriggerFlag: preventBackFlag });
 
   const chargePlayerNickNames = chargeRequiredPlayers.map(
     (player) => `${player.nickName}님`
@@ -41,6 +46,8 @@ export const ChargeMoney = ({
   };
 
   const handleConfirm = () => {
+    moveBack();
+    setPreventBackFlag(false);
     handleModalResult?.(playersSelect);
   };
 
@@ -50,8 +57,9 @@ export const ChargeMoney = ({
       <S.Main>
         <S.Title>충전금액: {chargeMoney}원</S.Title>
         <S.SubTitle>
-          {`${chargePlayerNickNames.join(",")}이 준비금을 모두 소진했어요.\n
-        게임 금액 증액 시,게임을 계속 할 수 있습니다.`}
+          {`${chargePlayerNickNames.join(
+            ","
+          )}이 준비금을 모두 소진했어요.\n금액을 증액할까요?`}
         </S.SubTitle>
         <S.PlayerSection>
           {chargeRequiredPlayers.map((player) => (
@@ -65,6 +73,7 @@ export const ChargeMoney = ({
           ))}
         </S.PlayerSection>
       </S.Main>
+      <S.Seperator />
       <S.Footer>
         <S.ModalBtn onClick={handleConfirm}>확인</S.ModalBtn>
       </S.Footer>
@@ -79,8 +88,10 @@ const S = {
     border-radius: 15px;
     background-color: white;
     min-width: 280px;
+    padding-top: 20px;
   `,
   Header: styled.header`
+    text-align: center;
     color: var(--color-grey-900, #202124);
     ${typo.s16w500}
   `,
@@ -90,9 +101,7 @@ const S = {
     justify-content: center;
     align-items: center;
     gap: 14px;
-
-    padding-top: 20px;
-    padding-bottom: 10px;
+    padding: 20px;
   `,
   Title: styled.span`
     color: var(--color-main, #009eb2);
@@ -104,31 +113,19 @@ const S = {
   SubTitle: styled.p`
     color: #5f6368;
     ${typo.s12w500}
+    text-align: center;
+    white-space: pre-wrap;
   `,
 
   PlayerSection: styled.section`
     display: flex;
+    width: 100%;
     flex-direction: column;
   `,
-  ContentImgSection: styled.div`
-    display: flex;
-    gap: 4px;
-    img {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-    }
-  `,
-  ContentTxt: styled.div`
-    text-align: center;
-    color: var(--color-grey-700, #5f6368);
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px; /* 200% */
-    max-width: 288px;
-    padding: 0px 24px;
-    white-space: pre;
+
+  Seperator: styled.div`
+    height: 1px;
+    background-color: var(--color-grey-200, "#E8EAED");
   `,
   ModalBtn: styled(Button)`
     padding: 4px 12px;
@@ -144,10 +141,7 @@ const S = {
       color: var(--color-gray-900, #202124);
     }
   `,
-  HorizontalSeperator: styled.hr`
-    height: 1px;
-    background-color: var(--color-grey-200, "#E8EAED");
-  `,
+
   Footer: styled.footer`
     display: flex;
     height: 42px;

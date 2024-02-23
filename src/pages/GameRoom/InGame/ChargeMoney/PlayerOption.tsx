@@ -26,11 +26,13 @@ export const PlayerOption = ({
         <S.Profile src={imgSrc} alt="avatar" />
         <S.NickName>{nickName}</S.NickName>
       </S.UserInfoSection>
-      <ToggleGroup
-        group={options}
-        selectedValues={[value]}
-        onChange={(value) => onChange(value[0])}
-      />
+      <S.GroupSection>
+        <ToggleGroup
+          group={options}
+          selectedValues={[value]}
+          onChange={(value) => onChange(value[0])}
+        />
+      </S.GroupSection>
     </S.Wrapper>
   );
 };
@@ -38,6 +40,7 @@ export const PlayerOption = ({
 const S = {
   Wrapper: styled.div`
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     gap: 5px;
   `,
@@ -54,7 +57,10 @@ const S = {
   UserInfoSection: styled.section`
     display: flex;
     gap: 14px;
-
     align-items: center;
+  `,
+  GroupSection: styled.section`
+    display: flex;
+    justify-content: center;
   `,
 };
