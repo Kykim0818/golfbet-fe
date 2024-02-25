@@ -105,26 +105,27 @@ export const FinalizeHoleScore = ({
       gameInfo
     );
   }
-  // 금액 부족한 유저 찾기
-  const previousPlayersMoneyInfo = holeInfos[currentHole - 2]?.players ?? {};
-  const inSufficientBalanceUsers: Record<string, number> = {};
-  let requiredRechargeAmount = 0;
-  Object.entries(playersMoneyChange).forEach(([userId, changeMoney]) => {
-    const previousMoney =
-      previousPlayersMoneyInfo[userId]?.previousMoney ?? bettingLimit;
-    if (previousMoney + changeMoney < 0) {
-      //
-      requiredRechargeAmount = Math.max(
-        requiredRechargeAmount,
-        Math.abs(previousMoney + changeMoney)
-      );
-      inSufficientBalanceUsers[userId] = changeMoney;
-    }
-  });
 
   useStrictModeEffectOnce(() => {
     // 수정 홀이 아니면 변화량에 잔액이 부족한지 확인해야함
     if (modifyTargetHole) return;
+
+    // 금액 부족한 유저 찾기
+    const previousPlayersMoneyInfo = holeInfos[currentHole - 2]?.players ?? {};
+    const inSufficientBalanceUsers: Record<string, number> = {};
+    let requiredRechargeAmount = 0;
+    Object.entries(playersMoneyChange).forEach(([userId, changeMoney]) => {
+      const previousMoney =
+        previousPlayersMoneyInfo[userId]?.remainingMoney ?? bettingLimit;
+      if (previousMoney + changeMoney < 0) {
+        //
+        requiredRechargeAmount = Math.max(
+          requiredRechargeAmount,
+          Math.abs(previousMoney + changeMoney)
+        );
+        inSufficientBalanceUsers[userId] = changeMoney;
+      }
+    });
     const inSufficientBalanceUserIds = Object.keys(inSufficientBalanceUsers);
     if (inSufficientBalanceUserIds.length <= 0) return;
     // openModal 하고 결과에 따라 chargeOrSurrender 값 반영
@@ -161,7 +162,7 @@ export const FinalizeHoleScore = ({
         );
       }
     });
-  }, [modifyTargetHole, inSufficientBalanceUsers.length]);
+  }, [modifyTargetHole]);
 
   const handleEnterScore = async () => {
     handleModalResult?.({
