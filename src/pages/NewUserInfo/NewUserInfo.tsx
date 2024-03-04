@@ -14,14 +14,22 @@ import { typo } from "../../styles/typo";
 import { Agreements } from "../TermsAndConditions/TermsAndConditions";
 
 type UserInputHelpUI = {
-  status: boolean;
+  formatStatus: boolean;
+  /** 중복 확인 여부 true : 가입 가능 , false : 가입 불가 */
+  duplicateStatus: boolean;
   text: string;
 };
 const INIT_HELP_TEXT = "";
-const INVALID_EMAIL = "이메일 주소가 유효하지 않습니다.";
+
+const INVALID_EMAIL_TEXT = "이메일 주소가 유효하지 않습니다.";
+const DUPLICATE_EMAIL_TEXT = "중복된 이메일 주소가 존재합니다.";
+const OK_EMAIL_TEXT = "등록 가능한 이메일입니다.";
+
 const INVALID_NICKNAME =
   "10자 이내의 한글,영문,숫자,밑줄 그리고 마침표만 사용가능합니다.";
-const INVALID_PHONE_NUMBER = "휴대폰번호가 유효하지 않습니다.";
+const DUPLICATE_NICKNAME_TEXT = "등록 가능한 닉네임입니다.";
+const OK_NICKNAME_TEXT = "등록 가능한 닉네임입니다.";
+// const INVALID_PHONE_NUMBER = "휴대폰번호가 유효하지 않습니다.";
 
 export const NewUserInfo = () => {
   const { moveBack, goHome } = usePageRoute();
@@ -35,17 +43,14 @@ export const NewUserInfo = () => {
   // TODO : 카카오에서 전해주는 정보가 있다면 해당 값으로 초기화
   const [userEmail, setUserEmail] = useState(tmpUserInfo.email ?? "");
   const [userEmailHelp, setUserEmailHelp] = useState<UserInputHelpUI>({
-    status: false,
+    formatStatus: false,
+    duplicateStatus: false,
     text: INIT_HELP_TEXT,
   });
   const [nickname, setNickname] = useState(tmpUserInfo?.nickname ?? "");
   const [nicknameHelp, setNicknameHelp] = useState<UserInputHelpUI>({
-    status: false,
-    text: INIT_HELP_TEXT,
-  });
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberHelp, setPhoneNumberHelp] = useState<UserInputHelpUI>({
-    status: false,
+    formatStatus: false,
+    duplicateStatus: false,
     text: INIT_HELP_TEXT,
   });
   const [gender, setGender] = useState(tmpUserInfo.gender ?? "male");
@@ -53,16 +58,21 @@ export const NewUserInfo = () => {
   // 초기 페이지 진입시 확인
   useEffect(() => {
     if (tmpUserInfo.email) {
+      const checkFormatEmail = validEmailCheck(tmpUserInfo.email);
+      if (checkFormatEmail === false) return;
+
       apiCheckDuplicate("email", tmpUserInfo.email).then((res) => {
         if (res?.duplicateYn === false) {
           setUserEmailHelp({
-            status: true,
-            text: "등록 가능한 이메일입니다.",
+            formatStatus: true,
+            duplicateStatus: true,
+            text: OK_EMAIL_TEXT,
           });
         } else {
           setUserEmailHelp({
-            status: false,
-            text: "중복된 이메일 주소가 존재합니다.",
+            formatStatus: true,
+            duplicateStatus: false,
+            text: DUPLICATE_EMAIL_TEXT,
           });
         }
       });
@@ -71,16 +81,21 @@ export const NewUserInfo = () => {
 
   useEffect(() => {
     if (tmpUserInfo.nickname) {
+      const checkFormatNickname = validNicknameCheck(tmpUserInfo.nickname);
+      if (checkFormatNickname === false) return;
+
       apiCheckDuplicate("nickname", tmpUserInfo.nickname).then((res) => {
         if (res?.duplicateYn === false) {
           setNicknameHelp({
-            status: true,
-            text: "등록 가능한 닉네임입니다.",
+            formatStatus: true,
+            duplicateStatus: true,
+            text: OK_NICKNAME_TEXT,
           });
         } else {
           setUserEmailHelp({
-            status: false,
-            text: "중복된 닉네임이 존재합니다.",
+            formatStatus: true,
+            duplicateStatus: false,
+            text: DUPLICATE_NICKNAME_TEXT,
           });
         }
       });
@@ -88,15 +103,17 @@ export const NewUserInfo = () => {
   }, [tmpUserInfo.nickname]);
 
   const handleSetUserEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserEmailHelp({
-      status: true,
-      text: INIT_HELP_TEXT,
-    });
-    // TODO 유효성검사
     if (validEmailCheck(e.target.value) === false) {
       setUserEmailHelp({
-        status: false,
-        text: INVALID_EMAIL,
+        formatStatus: false,
+        duplicateStatus: false,
+        text: INVALID_EMAIL_TEXT,
+      });
+    } else {
+      setUserEmailHelp({
+        formatStatus: true,
+        duplicateStatus: false,
+        text: INIT_HELP_TEXT,
       });
     }
     setUserEmail(e.target.value);
@@ -108,12 +125,14 @@ export const NewUserInfo = () => {
         console.log(res);
         if (res?.duplicateYn === false) {
           setUserEmailHelp({
-            status: true,
+            formatStatus: true,
+            duplicateStatus: true,
             text: "등록 가능한 이메일입니다.",
           });
         } else {
           setUserEmailHelp({
-            status: false,
+            formatStatus: true,
+            duplicateStatus: false,
             text: "중복된 이메일 주소가 존재합니다.",
           });
         }
@@ -121,15 +140,18 @@ export const NewUserInfo = () => {
     }
   };
   const handleSetNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNicknameHelp({
-      status: true,
-      text: INIT_HELP_TEXT,
-    });
     // TODO 유효성검사
     if (validNicknameCheck(e.target.value) === false) {
       setNicknameHelp({
-        status: false,
+        formatStatus: false,
+        duplicateStatus: false,
         text: INVALID_NICKNAME,
+      });
+    } else {
+      setNicknameHelp({
+        formatStatus: true,
+        duplicateStatus: false,
+        text: INIT_HELP_TEXT,
       });
     }
     setNickname(e.target.value);
@@ -141,32 +163,19 @@ export const NewUserInfo = () => {
       apiCheckDuplicate("nickname", nickname).then((res) => {
         if (res?.duplicateYn === false) {
           setNicknameHelp({
-            status: true,
+            formatStatus: true,
+            duplicateStatus: true,
             text: "등록 가능한 닉네임입니다.",
           });
         } else {
           setNicknameHelp({
-            status: false,
+            formatStatus: true,
+            duplicateStatus: false,
             text: "중복된 닉네임이 존재합니다.",
           });
         }
       });
     }
-  };
-
-  const handleSetPhoneNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumberHelp({
-      status: false,
-      text: INIT_HELP_TEXT,
-    });
-    // TODO 유효성검사
-    if (validPhoneNumberCheck(e.target.value) === false) {
-      setPhoneNumberHelp({
-        status: false,
-        text: INVALID_PHONE_NUMBER,
-      });
-    }
-    setPhoneNumber(e.target.value);
   };
 
   const handleRequestJoin = async () => {
@@ -177,7 +186,7 @@ export const NewUserInfo = () => {
       profile: tmpUserInfo.profile,
       nickname: nickname,
       gender: gender,
-      phoneNumber: phoneNumber,
+      phoneNumber: "none",
       termsOfServiceAgreement: state.serviceAvailable,
       privacyUsageAgreement: state.personalInfo,
       marketingConsent: state.marketingOption,
@@ -210,7 +219,9 @@ export const NewUserInfo = () => {
               onBlur={handleFocusOutEmail}
             />
             <S.InputHelpText
-              valid={userEmailHelp.status}
+              valid={
+                userEmailHelp.formatStatus && userEmailHelp.duplicateStatus
+              }
               text={userEmailHelp.text}
             >
               {userEmailHelp.text}
@@ -226,25 +237,10 @@ export const NewUserInfo = () => {
               onBlur={handleFocusOutNickname}
             />
             <S.InputHelpText
-              valid={nicknameHelp.status}
+              valid={nicknameHelp.formatStatus && nicknameHelp.duplicateStatus}
               text={nicknameHelp.text}
             >
               {nicknameHelp.text}
-            </S.InputHelpText>
-          </S.InputWrapper>
-          <S.InputWrapper>
-            <S.InputTitle>휴대폰 번호(010-0000-0000)</S.InputTitle>
-            <StyledInput
-              placeholder="휴대폰 번호를 입력해주세요"
-              type="text"
-              value={phoneNumber}
-              onChange={handleSetPhoneNumber}
-            />
-            <S.InputHelpText
-              valid={phoneNumberHelp.status}
-              text={phoneNumberHelp.text}
-            >
-              {phoneNumberHelp.text}
             </S.InputHelpText>
           </S.InputWrapper>
           <S.ToggleWrapper>
@@ -260,15 +256,15 @@ export const NewUserInfo = () => {
           </S.ToggleWrapper>
         </S.InfoSection>
       </S.Body>
-      <S.Body></S.Body>
       <PageStyle.Footer>
         <Button
           onClick={handleRequestJoin}
           disabled={
-            !!(
-              userEmailHelp.status &&
-              nicknameHelp.status &&
-              phoneNumber !== ""
+            !(
+              userEmailHelp.formatStatus &&
+              userEmailHelp.duplicateStatus &&
+              nicknameHelp.formatStatus &&
+              nicknameHelp.duplicateStatus
             )
           }
         >
@@ -287,10 +283,6 @@ function validEmailCheck(value: string) {
 function validNicknameCheck(value: string) {
   const pattern = /^[a-zA-Z0-9_\.\ㄱ-ㅎㅏ-ㅣ가-힣]{1,10}$/;
   return value.match(pattern) != null;
-}
-function validPhoneNumberCheck(value: string) {
-  const pattern = /^(010|011|016|017|018|019)-[0-9]{3,4}-[0-9]{4}$/;
-  return value.match(pattern) !== null;
 }
 
 const S = {
