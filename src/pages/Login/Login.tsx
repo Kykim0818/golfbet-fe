@@ -20,8 +20,9 @@ export const Login = (props: {}) => {
   //
   const handleTestLogin = () => {
     // TODO: Login 검증 request 필요
-    axios.defaults.headers.common["Authorization"] = "TEST";
-    setCookie("refreshToken", "TEST");
+    const randomTestCode = `TEST${Math.floor(Math.random() * 100)}`;
+    axios.defaults.headers.common["Authorization"] = randomTestCode;
+    setCookie("refreshToken", randomTestCode);
     movePage("/", { replace: true });
   };
 
