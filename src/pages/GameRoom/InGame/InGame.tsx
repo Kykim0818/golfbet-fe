@@ -10,6 +10,7 @@ import { useStrictModeEffectOnce } from "../../../hooks/useStrictModeEffectOnce"
 import { useSockets } from "../../../service/socketIo/socketIo.context";
 import { PageStyle } from "../../../styles/page";
 import { typo } from "../../../styles/typo";
+import { deepClone } from "../../../utils/deepClone";
 import {
   getDisplayBetTypeIconText,
   getDisplayBetTypeText,
@@ -46,7 +47,8 @@ export type InGameProps = {
   finalizeScore: (
     gameId: string,
     userId: string,
-    holeInfo: InGameInfo["holeInfos"][number]
+    holeInfo: InGameInfo["holeInfos"][number],
+    surrenders: string[]
   ) => void;
   modifyScore: (
     gameId: string,
@@ -142,9 +144,16 @@ export const InGame = ({
         let isDdangDeclare: false | "yes" | "no" = "no";
         const [ddangRuleValue] = ddang;
         if (ddangRuleValue === "onlyLastPlace") {
+          // 기권 처리자는 땅 처리에서 제외
+          const playerScoresExceptSurrender: EnterScoreResult["playerScores"] =
+            deepClone(res.playerScores);
+          res.surrenders.forEach((surrender) => {
+            delete playerScoresExceptSurrender[surrender];
+          });
+
           // 꼴등 식별
           const lastRankPlayers: GameRoomUser[] = [];
-          findLastRankPlayer(res.playerScores).forEach((userId) => {
+          findLastRankPlayer(playerScoresExceptSurrender).forEach((userId) => {
             players.forEach((player) => {
               if (player.userId === userId) {
                 lastRankPlayers.push(player);
@@ -165,7 +174,7 @@ export const InGame = ({
           res.holeInfo.ddang = isDdangDeclare === "yes" ? true : false;
         }
         // 점수 확정
-        finalizeScore(gameId, userInfo.userId, res.holeInfo);
+        finalizeScore(gameId, userInfo.userId, res.holeInfo, res.surrenders);
         setCanEnterScore(gameId, "");
       }
     }

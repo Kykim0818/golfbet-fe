@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import { useModal } from "../../../../hooks/useModal";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
+import { useStrictModeEffectOnce } from "../../../../hooks/useStrictModeEffectOnce";
 import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
 import {
@@ -16,6 +17,7 @@ import {
   checkDoubleCondition,
 } from "../../../../utils/score";
 import { GameRoomInfo } from "../../GameRoom";
+import { TPlayersSelect } from "../ChargeMoney/ChargeMoney";
 import { EnterScoreResult } from "../EnterHoleScore/EnterHoleScore";
 import { isApplyDdang } from "../util";
 import { PlayerRow } from "./PlayerRow";
@@ -38,7 +40,10 @@ export type FinalizeHoleScoreResult = {
   result: boolean;
   doubleConditions: string[];
   playersMoneyChange: Record<string, number>;
-  chargeOrSurrender: Record<string, "charge" | "surrender">;
+  // 기권자
+  surrenders: string[];
+  // 보유금 증액시 금액
+  plusMoney: number;
 };
 
 export const FinalizeHoleScore = ({
@@ -65,7 +70,11 @@ export const FinalizeHoleScore = ({
   // 게임 포기했을 경우 포기 확정의 경우는 마지막에 단계를 지나야 이뤄지기 때문에
   // UI상에서 포기정보를 보여주기 위해 필요함
   const [uiPlayers, setUiPlayers] = useState(deepClone(players));
-  const chargeOrSurrender = useRef<Record<string, "charge" | "surrender">>({});
+  const surrenders = useRef<string[]>([]);
+
+  // 결과에 따라 보유금액이 증가하는 경우 해당 금액
+  const plusMoney = useRef(0);
+
   const targetHole = modifyTargetHole ?? currentHole;
   const targetPar = getCurrentPar(
     targetHole,
@@ -96,33 +105,72 @@ export const FinalizeHoleScore = ({
       gameInfo
     );
   }
-  // 금액 부족한 유저 찾기
-  const previousPlayersMoneyInfo = holeInfos[currentHole - 2]?.players ?? {};
-  const inSufficientBalanceUsers = Object.entries(playersMoneyChange).filter(
-    ([userId, changeMoney]) => {
-      const previousMoney =
-        previousPlayersMoneyInfo[userId]?.previousMoney ?? bettingLimit;
 
-      if (previousMoney + changeMoney < 0) return true;
-      return false;
-    }
-  );
-
-  useEffect(() => {
+  useStrictModeEffectOnce(() => {
     // 수정 홀이 아니면 변화량에 잔액이 부족한지 확인해야함
     if (modifyTargetHole) return;
-    if (inSufficientBalanceUsers.length <= 0) return;
+
+    // 금액 부족한 유저 찾기
+    const previousPlayersMoneyInfo = holeInfos[currentHole - 2]?.players ?? {};
+    const inSufficientBalanceUsers: Record<string, number> = {};
+    let requiredRechargeAmount = 0;
+    Object.entries(playersMoneyChange).forEach(([userId, changeMoney]) => {
+      const previousMoney =
+        previousPlayersMoneyInfo[userId]?.remainingMoney ?? bettingLimit;
+      if (previousMoney + changeMoney < 0) {
+        //
+        requiredRechargeAmount = Math.max(
+          requiredRechargeAmount,
+          Math.abs(previousMoney + changeMoney)
+        );
+        inSufficientBalanceUsers[userId] = changeMoney;
+      }
+    });
+    const inSufficientBalanceUserIds = Object.keys(inSufficientBalanceUsers);
+    if (inSufficientBalanceUserIds.length <= 0) return;
     // openModal 하고 결과에 따라 chargeOrSurrender 값 반영
-    console.log("잔액 부족 발생");
-  }, [modifyTargetHole, inSufficientBalanceUsers.length]);
+
+    // 충전해야하는 금액 계산
+    let chargeMoney =
+      bettingLimit >= requiredRechargeAmount
+        ? bettingLimit
+        : requiredRechargeAmount;
+
+    openModal<TPlayersSelect>({
+      id: "CHARGE_MONEY",
+      args: {
+        chargeMoney,
+        chargeRequiredPlayers: players.filter((player) =>
+          inSufficientBalanceUserIds.includes(player.userId)
+        ),
+      },
+    }).then((modalRes) => {
+      if (modalRes) {
+        const surrenderUsers: string[] = [];
+        Object.entries(modalRes).forEach(([userId, option]) => {
+          if (option === "surrender") surrenderUsers.push(userId);
+          if (option === "charge") plusMoney.current = chargeMoney;
+        });
+        surrenders.current = [...surrenderUsers];
+        setUiPlayers(
+          uiPlayers.map((player) => {
+            if (surrenderUsers.includes(player.userId)) {
+              return { ...player, isGameQuit: true };
+            }
+            return player;
+          })
+        );
+      }
+    });
+  }, [modifyTargetHole]);
 
   const handleEnterScore = async () => {
     handleModalResult?.({
       doubleConditions,
       playersMoneyChange,
       result: true,
-      // ddang: isDdangDeclare,
-      chargeOrSurrender: chargeOrSurrender.current,
+      surrenders: surrenders.current,
+      plusMoney: plusMoney.current,
     });
   };
 
@@ -152,6 +200,7 @@ export const FinalizeHoleScore = ({
                 nickName={player.nickName}
                 score={playerScores[player.userId]}
                 changeMoney={playersMoneyChange[player.userId]}
+                isGameQuit={player.isGameQuit}
               />
             );
           })}

@@ -73,13 +73,3 @@ interface Player {
     handicaps: any[];
   };
 }
-
-// 이전홀 점수 확정 시에
-// 다음판 배판 여부 결정
-
-type InGameInfo = {};
-type HoleInfo = {
-  index: number;
-  isDouble: boolean;
-  isDoubleCondition: string[];
-};

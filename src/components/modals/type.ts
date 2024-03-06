@@ -1,3 +1,4 @@
+import { ChargeMoneyProps } from "../../pages/GameRoom/InGame/ChargeMoney/ChargeMoney";
 import { DeclareDdangProps } from "../../pages/GameRoom/InGame/DeclareDdang/DelcareDdang";
 import { ModifyEnterHoleScoreProps } from "../../pages/GameRoom/InGame/EnterHoleScore/ModifyEnterHoleScore";
 import { FinalizeHoleScoreProps } from "../../pages/GameRoom/InGame/FinalizeHoleScore/FinalizeHoleScore";
@@ -34,6 +35,7 @@ export type ModalParam =
   | DeclareDdangParam
   | ViewRuleParam
   | InGameResultParam
+  | ChargeMoneyParam
   //
   | RegionSelectParam
   | EnterHoleScoreParam
@@ -83,6 +85,10 @@ type ViewRuleParam = {
 type InGameResultParam = {
   id: "IN_GAME_RESULT";
   args: InGameResultProps;
+};
+type ChargeMoneyParam = {
+  id: "CHARGE_MONEY";
+  args: ChargeMoneyProps;
 };
 
 // bottom sheet

@@ -56,7 +56,8 @@ interface Context {
   finalizeScore: (
     gameId: string,
     userId: string,
-    holeInfo: InGameInfo["holeInfos"][number]
+    holeInfo: InGameInfo["holeInfos"][number],
+    surrenders: string[]
   ) => void;
   modifyScore: (
     gameId: string,
@@ -286,7 +287,8 @@ function SocketsProvider(props: any) {
   const finalizeScore = (
     gameId: string,
     userId: string,
-    holeInfo: InGameInfo["holeInfos"][number]
+    holeInfo: InGameInfo["holeInfos"][number],
+    surrenders: string[]
   ) => {
     console.log(
       `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
@@ -297,6 +299,7 @@ function SocketsProvider(props: any) {
         gameId,
         userId,
         holeInfo,
+        surrenders,
       },
     });
   };
