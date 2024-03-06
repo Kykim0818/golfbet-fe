@@ -1,8 +1,7 @@
-import axios from "axios";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import { usePageRoute } from "../../hooks/usePageRoute";
-import { setCookie } from "../../utils/cookie";
+import { testUser } from "../../utils/testUser";
 
 const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
 export const REACT_APP_KAKAO_REDIRECT =
@@ -19,9 +18,7 @@ export const Login = (props: {}) => {
   };
   //
   const handleTestLogin = () => {
-    // TODO: Login 검증 request 필요
-    axios.defaults.headers.common["Authorization"] = "TEST";
-    setCookie("refreshToken", "TEST");
+    testUser.login();
     movePage("/", { replace: true });
   };
 

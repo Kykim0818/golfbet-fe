@@ -3,13 +3,21 @@ import { useEffect, useState } from "react";
 import { requestAccessToken } from "../service/api";
 import { apiLogout, getUser } from "../service/api/user";
 import { actionUser } from "../store/user/userSlice";
+import { testUser } from "../utils/testUser";
 import { useAppDispatch } from "./redux";
 
 export const useAccount = () => {
   const dispatch = useAppDispatch();
   const [isLogined, setIsLogined] = useState(false);
 
+  // 계속 체크함
   useEffect(() => {
+    // 테스트면 로그인 확인 필요 없음
+    if (testUser.isTest()) {
+      setIsLogined(true);
+      return;
+    }
+
     console.log("useAcoount useEffect trigger check");
     checkLogined().then((res) => {
       console.log("checkLogined res", res);
@@ -23,10 +31,16 @@ export const useAccount = () => {
 
   // TODO: 분리해도될지 고민 필요
   const handleLogout = async () => {
+    // case : test
+    if (testUser.isTest()) {
+      testUser.logout();
+      return true;
+    }
+
     const res = await apiLogout();
     if (res) {
       // 토큰 제거
-      axios.defaults.headers.common["Authorization"] = undefined;
+      delete axios.defaults.headers.common["Authorization"];
       dispatch(actionUser.resetUserInfo());
       return true;
     }

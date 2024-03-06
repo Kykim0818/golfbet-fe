@@ -35,22 +35,31 @@ export const getUser = async () => {
     // 응답실패
     // alert 적으면 계속 query 실행됨
     console.log(e);
-    return { userInfo: mockUserInfo };
+    return { userInfo: getMockUserInfo() };
   }
 };
 // testAsync(() => mockUserInfo, 100).then((res) => res as User);
 // const ret = await axios.get<User>(
 //   "https://my-json-server.typicode.com/typicode/demo/posts"
 // );
-const mockUserInfo: BasicUserInfo = {
-  userId: "test",
-  nickname: "TEST",
-  profileImgSrc: process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
-  screenScore: 99,
-  screenTotalMoneyChange: 9999,
-  fieldScore: 99,
-  fieldTotalMoneyChange: 9999,
-  currentGameId: "",
+
+const getMockUserInfo = () => {
+  const mockUserInfo: BasicUserInfo = {
+    userId: "test",
+    nickname: "TEST",
+    profileImgSrc:
+      process.env.PUBLIC_URL + "/assets/images/profile_test_img.png",
+    screenScore: 99,
+    screenTotalMoneyChange: 9999,
+    fieldScore: 99,
+    fieldTotalMoneyChange: 9999,
+    currentGameId: "",
+  };
+  mockUserInfo.userId =
+    String(axios.defaults.headers.common["Authorization"]) ?? "unknown";
+  mockUserInfo.nickname =
+    String(axios.defaults.headers.common["Authorization"]) ?? "unknwon";
+  return mockUserInfo;
 };
 
 // TODO : db 에서 토큰 검증
