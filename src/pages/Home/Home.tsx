@@ -7,13 +7,17 @@ import { usePageRoute } from "../../hooks/usePageRoute";
 import { BasicUserInfo, getUser } from "../../service/api/user";
 import { actionUser } from "../../store/user/userSlice";
 import { getDisplayMoney } from "../../utils/display";
-import { HomeImageButton } from "./HomeImageButton";
+import { testUser } from "../../utils/testUser";
 import { ActiveGameNotifier } from "./ActiveGameNotifier";
+import { HomeImageButton } from "./HomeImageButton";
 
 export const Home = (props: { handleLogout: () => void }) => {
   const dispatch = useAppDispatch();
   const { movePage, goHome } = usePageRoute();
-  const { isLoading, error, data } = useQuery(["userInfo"], () => getUser());
+  const { isLoading, error, data } = useQuery(["userInfo"], () => {
+    if (testUser.isTest()) return testUser.getInfo();
+    return getUser();
+  });
 
   useEffect(() => {
     if (data) {

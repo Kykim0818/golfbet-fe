@@ -102,7 +102,7 @@ export const GameRoom = () => {
         }).then(() => goHome());
       }
     }
-  }, [gameId, userInfo.userId, connectState, joinRoom]);
+  }, [gameId, userInfo.userId, connectState]);
 
   const handleExitWaitRoom = () => {
     if (gameId) {
