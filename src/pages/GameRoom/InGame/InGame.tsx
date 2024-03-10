@@ -175,7 +175,6 @@ export const InGame = ({
         }
         // 점수 확정
         finalizeScore(gameId, userInfo.userId, res.holeInfo, res.surrenders);
-        setCanEnterScore(gameId, "");
       }
     }
     if (res.isAllEnter === false) {
@@ -196,7 +195,6 @@ export const InGame = ({
       return;
     }
     modifyScore(gameId, userInfo.userId, res.holeInfo);
-    setCanEnterScore(gameId, "");
   };
   return (
     <PageStyle.Wrapper>
