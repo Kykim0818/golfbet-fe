@@ -37,7 +37,7 @@ export const RankBoardPlayerInfo = ({
       </S.NickNameSection>
       <S.MoreInfo>
         <S.ScoreSection>
-          <span>{currentScore === 0 ? "-" : currentScore}</span>
+          <span>{isGameQuit ? "-" : currentScore}</span>
           <div>타</div>
         </S.ScoreSection>
         <S.Money>{getDisplayMoney(currentMoney)}원</S.Money>
