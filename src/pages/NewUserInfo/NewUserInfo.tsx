@@ -92,7 +92,7 @@ export const NewUserInfo = () => {
             text: OK_NICKNAME_TEXT,
           });
         } else {
-          setUserEmailHelp({
+          setNicknameHelp({
             formatStatus: true,
             duplicateStatus: false,
             text: DUPLICATE_NICKNAME_TEXT,
@@ -160,7 +160,9 @@ export const NewUserInfo = () => {
   const handleFocusOutNickname = () => {
     if (nickname !== "" && validNicknameCheck(nickname)) {
       // 닉네임 중복검사
+      console.log("중복검사");
       apiCheckDuplicate("nickname", nickname).then((res) => {
+        console.log(res);
         if (res?.duplicateYn === false) {
           setNicknameHelp({
             formatStatus: true,
