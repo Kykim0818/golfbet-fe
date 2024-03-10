@@ -67,7 +67,7 @@ interface Player {
   holeScores: string[];
   currentMoney: number;
   readyState: string;
-  isGameQuit: boolean;
+  isGameSurrender: boolean;
   handicapInfo: {
     userId: string;
     handicaps: any[];
