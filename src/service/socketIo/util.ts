@@ -60,7 +60,7 @@ export function convertSocketDataToUiGameRoomInfo(
         }),
         currentMoney: player.currentMoney,
         readyState: player.readyState === "true" ? true : false,
-        isGameQuit: player.isGameQuit ?? false,
+        isGameQuit: player.isGameSurrender ?? false,
         handicaps: [],
       };
     }),

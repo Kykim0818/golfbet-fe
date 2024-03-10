@@ -74,6 +74,7 @@ export const GameRoom = () => {
     finalizeScore,
     modifyScore,
     connect,
+    surrenderGame,
   } = useSockets();
   const { openModal } = useModal();
   const userInfo = useAppSelector((state) => state.users.userInfo);
@@ -126,6 +127,17 @@ export const GameRoom = () => {
     }
   };
 
+  const handleSurrenderGame = () => {
+    if (gameId) {
+      surrenderGame(gameId, userInfo.userId);
+      moveBack();
+      // exit 처리되기전에 disconnect 되버리면 작동안하는 거 같음 (추정)
+      setTimeout(() => {
+        socket.disconnect();
+      }, 500);
+    }
+  };
+
   // 3 웹 소켓 연결
   if (socket.connected === false || gameRoomInfo === undefined)
     return <Loading onTest={handleExitInGame} />;
@@ -145,7 +157,7 @@ export const GameRoom = () => {
     return (
       <InGame
         gameRoomInfo={gameRoomInfo}
-        exitRoom={handleExitInGame}
+        surrenderGame={handleSurrenderGame}
         enterScore={enterScore}
         finalizeScore={finalizeScore}
         modifyScore={modifyScore}

@@ -38,7 +38,7 @@ type TabValue = (typeof TABS)[number]["value"];
 const BACK_NINE_START_HOLE = 10;
 export type InGameProps = {
   gameRoomInfo: GameRoomInfo;
-  exitRoom: () => void;
+  surrenderGame: () => void;
   enterScore: (
     gameId: string,
     holeIdx: number,
@@ -60,7 +60,7 @@ export type InGameProps = {
 
 export const InGame = ({
   gameRoomInfo,
-  exitRoom,
+  surrenderGame,
   enterScore,
   finalizeScore,
   modifyScore,
@@ -83,7 +83,7 @@ export const InGame = ({
       okBtnLabel: "나가기",
       cancelBtnLabel: "닫기",
     },
-    handleClickOk: exitRoom,
+    handleClickOk: surrenderGame,
   });
   const { gameInfo, players, inGameInfo } = gameRoomInfo;
   const {
