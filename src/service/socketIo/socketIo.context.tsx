@@ -65,6 +65,7 @@ interface Context {
     modifyHoleInfo: Omit<InGameInfo["holeInfos"][number], "ddang">
   ) => void;
   setCanEnterScore: (gameId: string, value: string) => void;
+  surrenderGame: (gameId: string, value: string) => void;
 }
 
 const SocketContext = createContext<Context>({
@@ -82,6 +83,7 @@ const SocketContext = createContext<Context>({
   finalizeScore: () => {},
   modifyScore: () => {},
   setCanEnterScore: () => {},
+  surrenderGame: () => {},
 });
 
 function SocketsProvider(props: any) {
@@ -284,6 +286,17 @@ function SocketsProvider(props: any) {
     });
   }, []);
 
+  const surrenderGame = useCallback((gameId: string, userId: string) => {
+    console.log(`surrender game : ${gameId}, userId : ${userId}`);
+    socket.emit(EVENTS.TO_SERVER.SEND_TASK_MESSAGE, {
+      taskName: TASK.SURRENDER_GAME,
+      data: {
+        gameId,
+        userId,
+      },
+    });
+  }, []);
+
   const finalizeScore = (
     gameId: string,
     userId: string,
@@ -342,6 +355,7 @@ function SocketsProvider(props: any) {
         finalizeScore,
         modifyScore,
         setCanEnterScore,
+        surrenderGame,
       }}
       {...props}
     />
