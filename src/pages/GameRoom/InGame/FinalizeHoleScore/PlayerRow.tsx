@@ -26,8 +26,10 @@ export const PlayerRow = ({
         {isGameQuit && <GameAbandonMark />}
       </S.NameSection>
       <S.ScoreAndMoney>
-        <S.Score>{score}타</S.Score>
-        <S.Money>{getDisplayChangeMoney(changeMoney)}원</S.Money>
+        <S.Score>{isGameQuit ? "-" : score}타</S.Score>
+        <S.Money>
+          {isGameQuit ? "-" : getDisplayChangeMoney(changeMoney)}원
+        </S.Money>
       </S.ScoreAndMoney>
     </S.Wrapper>
   );
