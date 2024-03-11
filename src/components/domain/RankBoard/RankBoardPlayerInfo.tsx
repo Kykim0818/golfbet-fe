@@ -37,10 +37,10 @@ export const RankBoardPlayerInfo = ({
       </S.NickNameSection>
       <S.MoreInfo>
         <S.ScoreSection>
-          <span>{currentScore === 0 ? "-" : currentScore}</span>
+          <span>{isGameQuit ? "-" : currentScore}</span>
           <div>타</div>
         </S.ScoreSection>
-        <S.Money>{getDisplayMoney(currentMoney)}원</S.Money>
+        <S.Money>{isGameQuit ? "-" : getDisplayMoney(currentMoney)}원</S.Money>
       </S.MoreInfo>
     </S.Wrapper>
   );
@@ -145,6 +145,8 @@ const S = {
   `,
 
   Money: styled.span`
+    display: flex;
+    justify-content: flex-end;
     ${typo.s12w700}
     color: var(--color_main_darker, #003D45);
   `,
