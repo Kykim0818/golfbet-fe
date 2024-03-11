@@ -190,7 +190,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
               ? bettingLimit
               : holeInfos?.[previousHoleIndex]?.players[userId].remainingMoney;
           players[userId] = {
-            strokes: score,
+            strokes: score === UNENTERED_HOLE_SCORE ? 0 : score,
             moneyChange: res.playersMoneyChange[userId] ?? 0,
             previousMoney,
             remainingMoney:
