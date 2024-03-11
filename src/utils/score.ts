@@ -40,26 +40,6 @@ export function checkDoubleCondition(
   // 게임 포기한 사람 처리 완료된 점수임
   // 과반이상 동타 계산을 동적으로 하기 위함
   const inGamePlayerCount = Object.keys(playerScore).length;
-  // 1. 두번(2명이상 동타, 3명이상 동타) 반복 인데 이후 용어 통일 될 수 있어서 우선 중복 코드로 작성
-  if (inGamePlayerCount > 2) {
-    const overHalfPlayerCount = Math.floor(playerScoresArr.length / 2) + 1;
-    const scoreMap = new Map<number, number>();
-    playerScoresArr.forEach((score) => {
-      if (scoreMap.has(score)) {
-        scoreMap.set(score, (scoreMap.get(score) ?? 0) + 1);
-        return;
-      }
-      scoreMap.set(score, 1);
-    });
-
-    let isOverHalfPlayerTie = false;
-    scoreMap.forEach((score, userCount) => {
-      if (overHalfPlayerCount <= userCount) isOverHalfPlayerTie = true;
-    });
-
-    if (isOverHalfPlayerTie) resultDoubleConditons.push("twoOrMoreTie");
-  }
-  // 2. 동일 로직
   if (inGamePlayerCount > 3) {
     const overHalfPlayerCount = Math.floor(playerScoresArr.length / 2) + 1;
     const scoreMap = new Map<number, number>();
@@ -78,6 +58,26 @@ export function checkDoubleCondition(
     if (isOverHalfPlayerTie) resultDoubleConditons.push("threeOrMoreTie");
   }
 
+  // 1. 두번(2명이상 동타, 3명이상 동타) 반복 인데 이후 용어 통일 될 수 있어서 우선 중복 코드로 작성
+  // 2. 동일 로직
+  else if (inGamePlayerCount > 2) {
+    const overHalfPlayerCount = Math.floor(playerScoresArr.length / 2) + 1;
+    const scoreMap = new Map<number, number>();
+    playerScoresArr.forEach((score) => {
+      if (scoreMap.has(score)) {
+        scoreMap.set(score, (scoreMap.get(score) ?? 0) + 1);
+        return;
+      }
+      scoreMap.set(score, 1);
+    });
+
+    let isOverHalfPlayerTie = false;
+    scoreMap.forEach((score, userCount) => {
+      if (overHalfPlayerCount <= userCount) isOverHalfPlayerTie = true;
+    });
+
+    if (isOverHalfPlayerTie) resultDoubleConditons.push("twoOrMoreTie");
+  }
   return resultDoubleConditons;
 }
 
