@@ -107,9 +107,25 @@ export const getDisplayDoubleText = (
   doubleConditions.sort((a, b) => displayOrder[a] - displayOrder[b]);
   const isDdangInclude = doubleConditions.includes("ddang");
 
-  return `${DOUBLE_CONDITION_DISPLAY[doubleConditions[0]]} 배판 외${
-    isDdangInclude ? "(땅)" : ""
-  }`;
+  // TODO: 중복 정리 1개일때랑 중복 정리
+  const doubleCondition = doubleConditions[0];
+  let result = "";
+  if (doubleCondition === "triple") {
+    if (parCount === 3) result = DOUBLE_CONDITION_DISPLAY["double"];
+    else if (parCount >= 4 && parCount <= 5)
+      result = DOUBLE_CONDITION_DISPLAY["triple"];
+    else if (parCount >= 6) result = DOUBLE_CONDITION_DISPLAY["qudraple"];
+  } else if (
+    doubleCondition === "twoOrMoreTie" ||
+    doubleCondition === "threeOrMoreTie"
+  ) {
+    if (playerCount === 3) result = DOUBLE_CONDITION_DISPLAY["twoOrMoreTie"];
+    else if (playerCount === 4)
+      result = DOUBLE_CONDITION_DISPLAY["threeOrMoreTie"];
+  } else {
+    result = DOUBLE_CONDITION_DISPLAY[doubleCondition];
+  }
+  return `${result} 배판 외${isDdangInclude ? "(땅)" : ""}`;
 };
 
 export function getDisplayScore(score: number) {
@@ -119,9 +135,9 @@ export function getDisplayScore(score: number) {
 
 const GOLF_MAX_HOLE = 9;
 /**
- * 데이터 홀 값 (1 ~ 18) 을 전반 1 ~ 9 , 후반 1~9로 변환 
- * @param holeNumber 
+ * 데이터 홀 값 (1 ~ 18) 을 전반 1 ~ 9 , 후반 1~9로 변환
+ * @param holeNumber
  */
-export function getDisplayHole(holeNumber: number){
+export function getDisplayHole(holeNumber: number) {
   return holeNumber <= GOLF_MAX_HOLE ? holeNumber : holeNumber - GOLF_MAX_HOLE;
 }
