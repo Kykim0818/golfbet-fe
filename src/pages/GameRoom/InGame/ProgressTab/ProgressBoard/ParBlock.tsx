@@ -27,14 +27,33 @@ export const ParBlock = ({
         if (status !== STATUS.NOT_STARTED) handleHoleClick(hole);
       }}
     >
+      {getStatusIcon(status)}
       <span className="parblock__holeindex">{hole > 9 ? hole - 9 : hole}H</span>
       <span className="parblock__parcount">{parCount}파</span>
     </S.Wrapper>
   );
+
+  //
+  function getStatusIcon(status: (typeof STATUS)[keyof typeof STATUS]) {
+    if (status === "Completed" || status === "Completed clicked")
+      return (
+        <S.CompleteImg
+          src={process.env.PUBLIC_URL + "/assets/svg/ic_progress_complete.svg"}
+        />
+      );
+    if (status === "In Progress")
+      return (
+        <S.CompleteImg
+          src={process.env.PUBLIC_URL + "/assets/svg/ic_progress_ing.svg"}
+        />
+      );
+    return null;
+  }
 };
 
 const S = {
   Wrapper: styled.div<{ variantStyle: CSSProp }>`
+    position: relative;
     ${(props) => props.variantStyle}
 
     box-sizing: border-box;
@@ -44,7 +63,7 @@ const S = {
     align-items: center;
     width: 40px;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 10px;
 
     .parblock__holeindex {
       font-size: 14px;
@@ -59,27 +78,32 @@ const S = {
       line-height: normal;
     }
   `,
+  CompleteImg: styled.img`
+    position: absolute;
+    right: 2px;
+    top: 2px;
+  `,
 };
 
 const BLOCK_TYPE = {
   [STATUS.IN_PROGRESS]: css`
     color: var(--color-main-dark, #008395);
-    background-color: #b0e6ed;
-    border: 0.5px solid var(--color-main-dark, #008395);
+    background-color: #e1f4ff;
+    border: 0.5px solid #e1f4ff;
   `,
   [STATUS.COMPLETED]: css`
-    color: var(--color-sub-text-grey, #bcbcbc);
-    background-color: #f4f7fd;
+    color: #f9f9fb;
+    background-color: var(--color-sub-blue);
     border: 0.5px solid #f4f7fd;
   `,
   [STATUS.NOT_STARTED]: css`
-    color: var(--color-sub-text-grey, #bcbcbc);
+    color: var(--color-gray-400, #bdc1c6);
     background-color: #f4f7fd;
     border: 0.5px solid #f4f7fd;
   `,
   [STATUS.COMPLETED_FOCUS]: css`
-    color: var(--color-sub-text-grey, #bcbcbc);
-    background-color: var(--color-main, #009eb2);
-    border: 0.5px solid var(--color-main, #009eb2);
+    color: #f9f9fb;
+    background-color: var(--color-sub-blue);
+    border: 1px solid #e1f4ff;
   `,
 };

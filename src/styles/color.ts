@@ -16,7 +16,9 @@ export const color = css`
   --color-dark-hover: #006977;
   --color-alert: #f00;
 
+  --color-gray-50: #f8f9fa;
   --color-grey-200: #e8eaed;
+  --color-gray-400: #bdc1c6;
   --color-grey-700: #5f6368;
   --color-grey-800: #3c4043;
   --color-grey-900: #202124;

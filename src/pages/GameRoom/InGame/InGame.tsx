@@ -393,14 +393,24 @@ const S = {
   `,
   Tabs: styled.div`
     display: flex;
-    gap: 20px;
     padding-left: 10px;
   `,
   Tab: styled.span<{ selected: boolean }>`
-    ${typo.s15w500}
+    display: flex;
+    justify-content: center;
+    min-width: 90px;
+    min-height: 35px;
+    padding: 9px 5px;
+
+    ${typo.s13w400}
+    color : var(--color-gray-400);
+    background-color: rgba(190, 194, 197, 0.2);
+    border-radius: 8px 8px 0px 0px;
     ${(props) =>
       props.selected &&
       css`
+        color: var(--color-gray-50);
+        background-color: var(--color-main);
         font-weight: 700;
       `}
   `,
