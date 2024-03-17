@@ -28,5 +28,5 @@ export const usePreventBackInModal = ({
       }
     });
     return event;
-  }, [openModal, confirmTriggerFlag]);
+  }, [confirmTriggerFlag]);
 };
