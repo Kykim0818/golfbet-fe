@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import { RankBoardPlayerInfo } from "../../../../components/domain/RankBoard/RankBoardPlayerInfo";
@@ -25,7 +25,7 @@ export const InGameResult = ({ type }: InGameResultProps) => {
     gameInfo: { isBackNineStart, gameId },
     players,
   } = gameRoomInfo;
-  const preventBackFlag = useRef(true);
+  const [preventBackFlag, setPreventBackFlag] = useState(true);
   const sortedPlayerByScore = deepClone(players).sort(
     (playerA, playerB) => playerA.currentScore - playerB.currentScore
   );
@@ -33,7 +33,7 @@ export const InGameResult = ({ type }: InGameResultProps) => {
   const footerButtonLabel =
     type === "front" ? "후반 시작하기" : "전체 결과보기";
 
-  usePreventBackInModal({ confirmTriggerFlag: preventBackFlag.current });
+  usePreventBackInModal({ confirmTriggerFlag: preventBackFlag });
 
   const handleClickNext = () => {
     if (gameId === undefined) return;
@@ -42,21 +42,17 @@ export const InGameResult = ({ type }: InGameResultProps) => {
       return;
     }
     if (type === "back") {
-      preventBackFlag.current = false;
       moveBack();
-      setTimeout(() => {
-        moveBack();
-      }, 100);
+      setPreventBackFlag(false);
+      moveBack();
     }
   };
 
   useEffect(() => {
     if (type === "front" && isBackNineStart) {
-      preventBackFlag.current = false;
       moveBack();
-      setTimeout(() => {
-        moveBack();
-      }, 100);
+      setPreventBackFlag(false);
+      moveBack();
     }
   }, [type, isBackNineStart, moveBack]);
 

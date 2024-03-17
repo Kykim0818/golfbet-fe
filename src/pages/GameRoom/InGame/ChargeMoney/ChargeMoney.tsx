@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "../../../../components/Button";
 import { usePageRoute } from "../../../../hooks/usePageRoute";
@@ -29,8 +29,8 @@ export const ChargeMoney = ({
     });
     return playersDefaultSelect;
   });
-  const preventBackFlag = useRef(true);
-  usePreventBackInModal({ confirmTriggerFlag: preventBackFlag.current });
+  const [preventBackFlag, setPreventBackFlag] = useState(true);
+  usePreventBackInModal({ confirmTriggerFlag: preventBackFlag });
 
   const chargePlayerNickNames = chargeRequiredPlayers.map(
     (player) => `${player.nickName}님`
@@ -46,8 +46,8 @@ export const ChargeMoney = ({
   };
 
   const handleConfirm = () => {
-    preventBackFlag.current = false;
     moveBack();
+    setPreventBackFlag(false);
     handleModalResult?.(playersSelect);
   };
 
