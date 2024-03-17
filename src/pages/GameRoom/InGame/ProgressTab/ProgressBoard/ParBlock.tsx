@@ -27,7 +27,7 @@ export const ParBlock = ({
         if (status !== STATUS.NOT_STARTED) handleHoleClick(hole);
       }}
     >
-      <span className="parblock__holeindex">{hole}H</span>
+      <span className="parblock__holeindex">{hole > 9 ? hole - 9 : hole}H</span>
       <span className="parblock__parcount">{parCount}파</span>
     </S.Wrapper>
   );

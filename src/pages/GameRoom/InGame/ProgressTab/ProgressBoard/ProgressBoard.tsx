@@ -35,7 +35,7 @@ export const ProgressBoard = ({
         return (
           <ParBlock
             key={`${index + 1}`}
-            hole={index + 1}
+            hole={index + 1 + 9}
             parCount={par}
             status={getHoleStatus(index + 1 + 9, currentHole, selectHole)}
             handleHoleClick={handleHoleClick}
