@@ -38,6 +38,8 @@ export const WaitRoom = ({
   const { moveBack } = usePageRoute();
   const { openModal } = useModal();
   const [preventFlag, setPreventFlag] = useState(true);
+  const { hostUserId, gameInfo, players } = gameRoomInfo;
+  const { bettingLimit } = gameInfo;
 
   // 모달이 떠있으면, 패딩 X && 임의 플래그
   usePreventLeave({
@@ -52,21 +54,21 @@ export const WaitRoom = ({
   });
 
   // if (gameRoomInfo === undefined) return <Loading />;
-  const playerInfos: PlayersInfoUI[] = gameRoomInfo.players.map((player) => {
+  const playerInfos: PlayersInfoUI[] = players.map((player) => {
     return {
       id: player.userId,
       nickName: player.nickName,
       imgSrc: player.imgSrc,
       avgScore: player.avgScore,
-      initMoney: gameRoomInfo.gameInfo.bettingLimit,
+      initMoney: bettingLimit,
       readyState: player.readyState,
-      isHost: player.userId === gameRoomInfo.hostUserId,
+      isHost: player.userId === hostUserId,
     };
   });
   const me = playerInfos.find(
     (playerInfo) => playerInfo.id === userInfo.userId
   );
-  const isRoomMaker = userInfo.userId === gameRoomInfo.hostUserId;
+  const isRoomMaker = userInfo.userId === hostUserId;
 
   const handleOpenRoomCenter = async () => {
     const modifiedGolfCenter = await openModal<GameInfo["golfCenter"]>({
@@ -124,6 +126,14 @@ export const WaitRoom = ({
     }
   };
 
+  const isCanStart = () => {
+    let ret = true;
+    players.forEach((player) => {
+      if (player.userId === hostUserId) return;
+      if (player.readyState === false) ret = false;
+    });
+    return ret;
+  };
   return (
     <PageStyle.Wrapper>
       <GameTitleAsset
@@ -155,6 +165,7 @@ export const WaitRoom = ({
             onClick={handleGameStart}
             disabled={
               // TODO: ready 상태인지 확인 조건
+              isCanStart() === false ||
               gameRoomInfo.players.length !== gameRoomInfo.gameInfo.playerCount
             }
           >
