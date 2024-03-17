@@ -49,7 +49,10 @@ export const ProgressTab = ({
       {/* 플레이어 판 */}
       <S.Players isNobody={isNoBody}>
         {isNoBody ? (
-          <span>스코어를 입력해주세요.</span>
+          <S.NobodySection>
+            <img src={process.env.PUBLIC_URL + "/assets/svg/ic_info.svg"} />
+            <span>스코어를 입력해주세요.</span>
+          </S.NobodySection>
         ) : (
           players.map((player) => {
             return (
@@ -105,6 +108,18 @@ const S = {
           color:#A7A7A7;
         }
       `}
+  `,
+
+  NobodySection: styled.section`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: 22px;
+      height: 22px;
+    }
   `,
   Footer: styled.footer`
     display: flex;
