@@ -301,7 +301,8 @@ function SocketsProvider(props: any) {
     gameId: string,
     userId: string,
     holeInfo: InGameInfo["holeInfos"][number],
-    surrenders: string[]
+    surrenders: string[],
+    chargeMoney: number
   ) => {
     console.log(
       `finalize gameId : ${gameId}, 입력홀정보: ${JSON.stringify(holeInfo)}`
@@ -313,6 +314,7 @@ function SocketsProvider(props: any) {
         userId,
         holeInfo,
         surrenders,
+        chargeMoney,
       },
     });
   };

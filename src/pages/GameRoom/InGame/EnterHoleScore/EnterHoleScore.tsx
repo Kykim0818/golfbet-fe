@@ -29,6 +29,8 @@ export type EnterScoreResult = {
   holeInfo?: InGameInfo["holeInfos"][number];
   // 기권자들
   surrenders: string[];
+  // 충전금액
+  chargeMoney: number;
 };
 type PlayerScores = Record<string, number>;
 
@@ -211,6 +213,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
             par: currentPar,
           },
           surrenders: res.surrenders,
+          chargeMoney: res.plusMoney,
         });
       } else {
         setCanEnterScore(gameId, "");
@@ -223,6 +226,7 @@ export const EnterHoleScore = ({ handleModalResult }: EnterHoleScoreProps) => {
         isAllEnter: false,
         playerScores,
         surrenders: [],
+        chargeMoney: 0,
       });
     }
   };
