@@ -6,6 +6,7 @@ import { deepClone } from "../../../../utils/deepClone";
 import { divideFrontAndBackScores } from "../../../../utils/score";
 import { GameInfo } from "../../../MakeGame/MakeGame";
 import { GameRoomUser } from "../../GameRoom";
+import { getPlayersRank } from "../../../../utils/getPlayersRank";
 
 type LeaderBoardTabProps = {
   players: GameRoomUser[];
@@ -26,9 +27,7 @@ export const LeaderBoardTab = ({
   const backNinePars = centerInfo.backNineCourse.pars;
 
   // # 점수 별로 소팅
-  const sortedPlayerByScore = deepClone(players).sort(
-    (playerA, playerB) => playerA.currentScore - playerB.currentScore
-  );
+  const sortedPlayerByScore = getPlayersRank(players);
   const handleClickRankPlayer = (playerIndex: number) => {
     if (selectUser === playerIndex) {
       setSelectUser(NOT_FOLD_PLAYER);

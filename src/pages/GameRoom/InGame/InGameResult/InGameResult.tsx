@@ -8,6 +8,7 @@ import { usePreventBackInModal } from "../../../../hooks/usePreventBackInModal";
 import { useSockets } from "../../../../service/socketIo/socketIo.context";
 import { typo } from "../../../../styles/typo";
 import { deepClone } from "../../../../utils/deepClone";
+import { getPlayersRank } from "../../../../utils/getPlayersRank";
 
 export type InGameResultProps = {
   /** 전반, 후반  */
@@ -26,9 +27,7 @@ export const InGameResult = ({ type }: InGameResultProps) => {
     players,
   } = gameRoomInfo;
   const preventBackFlag = useRef(true);
-  const sortedPlayerByScore = deepClone(players).sort(
-    (playerA, playerB) => playerA.currentScore - playerB.currentScore
-  );
+  const sortedPlayerByScore = getPlayersRank(players);
   const title = type === "front" ? "전반 종료" : "게임 종료";
   const footerButtonLabel =
     type === "front" ? "후반 시작하기" : "전체 결과보기";

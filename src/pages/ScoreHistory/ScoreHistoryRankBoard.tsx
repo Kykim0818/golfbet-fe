@@ -5,6 +5,7 @@ import ScoreBoard from "../../components/domain/ScoreBoard";
 import { getUserId } from "../../utils/getUserId";
 import { divideFrontAndBackScores } from "../../utils/score";
 import { GameRoomUser } from "../GameRoom/GameRoom";
+import { getPlayersRank } from "../../utils/getPlayersRank";
 
 type ScoreHistroyRankBoardProps = {
   players: GameRoomUser[];
@@ -20,9 +21,7 @@ export const ScoreHistroyRankBoard = ({
   const NOT_FOLD_PLAYER = -1;
   const [selectUser, setSelectUser] = useState(NOT_FOLD_PLAYER);
   // # 점수 별로 소팅
-  const sortedPlayerByScore = players.sort(
-    (playerA, playerB) => playerA.currentScore - playerB.currentScore
-  );
+  const sortedPlayerByScore = getPlayersRank(players);
   const userId = getUserId();
   const handleClickRankPlayer = (playerIndex: number) => {
     if (selectUser === playerIndex) {

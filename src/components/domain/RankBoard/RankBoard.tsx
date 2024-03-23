@@ -3,6 +3,7 @@ import { useAppSelector } from "../../../hooks/redux";
 import { GameRoomUser } from "../../../pages/GameRoom/GameRoom";
 import { deepClone } from "../../../utils/deepClone";
 import { RankBoardPlayerInfo } from "./RankBoardPlayerInfo";
+import { getPlayersRank } from "../../../utils/getPlayersRank";
 
 type RankBoardProps = {
   players: GameRoomUser[];
@@ -11,9 +12,7 @@ type RankBoardProps = {
 export const RankBoard = ({ players }: RankBoardProps) => {
   // # 점수 별로 소팅
   const userInfo = useAppSelector((state) => state.users.userInfo);
-  const sortedPlayerByScore = deepClone(players).sort(
-    (playerA, playerB) => playerA.currentScore - playerB.currentScore
-  );
+  const sortedPlayerByScore = getPlayersRank(players);
   const userId = userInfo.userId;
   return (
     <S.Wrapper>
