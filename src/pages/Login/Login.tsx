@@ -5,16 +5,14 @@ import { testUser } from "../../utils/testUser";
 
 const REACT_APP_KAKAO_API = process.env.REACT_APP_KAKAO_API;
 export const REACT_APP_KAKAO_REDIRECT =
-  process.env.REACT_APP_KAKAO_REDIRECT_API + "login";
+  process.env.REACT_APP_KAKAO_REDIRECT_API;
 
 export const Login = (props: {}) => {
   // TODO: login handling 방식에 따라 다를듯
   const { movePage } = usePageRoute();
 
   const handleKakaoLogin = () => {
-    window.location.replace(
-      `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`
-    );
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_KAKAO_API}&redirect_uri=${REACT_APP_KAKAO_REDIRECT}&response_type=code`;
   };
   //
   const handleTestLogin = () => {

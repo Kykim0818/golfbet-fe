@@ -9,6 +9,8 @@ import Login from "../Login";
 export const Start = () => {
   const { movePage } = usePageRoute();
   const code = new URL(window.location.href).searchParams.get("code");
+
+  //
   useEffect(() => {
     localStorage.removeItem("tmpUserInfo");
   }, []);
