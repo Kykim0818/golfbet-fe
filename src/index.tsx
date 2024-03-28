@@ -43,12 +43,12 @@ const router = createBrowserRouter([
         element: <Start />,
         errorElement: <ErrorPage />,
       },
-
-      {
-        path: "/login",
-        element: <Start />,
-        errorElement: <ErrorPage />,
-      },
+      // // login redirect
+      // {
+      //   path: "/login",
+      //   element: <Start />,
+      //   errorElement: <ErrorPage />,
+      // },
       {
         path: "/terms_and_conditions",
         element: <TermsAndConditions />,
